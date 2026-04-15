@@ -86,7 +86,7 @@ body::before {
   transform: scale(1.4);
 }
 
-/* Arrow buttons */
+/* Arrow buttons — desktop: fixed to sides */
 .nav-btn {
   position: fixed; top: 50%; transform: translateY(-50%);
   width: 44px; height: 44px; border-radius: 50%;
@@ -100,8 +100,16 @@ body::before {
 #btn-prev { right: 20px; }
 #btn-next { left: 20px; }
 
+/* Arrow buttons — mobile: inline inside the bottom bar */
 @media (max-width: 768px) {
-  .nav-btn { display: none; }
+  .nav-btn {
+    position: static;
+    top: auto; transform: none;
+    width: 34px; height: 34px; font-size: 18px;
+    flex-shrink: 0;
+  }
+  .nav-btn:hover { transform: scale(1.08); }
+  #nav-dots { gap: 6px; align-items: center; }
 }
 
 /* Slides container */
@@ -424,8 +432,6 @@ body::before {
 
 <div class="tooltip-box" id="tooltip"></div>
 
-<button class="nav-btn" id="btn-prev" title="السابق">‹</button>
-<button class="nav-btn" id="btn-next" title="التالي">›</button>
 
 <div id="slides">
 
@@ -945,8 +951,9 @@ body::before {
 
 </div>
 
-<!-- Dots -->
+<!-- Bottom nav: arrows + dots -->
 <div id="nav-dots">
+  <button class="nav-btn" id="btn-next" title="التالي">›</button>
   <button class="dot active" onclick="goTo(0)"></button>
   <button class="dot" onclick="goTo(1)"></button>
   <button class="dot" onclick="goTo(2)"></button>
@@ -962,6 +969,7 @@ body::before {
   <button class="dot" onclick="goTo(12)"></button>
   <button class="dot" onclick="goTo(13)"></button>
   <button class="dot" onclick="goTo(14)"></button>
+  <button class="nav-btn" id="btn-prev" title="السابق">‹</button>
 </div>
 
 <script>

@@ -100,6 +100,10 @@ body::before {
 #btn-prev { right: 20px; }
 #btn-next { left: 20px; }
 
+@media (max-width: 768px) {
+  .nav-btn { display: none; }
+}
+
 /* Slides container */
 #slides {
   position: fixed; inset: 0; z-index: 1;
@@ -395,13 +399,17 @@ body::before {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .slide { padding: 50px 24px 100px; overflow-y: auto; }
+  .slide {
+    padding: 70px 18px 100px;
+    overflow-y: auto;
+    justify-content: flex-start;
+    align-items: stretch;
+  }
+  .slide > * { width: 100%; max-width: 100% !important; }
   .iot-big-grid { grid-template-columns: 1fr; }
   .info-grid { grid-template-columns: 1fr; }
   .iot-flow { flex-direction: column; }
   .iot-flow-arrow { transform: rotate(90deg); }
-  #btn-prev { right: 8px; }
-  #btn-next { left: 8px; }
 }
 </style>
 </head>
@@ -425,7 +433,7 @@ body::before {
   <div class="slide active" id="s1">
     <div class="title-eyebrow anim-1">Room Guardian — المرحلة التأسيسية</div>
     <div class="title-main anim-2">جلسة التأسيس<br>للمبرمج الشاب</div>
-    <div class="title-sub anim-3">رحلتنا اليوم: من رسم الأفكار، إلى كتابة الكود، وصولاً لعالم الأشياء المتصلة</div>
+    <div class="title-sub anim-3">رحلتنا اليوم: من رسم الأفكار، إلى كتابة الشفرة البرمجية، وصولاً إلى عالم الأشياء المتصلة</div>
     <div class="title-badges anim-4">
       <div class="t-badge teal">🗺 Flowchart</div>
       <div class="t-badge blue">🐱 Scratch</div>
@@ -437,27 +445,27 @@ body::before {
   <div class="slide" id="s2">
     <div class="slide-section-tag anim-1">الجزء الأول</div>
     <div class="slide-title anim-2">المخطط الانسيابي</div>
-    <div class="slide-subtitle anim-3">قبل ما تكتب سطر كود واحد — ارسم أفكارك أولاً</div>
+    <div class="slide-subtitle anim-3">قبل أن تكتب سطراً واحداً من الكود — ارسم أفكارك أولاً</div>
     <div class="info-grid anim-4">
       <div class="info-card">
         <span class="icon">🗺</span>
-        <h3>إيه هو؟</h3>
+        <h3>ما هو؟</h3>
         <p>رسم بياني يوضح خطوات حل مشكلة أو تنفيذ برنامج خطوة بخطوة</p>
       </div>
       <div class="info-card">
         <span class="icon">🤔</span>
-        <h3>ليه بنستخدمه؟</h3>
-        <p>يساعدنا نفكر بوضوح قبل الكود، ونكتشف الأخطاء قبل ما تحصل</p>
+        <h3>لماذا نستخدمه؟</h3>
+        <p>يساعدنا على التفكير بوضوح قبل كتابة الكود، واكتشاف الأخطاء قبل وقوعها</p>
       </div>
       <div class="info-card">
         <span class="icon">🔷</span>
         <h3>الرموز</h3>
-        <p>كل شكل له معنى: بيضاوي للبداية والنهاية، مستطيل للعمليات، متوازي الأضلاع للإدخال والإخراج</p>
+        <p>لكل شكل معنى: البيضاوي للبداية والنهاية، المستطيل للعمليات، متوازي الأضلاع للإدخال والإخراج</p>
       </div>
       <div class="info-card">
         <span class="icon">🎯</span>
         <h3>مشروعنا</h3>
-        <p>هنرسم flowchart لبرنامج يحسب محيط الدائرة — أبسط تطبيق عملي</p>
+        <p>سنرسم مخططاً انسيابياً لبرنامج يحسب محيط الدائرة — أبسط تطبيق عملي</p>
       </div>
     </div>
   </div>
@@ -466,7 +474,7 @@ body::before {
   <div class="slide" id="s3">
     <div class="slide-section-tag anim-1">Flowchart — فيديو</div>
     <div class="slide-title anim-2">شاهد الشرح أولاً</div>
-    <div class="slide-subtitle anim-3">الفيديو ده هيوضح لك الرموز، وكيفية رسم الـ Flowchart خطوة بخطوة</div>
+    <div class="slide-subtitle anim-3">سيوضح لك هذا الفيديو الرموز المستخدمة وكيفية رسم المخطط الانسيابي خطوة بخطوة</div>
     <div id="fc-video-container" class="anim-4" style="max-width:600px; width:100%;"></div>
     <div class="anim-5" style="margin-top:28px; background:rgba(0,229,192,0.06); border:1px solid rgba(0,229,192,0.2); border-radius:14px; padding:18px 24px; max-width:600px; width:100%;">
       <div style="font-size:13px; font-weight:700; color:var(--accent); margin-bottom:8px;">✏️ مهمتك بعد الفيديو</div>
@@ -485,7 +493,7 @@ body::before {
       <!-- Vertical Flowchart -->
       <div class="fc-stage anim-4">
         <div class="fc-node start-end"
-          data-tip="بداية البرنامج — دايماً نبدأ من هنا"
+          data-tip="بداية البرنامج — نبدأ دائماً من هنا"
           onmouseenter="showTip(event,this)" onmouseleave="hideTip()">
           بداية
         </div>
@@ -560,7 +568,7 @@ body::before {
   <div class="slide" id="s5">
     <div class="slide-section-tag anim-1">Flowchart — واجب</div>
     <div class="slide-title anim-2">🎯 تحديك الآن</div>
-    <div class="slide-subtitle anim-3">ارسم الـ Flowchart بإيدك في الدفتر — بدون مساعدة</div>
+    <div class="slide-subtitle anim-3">ارسم المخطط الانسيابي بيدك في الدفتر — دون مساعدة</div>
 
     <!-- Problem Statement -->
     <div class="anim-4" style="background:rgba(255,179,71,0.08); border:2px solid rgba(255,179,71,0.45); border-radius:18px; padding:28px 36px; max-width:640px; width:100%; margin-bottom:28px; text-align:center;">
@@ -581,7 +589,7 @@ body::before {
         <div style="font-size:42px; flex-shrink:0; line-height:1;">◇</div>
         <div>
           <div style="font-size:15px; font-weight:800; color:var(--accent3); margin-bottom:6px;">الشكل المعين — للقرارات</div>
-          <div style="font-size:13px; color:var(--muted); line-height:1.7;">يُستخدم عند طرح سؤال بـ <strong style="color:var(--text);">نعم أو لا</strong> — وله دايماً مخرجان من جانبيه</div>
+          <div style="font-size:13px; color:var(--muted); line-height:1.7;">يُستخدم عند طرح سؤال بـ <strong style="color:var(--text);">نعم أو لا</strong> — وله دائماً مخرجان من جانبيه</div>
         </div>
         <div style="margin-right:auto; font-size:11px; padding:4px 12px; border-radius:20px; background:rgba(255,107,107,0.1); color:var(--accent3); border:1px solid rgba(255,107,107,0.25); font-weight:700; white-space:nowrap; flex-shrink:0;">جديد ⭐</div>
       </div>
@@ -596,27 +604,27 @@ body::before {
   <div class="slide" id="s6">
     <div class="slide-section-tag anim-1">الجزء الثاني</div>
     <div class="slide-title anim-2">مقدمة البرمجة وعلوم الحاسوب</div>
-    <div class="slide-subtitle anim-3">قبل ما تبدأ تكتب كود — لازم تفهم الأساسيات اللي بيقوم عليها كل شيء</div>
+    <div class="slide-subtitle anim-3">قبل أن تبدأ بكتابة الكود — عليك أن تفهم الأساسيات التي يقوم عليها كل شيء</div>
     <div class="info-grid anim-4">
       <div class="info-card">
         <span class="icon">💻</span>
-        <h3>إيه هي البرمجة؟</h3>
-        <p>طريقة نكلم فيها الحاسوب ونقوله بالضبط إيه اللي المفروض يعمله — خطوة بخطوة</p>
+        <h3>ما هي البرمجة؟</h3>
+        <p>أسلوب نتواصل من خلاله مع الحاسوب، ونخبره بالضبط بما يجب أن يفعله — خطوة بخطوة</p>
       </div>
       <div class="info-card">
         <span class="icon">🧠</span>
         <h3>التفكير الحسابي</h3>
-        <p>قبل الكود، لازم تفكر زي الآلة — تقسّم المشكلة لأجزاء صغيرة وتحل كل جزء لوحده</p>
+        <p>قبل الكود، ينبغي أن تفكر كما تفكر الآلة — تُقسّم المشكلة إلى أجزاء صغيرة وتحل كل جزء على حدة</p>
       </div>
       <div class="info-card">
         <span class="icon">🔤</span>
         <h3>لغات البرمجة</h3>
-        <p>زي اللغات البشرية — Scratch للمبتدئين، Python للمشاريع، وكل لغة ليها استخدامها</p>
+        <p>كاللغات البشرية تماماً — Scratch للمبتدئين، Python للمشاريع، ولكل لغة استخدامها المحدد</p>
       </div>
       <div class="info-card">
         <span class="icon">🔁</span>
         <h3>المفاهيم الأساسية</h3>
-        <p>المتغيرات، الشروط، الحلقات — نفس الأفكار موجودة في كل لغة برمجة على وجه الأرض</p>
+        <p>المتغيرات، الشروط، الحلقات — هذه الأفكار ذاتها موجودة في كل لغة برمجة في العالم</p>
       </div>
     </div>
   </div>
@@ -679,17 +687,17 @@ body::before {
   <div class="slide" id="s9">
     <div class="slide-section-tag anim-1">الجزء الثالث</div>
     <div class="slide-title anim-2">Scratch — البرمجة المرئية</div>
-    <div class="slide-subtitle anim-3">بتبرمج بالـ drag & drop — مثالي لفهم المفاهيم بصرياً قبل الانتقال لـ Python</div>
+    <div class="slide-subtitle anim-3">البرمجة بالسحب والإفلات — مثالي لفهم المفاهيم بصرياً قبل الانتقال إلى Python</div>
     <div class="anim-4" style="display:flex; flex-direction:column; align-items:center; gap:20px; max-width:600px; width:100%;">
       <div style="font-size:80px; line-height:1;">🐱</div>
       <div style="background:rgba(91,127,255,0.08); border:2px dashed rgba(91,127,255,0.35); border-radius:20px; padding:32px 40px; text-align:center; width:100%;">
         <div style="font-size:18px; font-weight:800; color:var(--accent2); margin-bottom:10px;">الفيديوهات قادمة قريباً</div>
-        <div style="font-size:14px; color:var(--muted); line-height:1.8;">سيتم إضافة فيديوهات Scratch في الجلسة القادمة<br>ابق متابعاً! 🚀</div>
+        <div style="font-size:14px; color:var(--muted); line-height:1.8;">ستُضاف فيديوهات Scratch في الجلسة القادمة<br>ترقّب الجديد! 🚀</div>
       </div>
       <div style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px 24px; width:100%;">
         <div style="font-size:12px; font-weight:700; color:var(--accent2); letter-spacing:2px; font-family:'Space Mono',monospace; margin-bottom:10px;">في الوقت الحالي — تعرّف على Scratch</div>
         <div style="font-size:13px; color:var(--muted); line-height:1.8;">
-          Scratch هي بيئة برمجة مرئية من MIT — تسحب المكعبات وتوصلها زي الـ puzzle بدل ما تكتب كود. مثالية لتعلم مفاهيم البرمجة بطريقة ممتعة.
+          Scratch هي بيئة برمجة مرئية من MIT — تسحب المكعبات وتوصلها كقطع الأحجية بدلاً من كتابة الكود. إنها مثالية لتعلّم مفاهيم البرمجة بطريقة ممتعة وبصرية.
         </div>
       </div>
     </div>
@@ -699,11 +707,11 @@ body::before {
   <div class="slide" id="s10">
     <div class="slide-section-tag anim-1">إنترنت الأشياء — فيديو</div>
     <div class="slide-title anim-2">شاهد الشرح أولاً</div>
-    <div class="slide-subtitle anim-3">الفيديو ده هيوضح لك إيه هو الـ IoT وكيف يغيّر حياتنا بأمثلة حقيقية</div>
+    <div class="slide-subtitle anim-3">سيوضح لك هذا الفيديو ما هو الـ IoT وكيف يُغيّر حياتنا من خلال أمثلة حقيقية</div>
     <div id="iot-video-container" class="anim-4" style="max-width:600px; width:100%;"></div>
     <div class="anim-5" style="margin-top:28px; background:rgba(0,229,192,0.06); border:1px solid rgba(0,229,192,0.2); border-radius:14px; padding:18px 24px; max-width:600px; width:100%;">
       <div style="font-size:13px; font-weight:700; color:var(--accent); margin-bottom:8px;">✏️ ركّز أثناء المشاهدة</div>
-      <div style="font-size:13px; color:var(--muted); line-height:1.8;">دوّن في الدفتر: ما هي الأجهزة التي ذكرها الفيديو؟ وكيف تتواصل مع بعض؟</div>
+      <div style="font-size:13px; color:var(--muted); line-height:1.8;">دوّن في الدفتر: ما الأجهزة التي ذكرها الفيديو؟ وكيف تتواصل فيما بينها؟</div>
     </div>
   </div>
 
@@ -711,7 +719,7 @@ body::before {
   <div class="slide" id="s11">
     <div class="slide-section-tag anim-1">الجزء الثالث</div>
     <div class="slide-title anim-2">إنترنت الأشياء</div>
-    <div class="slide-subtitle anim-3">Internet of Things — لما الأشياء العادية تبدأ تتكلم مع بعض</div>
+    <div class="slide-subtitle anim-3">Internet of Things — حين تبدأ الأشياء العادية في التواصل فيما بينها</div>
     <div class="iot-flow anim-4">
       <div class="iot-flow-node">
         <div class="fn-icon">🌡</div>
@@ -740,13 +748,13 @@ body::before {
       <div class="iot-flow-node">
         <div class="fn-icon">📱</div>
         <div class="fn-label">القرار</div>
-        <div class="fn-sub">يبعت تنبيه</div>
+        <div class="fn-sub">يُرسل تنبيهاً</div>
       </div>
     </div>
     <div class="anim-5" style="margin-top:28px; background:rgba(0,229,192,0.06); border:1px solid rgba(0,229,192,0.2); border-radius:16px; padding:20px 28px; max-width:800px; width:100%;">
       <div style="font-size:15px; font-weight:700; color:var(--accent); margin-bottom:8px;">مشروعنا = IoT مصغر!</div>
       <div style="font-size:13px; color:var(--muted); line-height:1.8;">
-        Room Guardian بيقيس درجة الحرارة والاهتزاز (حساس) ← يبعت البيانات لـ Python (معالجة) ← يخزنها في SQLite (تخزين) ← يعرضها على الـ Dashboard (قرار)
+        Room Guardian يقيس درجة الحرارة والاهتزاز (حساس) ← يُرسل البيانات إلى Python (معالجة) ← يخزّنها في SQLite (تخزين) ← يعرضها على لوحة التحكم Dashboard (قرار)
       </div>
     </div>
   </div>
@@ -755,7 +763,7 @@ body::before {
   <div class="slide" id="s12">
     <div class="slide-section-tag anim-1">IoT — استخدامات وأمثلة</div>
     <div class="slide-title anim-2">IoT في حياتنا</div>
-    <div class="slide-subtitle anim-3">الأجهزة الذكية موجودة حواليك أكتر مما تتخيل</div>
+    <div class="slide-subtitle anim-3">الأجهزة الذكية موجودة حولك أكثر مما تتخيل</div>
     <div class="iot-big-grid anim-4">
       <div class="iot-big-card">
         <div class="q">المنازل الذكية</div>
@@ -800,31 +808,31 @@ body::before {
   <div class="slide" id="s13">
     <div class="slide-section-tag anim-1">IoT — أهمية البيانات</div>
     <div class="slide-title anim-2">البيانات هي الذهب الجديد</div>
-    <div class="slide-subtitle anim-3">هل نحتاج نخزن البيانات؟ — الإجابة القصيرة: نعم، دايماً</div>
+    <div class="slide-subtitle anim-3">هل نحتاج إلى تخزين البيانات؟ — الإجابة المختصرة: نعم، دائماً</div>
     <div class="info-grid anim-4" style="max-width: 860px;">
       <div class="info-card">
         <span class="icon">📈</span>
         <h3>فهم الأنماط</h3>
-        <p>لو خزنا درجة الحرارة كل يوم، هنقدر نشوف: الغرفة بتسخن إمتى؟ وليه؟</p>
+        <p>إذا خزّنّا درجة الحرارة كل يوم، استطعنا معرفة: متى ترتفع حرارة الغرفة؟ ولماذا؟</p>
       </div>
       <div class="info-card">
         <span class="icon">🚨</span>
         <h3>التنبؤ بالمشاكل</h3>
-        <p>بيانات الاهتزاز ممكن تحذرنا إن في مشكلة قبل ما تتفاقم</p>
+        <p>بيانات الاهتزاز يمكن أن تُنذرنا بوجود مشكلة قبل أن تتفاقم</p>
       </div>
       <div class="info-card">
         <span class="icon">🔍</span>
         <h3>التحليل والتحسين</h3>
-        <p>من غير بيانات مخزنة، مفيش تحليل — ومفيش تحسين ممكن</p>
+        <p>بدون بيانات مخزّنة، لا يوجد تحليل — ولا تحسين ممكن</p>
       </div>
       <div class="info-card">
         <span class="icon">🤖</span>
         <h3>الذكاء الاصطناعي</h3>
-        <p>كل نماذج الـ AI بتتعلم من بيانات مخزنة — البيانات = الخبرة</p>
+        <p>جميع نماذج الذكاء الاصطناعي تتعلم من بيانات مخزّنة — البيانات هي الخبرة</p>
       </div>
     </div>
     <div class="anim-5" style="margin-top:20px; background:rgba(255,179,71,0.06); border:1px solid rgba(255,179,71,0.25); border-radius:14px; padding:16px 24px; max-width:860px; width:100%; font-size:13px; color:var(--muted); line-height:1.8;">
-      💡 <strong style="color:var(--amber);">في مشروعنا:</strong> بنخزن بيانات الحساسات في SQLite — عشان نقدر نعرض تاريخ القراءات على الـ Dashboard ونحلل التغيرات مع الوقت
+      💡 <strong style="color:var(--amber);">في مشروعنا:</strong> نخزّن بيانات الحساسات في SQLite — كي نتمكن من عرض سجل القراءات على لوحة التحكم وتحليل التغيرات عبر الزمن
     </div>
   </div>
 
@@ -838,7 +846,7 @@ body::before {
     <div class="anim-4" style="background:rgba(255,179,71,0.07); border:2px solid rgba(255,179,71,0.4); border-radius:18px; padding:24px 32px; max-width:700px; width:100%; margin-bottom:24px;">
       <div style="font-size:11px; font-weight:700; color:var(--amber); letter-spacing:3px; font-family:'Space Mono',monospace; margin-bottom:12px;">📋 المشكلة</div>
       <div style="font-size:16px; font-weight:800; color:var(--text); line-height:1.7; margin-bottom:14px;">
-        مزارع عنده بيت نباتات (Greenhouse) —<br>النباتات بتموت أحياناً لأن درجة الحرارة بترتفع أو الرطوبة بتنخفض وهو مش موجود ليشوف.
+        لدى مزارعٍ بيتُ نباتات (Greenhouse) —<br>تموت النباتات أحياناً لارتفاع درجة الحرارة أو انخفاض الرطوبة في غيابه.
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
         <span style="background:rgba(255,107,107,0.12); border:1px solid rgba(255,107,107,0.3); border-radius:20px; padding:4px 14px; font-size:12px; font-weight:700; color:var(--accent3);">🌡 حرارة مرتفعة</span>
@@ -889,7 +897,7 @@ body::before {
   <div class="slide" id="s15">
     <div class="slide-section-tag anim-1">ملخص الجلسة</div>
     <div class="slide-title anim-2">مهامك لهذا الأسبوع</div>
-    <div class="slide-subtitle anim-3">اضغط على كل مهمة لما تخلصها ✅</div>
+    <div class="slide-subtitle anim-3">اضغط على كل مهمة عند إتمامها ✅</div>
     <div class="task-list anim-4" id="task-list">
       <div class="task-item" onclick="toggleTask(this)">
         <div class="task-check"></div>
@@ -910,8 +918,8 @@ body::before {
       <div class="task-item" onclick="toggleTask(this)">
         <div class="task-check"></div>
         <div class="task-body">
-          <div class="task-title">شاهد ٣ فيديوهات Scratch وطبق</div>
-          <div class="task-meta">الفيديو ١ + ٢ + ٤ من القائمة</div>
+          <div class="task-title">شاهد ٣ فيديوهات مقدمة البرمجة وطبّق</div>
+          <div class="task-meta">الفيديوهات الثلاثة بالترتيب من القائمة</div>
         </div>
         <span class="task-tag" style="background:rgba(255,107,107,0.1); color:var(--accent3); border:1px solid rgba(255,107,107,0.2);">مشاهدة + تطبيق</span>
       </div>
@@ -1075,7 +1083,7 @@ fetch('videos.json')
   });
 
 // Task checklist
-const msgs = ['', 'بداية ممتازة! 🎯', 'نص الطريق! 💪', 'تقريباً! 🔥', 'جبت عليها! 🔥', 'مبروك — الجلسة اتخلصت! 🎉 🏆'];
+const msgs = ['', 'بداية رائعة! 🎯', 'في منتصف الطريق! 💪', 'اقتربت من الهدف! 🔥', 'أنجزتَ معظمها! 🔥', 'مبارك — أتممتَ جميع المهام! 🎉 🏆'];
 function toggleTask(el) {
   el.classList.toggle('done');
   el.querySelector('.task-check').textContent = el.classList.contains('done') ? '✓' : '';

@@ -114,9 +114,11 @@ body::before {
   opacity: 0; pointer-events: none;
   transition: opacity 0.6s ease, transform 0.6s ease;
   transform: translateY(30px);
+  overflow-y: auto;
 }
 .slide.active {
   opacity: 1; pointer-events: all; transform: translateY(0);
+  overflow-y: auto;
 }
 .slide.exit {
   opacity: 0; transform: translateY(-30px);
@@ -364,7 +366,7 @@ body::before {
 
 /* Responsive */
 @media (max-width: 768px) {
-  .slide { padding: 50px 24px 80px; }
+  .slide { padding: 50px 24px 100px; overflow-y: auto; }
   .iot-big-grid { grid-template-columns: 1fr; }
   .info-grid { grid-template-columns: 1fr; }
   .iot-flow { flex-direction: column; }

@@ -1,4 +1,13 @@
 {
+  "iot": [
+    {
+      "id": "iot1",
+      "title": "ما هو إنترنت الأشياء؟ — شرح بالعربي",
+      "description": "تعرّف على IoT من الصفر — كيف تتواصل الأجهزة وتغيّر حياتنا",
+      "url": "https://www.youtube.com/watch?v=lFdaJPl249g&t=36s",
+      "platform": "YouTube"
+    }
+  ],
   "flowchart": [
     {
       "id": "fc1",

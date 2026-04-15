@@ -12,22 +12,22 @@
     {
       "id": "cs1",
       "num": "١",
-      "title": "مقدمة Scratch — أول خطواتك",
-      "description": "تعرف على واجهة البرنامج وأول مشروع",
+      "title": "ما هي البرمجة وكيف تتعلم البرمجة؟",
+      "description": "مقدمة شاملة عن البرمجة وكيف تبدأ رحلتك في تعلّمها",
       "url": "https://www.youtube.com/watch?v=9ndH9Qo05F4&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN"
     },
     {
       "id": "cs2",
       "num": "٢",
-      "title": "الحركة والأحداث",
-      "description": "كيف تحرك الشخصيات وتستجيب للمستخدم",
+      "title": "لغات البرمجة والفرق بينها",
+      "description": "تعلم البرمجة للمبتدئين — الجزء الثاني",
       "url": "https://www.youtube.com/watch?v=FMSOoWQR92I&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&index=2"
     },
     {
       "id": "cs3",
       "num": "٣",
-      "title": "الشروط والتكرار",
-      "description": "if / else والـ loops — قلب أي برنامج",
+      "title": "ما هو الـ Syntax؟",
+      "description": "تعلم البرمجة من الصفر للمبتدئين — الجزء الرابع",
       "url": "https://www.youtube.com/watch?v=NU_IdBZq1qc&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&index=4"
     }
   ],

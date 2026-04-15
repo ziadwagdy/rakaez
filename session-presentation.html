@@ -105,8 +105,10 @@ body::before {
   .nav-btn {
     position: static;
     top: auto; transform: none;
-    width: 34px; height: 34px; font-size: 18px;
+    width: 38px; height: 38px; font-size: 22px; font-weight: 900;
     flex-shrink: 0;
+    border-color: rgba(0,229,192,0.4);
+    background: rgba(0,229,192,0.1);
   }
   .nav-btn:hover { transform: scale(1.08); }
   #nav-dots { gap: 6px; align-items: center; }
@@ -953,7 +955,7 @@ body::before {
 
 <!-- Bottom nav: arrows + dots -->
 <div id="nav-dots">
-  <button class="nav-btn" id="btn-next" title="التالي">›</button>
+  <button class="nav-btn" id="btn-next" title="التالي">❯</button>
   <button class="dot active" onclick="goTo(0)"></button>
   <button class="dot" onclick="goTo(1)"></button>
   <button class="dot" onclick="goTo(2)"></button>
@@ -969,7 +971,7 @@ body::before {
   <button class="dot" onclick="goTo(12)"></button>
   <button class="dot" onclick="goTo(13)"></button>
   <button class="dot" onclick="goTo(14)"></button>
-  <button class="nav-btn" id="btn-prev" title="السابق">‹</button>
+  <button class="nav-btn" id="btn-prev" title="السابق">❮</button>
 </div>
 
 <script>

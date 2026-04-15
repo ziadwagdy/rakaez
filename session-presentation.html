@@ -1,0 +1,841 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Room Guardian — الجلسة التأسيسية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080c14;
+  --bg2: #0e1520;
+  --bg3: #141d2e;
+  --accent: #00e5c0;
+  --accent2: #5b7fff;
+  --accent3: #ff6b6b;
+  --amber: #ffb347;
+  --text: #e8f0fe;
+  --muted: #6b7fa3;
+  --border: rgba(0,229,192,0.15);
+  --card: rgba(14,21,32,0.9);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100%; height: 100%;
+  background: var(--bg);
+  font-family: 'Cairo', sans-serif;
+  color: var(--text);
+  overflow: hidden;
+  user-select: none;
+}
+
+/* Background grid */
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,192,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,192,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Glow orbs */
+.orb {
+  position: fixed; border-radius: 50%;
+  filter: blur(100px); pointer-events: none; z-index: 0; opacity: 0.18;
+  transition: all 1.2s ease;
+}
+.orb1 { width: 500px; height: 500px; background: #00e5c0; top: -150px; right: -150px; }
+.orb2 { width: 400px; height: 400px; background: #5b7fff; bottom: -100px; left: -100px; }
+
+/* Progress bar */
+#progress-bar {
+  position: fixed; top: 0; left: 0; height: 3px;
+  background: linear-gradient(90deg, var(--accent), var(--accent2));
+  transition: width 0.5s ease; z-index: 100;
+  box-shadow: 0 0 12px var(--accent);
+}
+
+/* Slide counter */
+#counter {
+  position: fixed; top: 18px; left: 24px;
+  font-size: 12px; color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  z-index: 100; letter-spacing: 1px;
+}
+
+/* Nav dots */
+#nav-dots {
+  position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+  display: flex; gap: 8px; z-index: 100;
+}
+.dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--muted); cursor: pointer;
+  transition: all 0.3s ease;
+  border: none; padding: 0;
+}
+.dot.active {
+  background: var(--accent);
+  box-shadow: 0 0 10px var(--accent);
+  transform: scale(1.4);
+}
+
+/* Arrow buttons */
+.nav-btn {
+  position: fixed; top: 50%; transform: translateY(-50%);
+  width: 44px; height: 44px; border-radius: 50%;
+  border: 1px solid var(--border);
+  background: rgba(14,21,32,0.8);
+  color: var(--accent); font-size: 18px; cursor: pointer;
+  z-index: 100; display: flex; align-items: center; justify-content: center;
+  transition: all 0.2s ease; backdrop-filter: blur(8px);
+}
+.nav-btn:hover { background: rgba(0,229,192,0.15); transform: translateY(-50%) scale(1.1); }
+#btn-prev { right: 20px; }
+#btn-next { left: 20px; }
+
+/* Slides container */
+#slides {
+  position: fixed; inset: 0; z-index: 1;
+}
+
+/* Slide */
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 60px 80px 80px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  transform: translateY(30px);
+}
+.slide.active {
+  opacity: 1; pointer-events: all; transform: translateY(0);
+}
+.slide.exit {
+  opacity: 0; transform: translateY(-30px);
+}
+
+/* ===== SLIDE COMPONENTS ===== */
+
+/* Title slide */
+.title-eyebrow {
+  font-size: 13px; font-weight: 400; color: var(--accent);
+  letter-spacing: 4px; text-transform: uppercase;
+  margin-bottom: 20px;
+  font-family: 'Space Mono', monospace;
+}
+.title-main {
+  font-size: clamp(40px, 6vw, 72px);
+  font-weight: 900; line-height: 1.1;
+  text-align: center;
+  background: linear-gradient(135deg, #fff 0%, var(--accent) 60%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 24px;
+}
+.title-sub {
+  font-size: 16px; color: var(--muted); text-align: center;
+  max-width: 600px; line-height: 1.7;
+}
+.title-badges {
+  display: flex; gap: 10px; margin-top: 36px; flex-wrap: wrap; justify-content: center;
+}
+.t-badge {
+  padding: 8px 18px; border-radius: 30px; font-size: 13px; font-weight: 600;
+  border: 1px solid; display: flex; align-items: center; gap: 6px;
+}
+.t-badge.teal { border-color: var(--accent); color: var(--accent); background: rgba(0,229,192,0.08); }
+.t-badge.blue { border-color: var(--accent2); color: var(--accent2); background: rgba(91,127,255,0.08); }
+.t-badge.red  { border-color: var(--accent3); color: var(--accent3); background: rgba(255,107,107,0.08); }
+
+/* Section heading */
+.slide-section-tag {
+  font-size: 11px; font-weight: 600; letter-spacing: 3px;
+  color: var(--accent); font-family: 'Space Mono', monospace;
+  text-transform: uppercase; margin-bottom: 12px;
+}
+.slide-title {
+  font-size: clamp(28px, 4vw, 48px);
+  font-weight: 900; text-align: center; margin-bottom: 8px;
+  color: var(--text);
+}
+.slide-subtitle {
+  font-size: 15px; color: var(--muted); text-align: center;
+  margin-bottom: 36px; max-width: 650px; line-height: 1.7;
+}
+
+/* Info grid */
+.info-grid {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px; width: 100%; max-width: 900px;
+}
+.info-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 20px 22px;
+  transition: all 0.3s ease;
+}
+.info-card:hover {
+  border-color: rgba(0,229,192,0.4);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 40px rgba(0,229,192,0.08);
+}
+.info-card .icon { font-size: 28px; margin-bottom: 10px; display: block; }
+.info-card h3 { font-size: 15px; font-weight: 700; color: var(--accent); margin-bottom: 6px; }
+.info-card p { font-size: 13px; color: var(--muted); line-height: 1.7; }
+
+/* Flowchart interactive */
+.fc-stage {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 4px; width: 100%; max-width: 400px;
+}
+.fc-node {
+  padding: 10px 28px; font-size: 14px; font-weight: 600;
+  cursor: pointer; transition: all 0.3s ease;
+  position: relative; text-align: center; width: 80%;
+}
+.fc-node.start-end {
+  border-radius: 40px; background: rgba(0,229,192,0.1);
+  border: 2px solid var(--accent); color: var(--accent);
+}
+.fc-node.process {
+  border-radius: 8px; background: rgba(91,127,255,0.1);
+  border: 2px solid var(--accent2); color: var(--accent2);
+}
+.fc-node.io {
+  clip-path: polygon(8% 0%, 100% 0%, 92% 100%, 0% 100%);
+  background: rgba(255,179,71,0.1); border: none;
+  outline: 2px solid var(--amber); color: var(--amber);
+  width: 85%;
+}
+.fc-node:hover { filter: brightness(1.3); transform: scale(1.04); }
+.fc-arrow-down {
+  font-size: 20px; color: var(--muted); line-height: 1;
+}
+.fc-legend {
+  display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; justify-content: center;
+}
+.fc-legend-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 12px; color: var(--muted);
+}
+.fc-legend-swatch {
+  width: 14px; height: 14px; border-radius: 3px;
+}
+
+/* Video links */
+.video-list { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 750px; }
+.video-link {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 20px;
+  text-decoration: none; color: var(--text);
+  transition: all 0.3s ease;
+}
+.video-link:hover {
+  border-color: rgba(255,107,107,0.5);
+  background: rgba(255,107,107,0.06);
+  transform: translateX(-4px);
+}
+.video-num {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: rgba(255,107,107,0.15); color: var(--accent3);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: 700; flex-shrink: 0;
+}
+.video-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.video-desc { font-size: 12px; color: var(--muted); }
+.play-icon {
+  margin-right: auto; font-size: 20px; color: var(--accent3);
+  opacity: 0.6; transition: opacity 0.2s;
+}
+.video-link:hover .play-icon { opacity: 1; }
+
+/* IoT big cards */
+.iot-big-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px; width: 100%; max-width: 860px;
+}
+.iot-big-card {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 22px 24px;
+  transition: all 0.3s ease;
+}
+.iot-big-card:hover { border-color: rgba(91,127,255,0.4); transform: translateY(-3px); }
+.iot-big-card .q {
+  font-size: 12px; font-weight: 600; color: var(--accent2);
+  letter-spacing: 2px; text-transform: uppercase;
+  font-family: 'Space Mono', monospace; margin-bottom: 10px;
+}
+.iot-big-card .a { font-size: 14px; color: var(--text); line-height: 1.8; }
+.iot-big-card .a span {
+  display: inline-block; margin: 2px 3px;
+  padding: 2px 10px; border-radius: 20px; font-size: 12px;
+  background: rgba(91,127,255,0.12); color: var(--accent2);
+  border: 1px solid rgba(91,127,255,0.2);
+}
+
+/* Task checklist */
+.task-list { display: flex; flex-direction: column; gap: 12px; width: 100%; max-width: 750px; }
+.task-item {
+  display: flex; align-items: center; gap: 16px;
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 14px; padding: 16px 20px; cursor: pointer;
+  transition: all 0.3s ease;
+}
+.task-item.done {
+  border-color: rgba(0,229,192,0.4);
+  background: rgba(0,229,192,0.05);
+}
+.task-check {
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 2px solid var(--muted); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; transition: all 0.3s ease;
+}
+.task-item.done .task-check {
+  border-color: var(--accent); background: var(--accent); color: #000;
+}
+.task-body { flex: 1; }
+.task-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+.task-meta { font-size: 12px; color: var(--muted); }
+.task-tag {
+  font-size: 11px; padding: 3px 10px; border-radius: 20px; font-weight: 600;
+}
+
+/* Data visualization - IoT flow */
+.iot-flow {
+  display: flex; align-items: center; gap: 0;
+  width: 100%; max-width: 800px; justify-content: center;
+  flex-wrap: nowrap; overflow-x: auto;
+}
+.iot-flow-node {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px;
+  text-align: center; min-width: 130px;
+  transition: all 0.3s ease;
+}
+.iot-flow-node:hover {
+  border-color: rgba(0,229,192,0.5);
+  box-shadow: 0 0 20px rgba(0,229,192,0.1);
+}
+.iot-flow-node .fn-icon { font-size: 28px; margin-bottom: 6px; }
+.iot-flow-node .fn-label { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.iot-flow-node .fn-sub { font-size: 11px; color: var(--muted); }
+.iot-flow-arrow { font-size: 22px; color: var(--accent); padding: 0 6px; flex-shrink: 0; }
+
+/* Animated entrance */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.slide.active .anim-1 { animation: fadeUp 0.5s ease 0.1s both; }
+.slide.active .anim-2 { animation: fadeUp 0.5s ease 0.2s both; }
+.slide.active .anim-3 { animation: fadeUp 0.5s ease 0.3s both; }
+.slide.active .anim-4 { animation: fadeUp 0.5s ease 0.4s both; }
+.slide.active .anim-5 { animation: fadeUp 0.5s ease 0.5s both; }
+.slide.active .anim-6 { animation: fadeUp 0.5s ease 0.6s both; }
+
+/* Tooltip */
+.tooltip-box {
+  position: fixed; z-index: 200;
+  background: rgba(14,21,32,0.97); border: 1px solid var(--accent);
+  border-radius: 10px; padding: 10px 14px;
+  font-size: 13px; color: var(--text); max-width: 250px;
+  pointer-events: none; opacity: 0; transition: opacity 0.2s ease;
+  box-shadow: 0 8px 30px rgba(0,229,192,0.15);
+}
+.tooltip-box.visible { opacity: 1; }
+
+/* Keyboard hint */
+#keyboard-hint {
+  position: fixed; bottom: 60px; left: 50%; transform: translateX(-50%);
+  font-size: 11px; color: var(--muted);
+  font-family: 'Space Mono', monospace;
+  z-index: 100;
+  animation: fadeUp 1s ease 2s both;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .slide { padding: 50px 24px 80px; }
+  .iot-big-grid { grid-template-columns: 1fr; }
+  .info-grid { grid-template-columns: 1fr; }
+  .iot-flow { flex-direction: column; }
+  .iot-flow-arrow { transform: rotate(90deg); }
+  #btn-prev { right: 8px; }
+  #btn-next { left: 8px; }
+}
+</style>
+</head>
+<body>
+
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div id="progress-bar" style="width: 10%"></div>
+<div id="counter">01 / 10</div>
+<div id="keyboard-hint">← → للتنقل | SPACE للتالي</div>
+
+<div class="tooltip-box" id="tooltip"></div>
+
+<button class="nav-btn" id="btn-prev" title="السابق">‹</button>
+<button class="nav-btn" id="btn-next" title="التالي">›</button>
+
+<div id="slides">
+
+  <!-- SLIDE 1: Title -->
+  <div class="slide active" id="s1">
+    <div class="title-eyebrow anim-1">Room Guardian — المرحلة التأسيسية</div>
+    <div class="title-main anim-2">جلسة التأسيس<br>للمبرمج الشاب</div>
+    <div class="title-sub anim-3">رحلتنا اليوم: من رسم الأفكار، إلى كتابة الكود، وصولاً لعالم الأشياء المتصلة</div>
+    <div class="title-badges anim-4">
+      <div class="t-badge teal">🗺 Flowchart</div>
+      <div class="t-badge blue">🐱 Scratch</div>
+      <div class="t-badge red">🌐 IoT</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: What is Flowchart -->
+  <div class="slide" id="s2">
+    <div class="slide-section-tag anim-1">الجزء الأول</div>
+    <div class="slide-title anim-2">المخطط الانسيابي</div>
+    <div class="slide-subtitle anim-3">قبل ما تكتب سطر كود واحد — ارسم أفكارك أولاً</div>
+    <div class="info-grid anim-4">
+      <div class="info-card">
+        <span class="icon">🗺</span>
+        <h3>إيه هو؟</h3>
+        <p>رسم بياني يوضح خطوات حل مشكلة أو تنفيذ برنامج خطوة بخطوة</p>
+      </div>
+      <div class="info-card">
+        <span class="icon">🤔</span>
+        <h3>ليه بنستخدمه؟</h3>
+        <p>يساعدنا نفكر بوضوح قبل الكود، ونكتشف الأخطاء قبل ما تحصل</p>
+      </div>
+      <div class="info-card">
+        <span class="icon">🔷</span>
+        <h3>الرموز</h3>
+        <p>كل شكل له معنى: بيضاوي للبداية والنهاية، مستطيل للعمليات، متوازي الأضلاع للإدخال والإخراج</p>
+      </div>
+      <div class="info-card">
+        <span class="icon">🎯</span>
+        <h3>مشروعنا</h3>
+        <p>هنرسم flowchart لبرنامج يحسب محيط الدائرة — أبسط تطبيق عملي</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Flowchart Interactive -->
+  <div class="slide" id="s3">
+    <div class="slide-section-tag anim-1">Flowchart — تطبيق</div>
+    <div class="slide-title anim-2">محيط الدائرة</div>
+    <div class="slide-subtitle anim-3">المعادلة: المحيط = 2 × π × r &nbsp;|&nbsp; اضغط على أي خطوة لتعرف أكثر</div>
+    <div style="display:flex; gap:60px; align-items:flex-start; flex-wrap:wrap; justify-content:center;">
+      <div class="fc-stage anim-4">
+        <div class="fc-node start-end"
+          data-tip="بداية البرنامج — دايماً نبدأ من هنا"
+          onmouseenter="showTip(event,this)" onmouseleave="hideTip()">
+          بداية
+        </div>
+        <div class="fc-arrow-down">↓</div>
+        <div class="fc-node io"
+          data-tip="الإدخال: نطلب من المستخدم يكتب قيمة نصف القطر r"
+          onmouseenter="showTip(event,this)" onmouseleave="hideTip()">
+          أدخل نصف القطر (r)
+        </div>
+        <div class="fc-arrow-down">↓</div>
+        <div class="fc-node process"
+          data-tip="المعالجة: نحسب المحيط باستخدام المعادلة الرياضية"
+          onmouseenter="showTip(event,this)" onmouseleave="hideTip()">
+          المحيط = 2 × 3.14 × r
+        </div>
+        <div class="fc-arrow-down">↓</div>
+        <div class="fc-node io"
+          data-tip="الإخراج: نعرض النتيجة للمستخدم على الشاشة"
+          onmouseenter="showTip(event,this)" onmouseleave="hideTip()">
+          اطبع المحيط
+        </div>
+        <div class="fc-arrow-down">↓</div>
+        <div class="fc-node start-end"
+          data-tip="نهاية البرنامج — البرنامج انتهى بنجاح"
+          onmouseenter="showTip(event,this)" onmouseleave="hideTip()">
+          نهاية
+        </div>
+        <div class="fc-legend anim-5">
+          <div class="fc-legend-item">
+            <div class="fc-legend-swatch" style="background:rgba(0,229,192,0.3); border-radius:20px;"></div>
+            بداية / نهاية
+          </div>
+          <div class="fc-legend-item">
+            <div class="fc-legend-swatch" style="background:rgba(91,127,255,0.3); border-radius:3px;"></div>
+            معالجة
+          </div>
+          <div class="fc-legend-item">
+            <div class="fc-legend-swatch" style="background:rgba(255,179,71,0.3); border-radius:3px;"></div>
+            إدخال / إخراج
+          </div>
+        </div>
+      </div>
+
+      <!-- Calculator -->
+      <div class="anim-5" style="background: var(--card); border: 1px solid var(--border); border-radius:16px; padding:24px; min-width:220px; text-align:center;">
+        <div style="font-size:13px; color:var(--muted); margin-bottom:14px; font-weight:600;">جرب المعادلة بنفسك ↓</div>
+        <div style="font-size:13px; color:var(--muted); margin-bottom:6px; text-align:right;">نصف القطر (r)</div>
+        <input type="number" id="radius-input" value="5" min="1" max="999"
+          style="width:100%; padding:10px 14px; background:var(--bg3); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:Cairo,sans-serif; font-size:15px; text-align:center; outline:none; direction:ltr; margin-bottom:14px;"
+          oninput="calcCirc()">
+        <div style="font-size:13px; color:var(--muted); margin-bottom:8px;">النتيجة</div>
+        <div id="circ-result" style="font-size:32px; font-weight:900; color:var(--accent);">31.4</div>
+        <div style="font-size:11px; color:var(--muted); margin-top:6px;">وحدة</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: Flowchart Video -->
+  <div class="slide" id="s4">
+    <div class="slide-section-tag anim-1">Flowchart — فيديو</div>
+    <div class="slide-title anim-2">شاهد الشرح أولاً</div>
+    <div class="slide-subtitle anim-3">الفيديو ده هيوضح لك الرموز، وكيفية رسم الـ Flowchart خطوة بخطوة</div>
+    <a href="https://www.youtube.com/watch?v=OrYLsguQ4aQ" target="_blank" class="anim-4"
+      style="display:flex; align-items:center; gap:20px; background:var(--card); border:1px solid rgba(255,107,107,0.3); border-radius:20px; padding:28px 36px; text-decoration:none; transition:all 0.3s ease; max-width:600px; width:100%;"
+      onmouseenter="this.style.borderColor='rgba(255,107,107,0.7)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 20px 50px rgba(255,107,107,0.12)'"
+      onmouseleave="this.style.borderColor='rgba(255,107,107,0.3)'; this.style.transform=''; this.style.boxShadow=''">
+      <div style="width:60px; height:60px; border-radius:50%; background:rgba(255,107,107,0.2); display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; border:2px solid rgba(255,107,107,0.4);">▶</div>
+      <div>
+        <div style="font-size:17px; font-weight:700; color:var(--text); margin-bottom:6px;">شرح المخطط الانسيابي بالعربي</div>
+        <div style="font-size:13px; color:var(--muted);">تعلم الرموز، وطريقة التفكير، وكيف تطبق على أي مشكلة</div>
+        <div style="font-size:11px; color:rgba(255,107,107,0.8); margin-top:8px; font-family:'Space Mono',monospace;">YouTube — اضغط للفتح ↗</div>
+      </div>
+    </a>
+    <div class="anim-5" style="margin-top:28px; background:rgba(0,229,192,0.06); border:1px solid rgba(0,229,192,0.2); border-radius:14px; padding:18px 24px; max-width:600px; width:100%;">
+      <div style="font-size:13px; font-weight:700; color:var(--accent); margin-bottom:8px;">✏️ مهمتك بعد الفيديو</div>
+      <div style="font-size:13px; color:var(--muted); line-height:1.8;">ارسم بإيدك Flowchart لبرنامج يحسب محيط الدائرة في دفتر التوثيق — بالرموز الصح</div>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Scratch Intro -->
+  <div class="slide" id="s5">
+    <div class="slide-section-tag anim-1">الجزء الثاني</div>
+    <div class="slide-title anim-2">Scratch — البرمجة المرئية</div>
+    <div class="slide-subtitle anim-3">بتبرمج بالـ drag & drop — مثالي لفهم المفاهيم الأساسية</div>
+    <div class="info-grid anim-4">
+      <div class="info-card">
+        <span class="icon">🐱</span>
+        <h3>إيه هو Scratch؟</h3>
+        <p>بيئة برمجة مرئية من MIT — بتسحب وتوصل الأكواد زي الـ puzzle</p>
+      </div>
+      <div class="info-card">
+        <span class="icon">🎮</span>
+        <h3>بنعمل إيه؟</h3>
+        <p>ألعاب، قصص، رسوم متحركة — كل ده بكود بسيط ومرئي</p>
+      </div>
+      <div class="info-card">
+        <span class="icon">🧱</span>
+        <h3>المفاهيم</h3>
+        <p>الأحداث، الحلقات، الشروط، المتغيرات — نفس مفاهيم Python بس بصريًا</p>
+      </div>
+      <div class="info-card">
+        <span class="icon">🔗</span>
+        <h3>الربط بمشروعنا</h3>
+        <p>Scratch بيبني تفكيرنا البرمجي قبل ما ننتقل لـ Python في المشروع الحقيقي</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 6: Scratch Videos -->
+  <div class="slide" id="s6">
+    <div class="slide-section-tag anim-1">Scratch — فيديوهات</div>
+    <div class="slide-title anim-2">ثلاثة فيديوهات بالترتيب</div>
+    <div class="slide-subtitle anim-3">شاهد وطبق مع كل فيديو مباشرةً — ودون المصطلحات الجديدة في الدفتر</div>
+    <div class="video-list anim-4">
+      <a href="https://www.youtube.com/watch?v=9ndH9Qo05F4&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN" target="_blank" class="video-link">
+        <div class="video-num">١</div>
+        <div>
+          <div class="video-title">مقدمة Scratch — أول خطواتك</div>
+          <div class="video-desc">تعرف على واجهة البرنامج وأول مشروع</div>
+        </div>
+        <div class="play-icon">▶</div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=FMSOoWQR92I&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&index=2" target="_blank" class="video-link">
+        <div class="video-num">٢</div>
+        <div>
+          <div class="video-title">الحركة والأحداث</div>
+          <div class="video-desc">كيف تحرك الشخصيات وتستجيب للمستخدم</div>
+        </div>
+        <div class="play-icon">▶</div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=NU_IdBZq1qc&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&index=4" target="_blank" class="video-link">
+        <div class="video-num">٤</div>
+        <div>
+          <div class="video-title">الشروط والتكرار</div>
+          <div class="video-desc">if / else والـ loops — قلب أي برنامج</div>
+        </div>
+        <div class="play-icon">▶</div>
+      </a>
+    </div>
+    <div class="anim-5" style="margin-top:16px; background:rgba(91,127,255,0.06); border:1px solid rgba(91,127,255,0.2); border-radius:14px; padding:14px 20px; max-width:750px; width:100%; font-size:13px; color:var(--muted);">
+      📝 بعد كل فيديو: اكتب في الدفتر ٣ مصطلحات جديدة ومعناها بالعربي
+    </div>
+  </div>
+
+  <!-- SLIDE 7: IoT Intro -->
+  <div class="slide" id="s7">
+    <div class="slide-section-tag anim-1">الجزء الثالث</div>
+    <div class="slide-title anim-2">إنترنت الأشياء</div>
+    <div class="slide-subtitle anim-3">Internet of Things — لما الأشياء العادية تبدأ تتكلم مع بعض</div>
+    <div class="iot-flow anim-4">
+      <div class="iot-flow-node">
+        <div class="fn-icon">🌡</div>
+        <div class="fn-label">الحساس</div>
+        <div class="fn-sub">يقيس البيئة</div>
+      </div>
+      <div class="iot-flow-arrow">→</div>
+      <div class="iot-flow-node">
+        <div class="fn-icon">📡</div>
+        <div class="fn-label">الإرسال</div>
+        <div class="fn-sub">عبر الإنترنت</div>
+      </div>
+      <div class="iot-flow-arrow">→</div>
+      <div class="iot-flow-node">
+        <div class="fn-icon">☁️</div>
+        <div class="fn-label">السيرفر</div>
+        <div class="fn-sub">يستقبل ويخزن</div>
+      </div>
+      <div class="iot-flow-arrow">→</div>
+      <div class="iot-flow-node">
+        <div class="fn-icon">📊</div>
+        <div class="fn-label">التحليل</div>
+        <div class="fn-sub">يفهم البيانات</div>
+      </div>
+      <div class="iot-flow-arrow">→</div>
+      <div class="iot-flow-node">
+        <div class="fn-icon">📱</div>
+        <div class="fn-label">القرار</div>
+        <div class="fn-sub">يبعت تنبيه</div>
+      </div>
+    </div>
+    <div class="anim-5" style="margin-top:28px; background:rgba(0,229,192,0.06); border:1px solid rgba(0,229,192,0.2); border-radius:16px; padding:20px 28px; max-width:800px; width:100%;">
+      <div style="font-size:15px; font-weight:700; color:var(--accent); margin-bottom:8px;">مشروعنا = IoT مصغر!</div>
+      <div style="font-size:13px; color:var(--muted); line-height:1.8;">
+        Room Guardian بيقيس درجة الحرارة والاهتزاز (حساس) ← يبعت البيانات لـ Python (معالجة) ← يخزنها في SQLite (تخزين) ← يعرضها على الـ Dashboard (قرار)
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 8: IoT Uses -->
+  <div class="slide" id="s8">
+    <div class="slide-section-tag anim-1">IoT — استخدامات وأمثلة</div>
+    <div class="slide-title anim-2">IoT في حياتنا</div>
+    <div class="slide-subtitle anim-3">الأجهزة الذكية موجودة حواليك أكتر مما تتخيل</div>
+    <div class="iot-big-grid anim-4">
+      <div class="iot-big-card">
+        <div class="q">المنازل الذكية</div>
+        <div class="a">
+          <span>🏠 إضاءة تلقائية</span>
+          <span>🌡 تحكم بالحرارة</span>
+          <span>🔒 أقفال ذكية</span>
+          <span>📸 كاميرات أمان</span>
+        </div>
+      </div>
+      <div class="iot-big-card">
+        <div class="q">الصحة والرياضة</div>
+        <div class="a">
+          <span>⌚ Fitbit / SmartWatch</span>
+          <span>💓 قياس النبض</span>
+          <span>🩺 مراقبة المرضى</span>
+          <span>💊 جرعة دواء</span>
+        </div>
+      </div>
+      <div class="iot-big-card">
+        <div class="q">الزراعة والصناعة</div>
+        <div class="a">
+          <span>🌱 ري ذكي</span>
+          <span>🏭 مصانع آلية</span>
+          <span>🚜 معدات متصلة</span>
+          <span>☀️ طاقة شمسية ذكية</span>
+        </div>
+      </div>
+      <div class="iot-big-card">
+        <div class="q">المدن والنقل</div>
+        <div class="a">
+          <span>🚗 سيارات ذاتية</span>
+          <span>🚦 إشارات ذكية</span>
+          <span>🗑 قمامة ذكية</span>
+          <span>⚡ عداد كهرباء</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 9: Data importance -->
+  <div class="slide" id="s9">
+    <div class="slide-section-tag anim-1">IoT — أهمية البيانات</div>
+    <div class="slide-title anim-2">البيانات هي الذهب الجديد</div>
+    <div class="slide-subtitle anim-3">هل نحتاج نخزن البيانات؟ — الإجابة القصيرة: نعم، دايماً</div>
+    <div class="info-grid anim-4" style="max-width: 860px;">
+      <div class="info-card">
+        <span class="icon">📈</span>
+        <h3>فهم الأنماط</h3>
+        <p>لو خزنا درجة الحرارة كل يوم، هنقدر نشوف: الغرفة بتسخن إمتى؟ وليه؟</p>
+      </div>
+      <div class="info-card">
+        <span class="icon">🚨</span>
+        <h3>التنبؤ بالمشاكل</h3>
+        <p>بيانات الاهتزاز ممكن تحذرنا إن في مشكلة قبل ما تتفاقم</p>
+      </div>
+      <div class="info-card">
+        <span class="icon">🔍</span>
+        <h3>التحليل والتحسين</h3>
+        <p>من غير بيانات مخزنة، مفيش تحليل — ومفيش تحسين ممكن</p>
+      </div>
+      <div class="info-card">
+        <span class="icon">🤖</span>
+        <h3>الذكاء الاصطناعي</h3>
+        <p>كل نماذج الـ AI بتتعلم من بيانات مخزنة — البيانات = الخبرة</p>
+      </div>
+    </div>
+    <div class="anim-5" style="margin-top:20px; background:rgba(255,179,71,0.06); border:1px solid rgba(255,179,71,0.25); border-radius:14px; padding:16px 24px; max-width:860px; width:100%; font-size:13px; color:var(--muted); line-height:1.8;">
+      💡 <strong style="color:var(--amber);">في مشروعنا:</strong> بنخزن بيانات الحساسات في SQLite — عشان نقدر نعرض تاريخ القراءات على الـ Dashboard ونحلل التغيرات مع الوقت
+    </div>
+  </div>
+
+  <!-- SLIDE 10: Summary / Tasks -->
+  <div class="slide" id="s10">
+    <div class="slide-section-tag anim-1">ملخص الجلسة</div>
+    <div class="slide-title anim-2">مهامك لهذا الأسبوع</div>
+    <div class="slide-subtitle anim-3">اضغط على كل مهمة لما تخلصها ✅</div>
+    <div class="task-list anim-4" id="task-list">
+      <div class="task-item" onclick="toggleTask(this)">
+        <div class="task-check"></div>
+        <div class="task-body">
+          <div class="task-title">شاهد فيديو Flowchart</div>
+          <div class="task-meta">يوتيوب — شرح المخطط الانسيابي بالعربي</div>
+        </div>
+        <span class="task-tag" style="background:rgba(255,107,107,0.1); color:var(--accent3); border:1px solid rgba(255,107,107,0.2);">مشاهدة</span>
+      </div>
+      <div class="task-item" onclick="toggleTask(this)">
+        <div class="task-check"></div>
+        <div class="task-body">
+          <div class="task-title">ارسم Flowchart لمحيط الدائرة</div>
+          <div class="task-meta">في الدفتر — بالرموز الصحيحة</div>
+        </div>
+        <span class="task-tag" style="background:rgba(0,229,192,0.1); color:var(--accent); border:1px solid rgba(0,229,192,0.2);">تطبيق</span>
+      </div>
+      <div class="task-item" onclick="toggleTask(this)">
+        <div class="task-check"></div>
+        <div class="task-body">
+          <div class="task-title">شاهد ٣ فيديوهات Scratch وطبق</div>
+          <div class="task-meta">الفيديو ١ + ٢ + ٤ من القائمة</div>
+        </div>
+        <span class="task-tag" style="background:rgba(255,107,107,0.1); color:var(--accent3); border:1px solid rgba(255,107,107,0.2);">مشاهدة + تطبيق</span>
+      </div>
+      <div class="task-item" onclick="toggleTask(this)">
+        <div class="task-check"></div>
+        <div class="task-body">
+          <div class="task-title">خصص دفتر التوثيق</div>
+          <div class="task-meta">المصطلحات الجديدة + ملخص كل فيديو</div>
+        </div>
+        <span class="task-tag" style="background:rgba(255,179,71,0.1); color:var(--amber); border:1px solid rgba(255,179,71,0.2);">توثيق</span>
+      </div>
+      <div class="task-item" onclick="toggleTask(this)">
+        <div class="task-check"></div>
+        <div class="task-body">
+          <div class="task-title">ابحث عن IoT وأجب على الأسئلة الأربعة</div>
+          <div class="task-meta">ما هو؟ استخداماته؟ أمثلة؟ أهمية البيانات؟</div>
+        </div>
+        <span class="task-tag" style="background:rgba(91,127,255,0.1); color:var(--accent2); border:1px solid rgba(91,127,255,0.2);">بحث</span>
+      </div>
+    </div>
+    <div id="progress-msg" class="anim-5" style="margin-top:16px; font-size:13px; color:var(--muted); text-align:center;"></div>
+  </div>
+
+</div>
+
+<!-- Dots -->
+<div id="nav-dots">
+  <button class="dot active" onclick="goTo(0)"></button>
+  <button class="dot" onclick="goTo(1)"></button>
+  <button class="dot" onclick="goTo(2)"></button>
+  <button class="dot" onclick="goTo(3)"></button>
+  <button class="dot" onclick="goTo(4)"></button>
+  <button class="dot" onclick="goTo(5)"></button>
+  <button class="dot" onclick="goTo(6)"></button>
+  <button class="dot" onclick="goTo(7)"></button>
+  <button class="dot" onclick="goTo(8)"></button>
+  <button class="dot" onclick="goTo(9)"></button>
+</div>
+
+<script>
+const TOTAL = 10;
+let current = 0;
+
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
+const counter = document.getElementById('counter');
+const progress = document.getElementById('progress-bar');
+const tooltip = document.getElementById('tooltip');
+
+function goTo(n) {
+  if (n < 0 || n >= TOTAL) return;
+  slides[current].classList.remove('active');
+  slides[current].classList.add('exit');
+  setTimeout(() => { slides[current].classList.remove('exit'); }, 600);
+  current = n;
+  slides[current].classList.add('active');
+  dots.forEach((d, i) => d.classList.toggle('active', i === current));
+  counter.textContent = String(current + 1).padStart(2,'0') + ' / ' + String(TOTAL).padStart(2,'0');
+  progress.style.width = ((current + 1) / TOTAL * 100) + '%';
+}
+
+document.getElementById('btn-next').onclick = () => goTo(current + 1);
+document.getElementById('btn-prev').onclick = () => goTo(current - 1);
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') goTo(current + 1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') goTo(current - 1);
+  if (e.key === ' ') { e.preventDefault(); goTo(current + 1); }
+});
+
+// Swipe
+let tx = 0;
+document.addEventListener('touchstart', e => tx = e.touches[0].clientX);
+document.addEventListener('touchend', e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 50) goTo(current + (dx > 0 ? 1 : -1));
+});
+
+// Circumference calc
+function calcCirc() {
+  const r = parseFloat(document.getElementById('radius-input').value) || 0;
+  document.getElementById('circ-result').textContent = (2 * Math.PI * r).toFixed(2);
+}
+
+// Tooltip
+function showTip(e, el) {
+  tooltip.textContent = el.dataset.tip;
+  tooltip.classList.add('visible');
+  moveTip(e);
+}
+function hideTip() { tooltip.classList.remove('visible'); }
+document.addEventListener('mousemove', e => { if (tooltip.classList.contains('visible')) moveTip(e); });
+function moveTip(e) {
+  tooltip.style.left = (e.clientX + 16) + 'px';
+  tooltip.style.top = (e.clientY - 40) + 'px';
+}
+
+// Task checklist
+const msgs = ['', 'بداية ممتازة! 🎯', 'نص الطريق! 💪', 'تقريباً! 🔥', 'جبت عليها! 🔥', 'مبروك — الجلسة اتخلصت! 🎉 🏆'];
+function toggleTask(el) {
+  el.classList.toggle('done');
+  el.querySelector('.task-check').textContent = el.classList.contains('done') ? '✓' : '';
+  const done = document.querySelectorAll('.task-item.done').length;
+  document.getElementById('progress-msg').textContent = done > 0 ? done + ' / 5 مهام مكتملة — ' + (msgs[done] || '') : '';
+}
+</script>
+</body>
+</html>

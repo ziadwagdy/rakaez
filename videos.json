@@ -8,27 +8,28 @@
       "platform": "YouTube"
     }
   ],
-  "scratch": [
+  "cs_intro": [
     {
-      "id": "scratch1",
+      "id": "cs1",
       "num": "١",
       "title": "مقدمة Scratch — أول خطواتك",
       "description": "تعرف على واجهة البرنامج وأول مشروع",
       "url": "https://www.youtube.com/watch?v=9ndH9Qo05F4&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN"
     },
     {
-      "id": "scratch2",
+      "id": "cs2",
       "num": "٢",
       "title": "الحركة والأحداث",
       "description": "كيف تحرك الشخصيات وتستجيب للمستخدم",
       "url": "https://www.youtube.com/watch?v=FMSOoWQR92I&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&index=2"
     },
     {
-      "id": "scratch4",
-      "num": "٤",
+      "id": "cs3",
+      "num": "٣",
       "title": "الشروط والتكرار",
       "description": "if / else والـ loops — قلب أي برنامج",
       "url": "https://www.youtube.com/watch?v=NU_IdBZq1qc&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&index=4"
     }
-  ]
+  ],
+  "scratch": []
 }

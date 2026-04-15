@@ -194,14 +194,13 @@ body::before {
 
 /* Flowchart interactive */
 .fc-stage {
-  display: flex; flex-direction: row; align-items: center;
-  gap: 4px; width: 100%; max-width: 900px; flex-wrap: nowrap;
-  overflow-x: auto;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 0; width: 100%; max-width: 500px;
 }
 .fc-node {
-  padding: 10px 18px; font-size: 13px; font-weight: 600;
+  padding: 12px 28px; font-size: 14px; font-weight: 600;
   cursor: pointer; transition: all 0.3s ease;
-  position: relative; text-align: center; white-space: nowrap;
+  position: relative; text-align: center; width: 100%; max-width: 320px;
 }
 .fc-node.start-end {
   border-radius: 40px; background: rgba(0,229,192,0.1);
@@ -218,7 +217,8 @@ body::before {
 }
 .fc-node:hover { filter: brightness(1.3); transform: scale(1.04); }
 .fc-arrow-down {
-  font-size: 20px; color: var(--muted); line-height: 1; flex-shrink: 0;
+  font-size: 22px; color: var(--accent); line-height: 1; flex-shrink: 0;
+  margin: 2px 0;
 }
 .fc-legend {
   display: flex; gap: 16px; margin-top: 16px; flex-wrap: wrap; justify-content: center;
@@ -229,6 +229,24 @@ body::before {
 }
 .fc-legend-swatch {
   width: 14px; height: 14px; border-radius: 3px;
+}
+
+/* Diamond decision node */
+.fc-node.decision {
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+  background: rgba(255,107,107,0.1); border: none;
+  outline: 2px solid var(--accent3); color: var(--accent3);
+  padding: 22px 28px; min-width: 160px;
+}
+.fc-branch {
+  display: flex; align-items: flex-start; gap: 16px; width: 100%; max-width: 500px; justify-content: center;
+}
+.fc-branch-col {
+  display: flex; flex-direction: column; align-items: center; gap: 0; flex: 1;
+}
+.fc-branch-label {
+  font-size: 11px; font-weight: 700; font-family: 'Space Mono', monospace;
+  letter-spacing: 1px; margin-bottom: 4px;
 }
 
 /* Video links */
@@ -393,7 +411,7 @@ body::before {
 <div class="orb orb2"></div>
 <img id="site-logo" src="rakaez.jpg" alt="ركائز">
 <div id="progress-bar" style="width: 10%"></div>
-<div id="counter">01 / 10</div>
+<div id="counter">01 / 11</div>
 <div id="keyboard-hint">← → للتنقل | SPACE للتالي</div>
 
 <div class="tooltip-box" id="tooltip"></div>
@@ -446,35 +464,38 @@ body::before {
 
   <!-- SLIDE 3: Flowchart Interactive -->
   <div class="slide" id="s3">
-    <div class="slide-section-tag anim-1">Flowchart — تطبيق</div>
+    <div class="slide-section-tag anim-1">Flowchart — مثال تطبيقي</div>
     <div class="slide-title anim-2">محيط الدائرة</div>
     <div class="slide-subtitle anim-3">المعادلة: المحيط = 2 × π × r &nbsp;|&nbsp; اضغط على أي خطوة لتعرف أكثر</div>
-    <div style="display:flex; flex-direction:column; gap:20px; align-items:center; width:100%;">
+
+    <div style="display:flex; flex-direction:row; gap:48px; align-items:flex-start; width:100%; max-width:900px; justify-content:center; flex-wrap:wrap;">
+
+      <!-- Vertical Flowchart -->
       <div class="fc-stage anim-4">
         <div class="fc-node start-end"
           data-tip="بداية البرنامج — دايماً نبدأ من هنا"
           onmouseenter="showTip(event,this)" onmouseleave="hideTip()">
           بداية
         </div>
-        <div class="fc-arrow-down">←</div>
+        <div class="fc-arrow-down">↓</div>
         <div class="fc-node io"
           data-tip="الإدخال: نطلب من المستخدم يكتب قيمة نصف القطر r"
           onmouseenter="showTip(event,this)" onmouseleave="hideTip()">
           أدخل نصف القطر (r)
         </div>
-        <div class="fc-arrow-down">←</div>
+        <div class="fc-arrow-down">↓</div>
         <div class="fc-node process"
           data-tip="المعالجة: نحسب المحيط باستخدام المعادلة الرياضية"
           onmouseenter="showTip(event,this)" onmouseleave="hideTip()">
           المحيط = 2 × 3.14 × r
         </div>
-        <div class="fc-arrow-down">←</div>
+        <div class="fc-arrow-down">↓</div>
         <div class="fc-node io"
           data-tip="الإخراج: نعرض النتيجة للمستخدم على الشاشة"
           onmouseenter="showTip(event,this)" onmouseleave="hideTip()">
           اطبع المحيط
         </div>
-        <div class="fc-arrow-down">←</div>
+        <div class="fc-arrow-down">↓</div>
         <div class="fc-node start-end"
           data-tip="نهاية البرنامج — البرنامج انتهى بنجاح"
           onmouseenter="showTip(event,this)" onmouseleave="hideTip()">
@@ -482,26 +503,31 @@ body::before {
         </div>
       </div>
 
-      <div class="anim-5" style="display:flex; gap:32px; align-items:center; flex-wrap:wrap; justify-content:center;">
-        <div class="fc-legend">
-          <div class="fc-legend-item">
-            <div class="fc-legend-swatch" style="background:rgba(0,229,192,0.3); border-radius:20px;"></div>
-            بداية / نهاية
-          </div>
-          <div class="fc-legend-item">
-            <div class="fc-legend-swatch" style="background:rgba(91,127,255,0.3); border-radius:3px;"></div>
-            معالجة
-          </div>
-          <div class="fc-legend-item">
-            <div class="fc-legend-swatch" style="background:rgba(255,179,71,0.3); border-radius:3px;"></div>
-            إدخال / إخراج
+      <!-- Right side: legend + calculator -->
+      <div class="anim-5" style="display:flex; flex-direction:column; gap:20px; align-items:center; flex:1; min-width:240px;">
+        <!-- Legend -->
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px 20px; width:100%;">
+          <div style="font-size:11px; font-weight:700; color:var(--accent); letter-spacing:2px; font-family:'Space Mono',monospace; margin-bottom:14px;">دليل الرموز</div>
+          <div class="fc-legend" style="flex-direction:column; gap:10px; margin-top:0; align-items:flex-start; justify-content:flex-start;">
+            <div class="fc-legend-item">
+              <div class="fc-legend-swatch" style="background:rgba(0,229,192,0.3); border-radius:20px;"></div>
+              شكل بيضاوي — بداية / نهاية
+            </div>
+            <div class="fc-legend-item">
+              <div class="fc-legend-swatch" style="background:rgba(91,127,255,0.3); border-radius:3px;"></div>
+              مستطيل — معالجة وحساب
+            </div>
+            <div class="fc-legend-item">
+              <div class="fc-legend-swatch" style="background:rgba(255,179,71,0.3); border-radius:3px;"></div>
+              متوازي أضلاع — إدخال / إخراج
+            </div>
           </div>
         </div>
 
         <!-- Calculator -->
-        <div style="background: var(--card); border: 1px solid var(--border); border-radius:16px; padding:20px 24px; display:flex; align-items:center; gap:20px; flex-wrap:wrap; justify-content:center;">
-          <div style="font-size:13px; color:var(--muted); font-weight:600;">جرب المعادلة ↓</div>
-          <div style="display:flex; align-items:center; gap:10px;">
+        <div style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px 20px; width:100%;">
+          <div style="font-size:11px; font-weight:700; color:var(--accent); letter-spacing:2px; font-family:'Space Mono',monospace; margin-bottom:14px;">جرب المعادلة</div>
+          <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
             <div style="font-size:13px; color:var(--muted);">r =</div>
             <input type="number" id="radius-input" value="5" min="1" max="999"
               style="width:80px; padding:8px 10px; background:var(--bg3); border:1px solid var(--border); border-radius:8px; color:var(--text); font-family:Cairo,sans-serif; font-size:15px; text-align:center; outline:none; direction:ltr;"
@@ -509,38 +535,102 @@ body::before {
           </div>
           <div style="display:flex; align-items:center; gap:8px;">
             <span style="font-size:13px; color:var(--muted);">المحيط =</span>
-            <span id="circ-result" style="font-size:26px; font-weight:900; color:var(--accent);">31.42</span>
+            <span id="circ-result" style="font-size:28px; font-weight:900; color:var(--accent);">31.42</span>
             <span style="font-size:11px; color:var(--muted);">وحدة</span>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 
-  <!-- SLIDE 4: Flowchart Video -->
+  <!-- SLIDE 4: Flowchart Homework -->
   <div class="slide" id="s4">
+    <div class="slide-section-tag anim-1">Flowchart — واجب</div>
+    <div class="slide-title anim-2">🎯 تحدي المخطط الانسيابي</div>
+    <div class="slide-subtitle anim-3">طبق اللي تعلمته — ارسم الـ Flowchart بإيدك في الدفتر</div>
+
+    <!-- Problem Statement -->
+    <div class="anim-4" style="background:rgba(255,179,71,0.08); border:2px solid rgba(255,179,71,0.45); border-radius:18px; padding:24px 32px; max-width:680px; width:100%; margin-bottom:24px;">
+      <div style="font-size:11px; font-weight:700; color:var(--amber); letter-spacing:3px; font-family:'Space Mono',monospace; margin-bottom:10px;">📋 المطلوب</div>
+      <div style="font-size:17px; font-weight:800; color:var(--text); line-height:1.6; margin-bottom:10px;">
+        برنامج يسأل الطالب عن درجته (من 100)<br>ويحدد إذا كان <span style="color:#6effa8;">ناجحاً</span> أم <span style="color:var(--accent3);">راسباً</span>
+      </div>
+      <div style="font-size:13px; color:var(--muted); display:flex; align-items:center; gap:8px;">
+        <span style="background:rgba(255,179,71,0.15); border:1px solid rgba(255,179,71,0.3); border-radius:20px; padding:3px 12px; font-weight:700; color:var(--amber);">شرط النجاح</span>
+        درجة النجاح = 50 فأكثر
+      </div>
+    </div>
+
+    <!-- Step-by-step hints -->
+    <div class="anim-5" style="width:100%; max-width:680px; display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+      <div style="font-size:12px; font-weight:700; color:var(--muted); letter-spacing:2px; font-family:'Space Mono',monospace; margin-bottom:4px;">خطوات الحل — بالترتيب</div>
+
+      <div style="display:flex; align-items:center; gap:14px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+        <div style="width:32px; height:32px; border-radius:50%; background:rgba(0,229,192,0.15); border:2px solid var(--accent); color:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px; flex-shrink:0;">١</div>
+        <div>
+          <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:2px;">ارسم شكل بيضاوي</div>
+          <div style="font-size:12px; color:var(--muted);">اكتب فيه: بداية</div>
+        </div>
+        <div style="margin-right:auto; font-size:11px; padding:3px 10px; border-radius:20px; background:rgba(0,229,192,0.1); color:var(--accent); border:1px solid rgba(0,229,192,0.2); font-weight:700;">بيضاوي</div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:14px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+        <div style="width:32px; height:32px; border-radius:50%; background:rgba(255,179,71,0.15); border:2px solid var(--amber); color:var(--amber); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px; flex-shrink:0;">٢</div>
+        <div>
+          <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:2px;">ارسم متوازي أضلاع للإدخال</div>
+          <div style="font-size:12px; color:var(--muted);">اكتب فيه: أدخل الدرجة</div>
+        </div>
+        <div style="margin-right:auto; font-size:11px; padding:3px 10px; border-radius:20px; background:rgba(255,179,71,0.1); color:var(--amber); border:1px solid rgba(255,179,71,0.2); font-weight:700;">متوازي أضلاع</div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:14px; background:var(--card); border:2px solid rgba(255,107,107,0.35); border-radius:12px; padding:14px 18px;">
+        <div style="width:32px; height:32px; border-radius:50%; background:rgba(255,107,107,0.15); border:2px solid var(--accent3); color:var(--accent3); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px; flex-shrink:0;">٣</div>
+        <div>
+          <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:2px;">ارسم شكل معين (◇) — جديد! ⭐</div>
+          <div style="font-size:12px; color:var(--muted);">اكتب فيه السؤال: هل الدرجة ≥ 50؟ — واكتب على السهمين: نعم / لا</div>
+        </div>
+        <div style="margin-right:auto; font-size:11px; padding:3px 10px; border-radius:20px; background:rgba(255,107,107,0.1); color:var(--accent3); border:1px solid rgba(255,107,107,0.2); font-weight:700;">معين ◇</div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:14px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+        <div style="width:32px; height:32px; border-radius:50%; background:rgba(255,179,71,0.15); border:2px solid var(--amber); color:var(--amber); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px; flex-shrink:0;">٤</div>
+        <div>
+          <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:2px;">ارسم إخراجين منفصلين</div>
+          <div style="font-size:12px; color:var(--muted);">متوازي أضلاع: "ناجح" — ومتوازي أضلاع آخر: "راسب"</div>
+        </div>
+        <div style="margin-right:auto; font-size:11px; padding:3px 10px; border-radius:20px; background:rgba(255,179,71,0.1); color:var(--amber); border:1px solid rgba(255,179,71,0.2); font-weight:700;">متوازي أضلاع</div>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:14px; background:var(--card); border:1px solid var(--border); border-radius:12px; padding:14px 18px;">
+        <div style="width:32px; height:32px; border-radius:50%; background:rgba(0,229,192,0.15); border:2px solid var(--accent); color:var(--accent); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:14px; flex-shrink:0;">٥</div>
+        <div>
+          <div style="font-size:14px; font-weight:700; color:var(--text); margin-bottom:2px;">ارسم شكل بيضاوي للنهاية</div>
+          <div style="font-size:12px; color:var(--muted);">وصّل الفرعين (نعم ولا) كلاهما إليه</div>
+        </div>
+        <div style="margin-right:auto; font-size:11px; padding:3px 10px; border-radius:20px; background:rgba(0,229,192,0.1); color:var(--accent); border:1px solid rgba(0,229,192,0.2); font-weight:700;">بيضاوي</div>
+      </div>
+    </div>
+
+    <div class="anim-6" style="background:rgba(91,127,255,0.06); border:1px solid rgba(91,127,255,0.25); border-radius:14px; padding:14px 22px; max-width:680px; width:100%; font-size:13px; color:var(--muted); line-height:1.8; text-align:center;">
+      💡 <strong style="color:var(--accent2);">تذكر:</strong> الشكل المعين (◇) يُستخدم فقط للقرارات — وله دايماً مخرجان: <span style="color:#6effa8; font-weight:700;">نعم</span> أو <span style="color:var(--accent3); font-weight:700;">لا</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 5: Flowchart Video -->
+  <div class="slide" id="s5">
     <div class="slide-section-tag anim-1">Flowchart — فيديو</div>
     <div class="slide-title anim-2">شاهد الشرح أولاً</div>
     <div class="slide-subtitle anim-3">الفيديو ده هيوضح لك الرموز، وكيفية رسم الـ Flowchart خطوة بخطوة</div>
-    <a href="https://www.youtube.com/watch?v=OrYLsguQ4aQ" target="_blank" class="anim-4"
-      style="display:flex; align-items:center; gap:20px; background:var(--card); border:1px solid rgba(255,107,107,0.3); border-radius:20px; padding:28px 36px; text-decoration:none; transition:all 0.3s ease; max-width:600px; width:100%;"
-      onmouseenter="this.style.borderColor='rgba(255,107,107,0.7)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 20px 50px rgba(255,107,107,0.12)'"
-      onmouseleave="this.style.borderColor='rgba(255,107,107,0.3)'; this.style.transform=''; this.style.boxShadow=''">
-      <div style="width:60px; height:60px; border-radius:50%; background:rgba(255,107,107,0.2); display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; border:2px solid rgba(255,107,107,0.4);">▶</div>
-      <div>
-        <div style="font-size:17px; font-weight:700; color:var(--text); margin-bottom:6px;">شرح المخطط الانسيابي بالعربي</div>
-        <div style="font-size:13px; color:var(--muted);">تعلم الرموز، وطريقة التفكير، وكيف تطبق على أي مشكلة</div>
-        <div style="font-size:11px; color:rgba(255,107,107,0.8); margin-top:8px; font-family:'Space Mono',monospace;">YouTube — اضغط للفتح ↗</div>
-      </div>
-    </a>
+    <div id="fc-video-container" class="anim-4" style="max-width:600px; width:100%;"></div>
     <div class="anim-5" style="margin-top:28px; background:rgba(0,229,192,0.06); border:1px solid rgba(0,229,192,0.2); border-radius:14px; padding:18px 24px; max-width:600px; width:100%;">
       <div style="font-size:13px; font-weight:700; color:var(--accent); margin-bottom:8px;">✏️ مهمتك بعد الفيديو</div>
-      <div style="font-size:13px; color:var(--muted); line-height:1.8;">ارسم بإيدك Flowchart لبرنامج يحسب محيط الدائرة في دفتر التوثيق — بالرموز الصح</div>
+      <div style="font-size:13px; color:var(--muted); line-height:1.8;">شاهد الفيديو، ثم انتقل للشريحة التالية لتجد تحدي الواجب</div>
     </div>
   </div>
 
-  <!-- SLIDE 5: Scratch Intro -->
-  <div class="slide" id="s5">
+  <!-- SLIDE 6: Scratch Intro -->
+  <div class="slide" id="s6">
     <div class="slide-section-tag anim-1">الجزء الثاني</div>
     <div class="slide-title anim-2">Scratch — البرمجة المرئية</div>
     <div class="slide-subtitle anim-3">بتبرمج بالـ drag & drop — مثالي لفهم المفاهيم الأساسية</div>
@@ -568,44 +658,19 @@ body::before {
     </div>
   </div>
 
-  <!-- SLIDE 6: Scratch Videos -->
-  <div class="slide" id="s6">
+  <!-- SLIDE 7: Scratch Videos -->
+  <div class="slide" id="s7">
     <div class="slide-section-tag anim-1">Scratch — فيديوهات</div>
     <div class="slide-title anim-2">ثلاثة فيديوهات بالترتيب</div>
     <div class="slide-subtitle anim-3">شاهد وطبق مع كل فيديو مباشرةً — ودون المصطلحات الجديدة في الدفتر</div>
-    <div class="video-list anim-4">
-      <a href="https://www.youtube.com/watch?v=9ndH9Qo05F4&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN" target="_blank" class="video-link">
-        <div class="video-num">١</div>
-        <div>
-          <div class="video-title">مقدمة Scratch — أول خطواتك</div>
-          <div class="video-desc">تعرف على واجهة البرنامج وأول مشروع</div>
-        </div>
-        <div class="play-icon">▶</div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=FMSOoWQR92I&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&index=2" target="_blank" class="video-link">
-        <div class="video-num">٢</div>
-        <div>
-          <div class="video-title">الحركة والأحداث</div>
-          <div class="video-desc">كيف تحرك الشخصيات وتستجيب للمستخدم</div>
-        </div>
-        <div class="play-icon">▶</div>
-      </a>
-      <a href="https://www.youtube.com/watch?v=NU_IdBZq1qc&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&index=4" target="_blank" class="video-link">
-        <div class="video-num">٤</div>
-        <div>
-          <div class="video-title">الشروط والتكرار</div>
-          <div class="video-desc">if / else والـ loops — قلب أي برنامج</div>
-        </div>
-        <div class="play-icon">▶</div>
-      </a>
-    </div>
+    <div class="video-list anim-4" id="scratch-video-list"></div>
     <div class="anim-5" style="margin-top:16px; background:rgba(91,127,255,0.06); border:1px solid rgba(91,127,255,0.2); border-radius:14px; padding:14px 20px; max-width:750px; width:100%; font-size:13px; color:var(--muted);">
       📝 بعد كل فيديو: اكتب في الدفتر ٣ مصطلحات جديدة ومعناها بالعربي
     </div>
   </div>
 
-  <!-- SLIDE 7: IoT Intro -->
-  <div class="slide" id="s7">
+  <!-- SLIDE 8: IoT Intro -->
+  <div class="slide" id="s8">
     <div class="slide-section-tag anim-1">الجزء الثالث</div>
     <div class="slide-title anim-2">إنترنت الأشياء</div>
     <div class="slide-subtitle anim-3">Internet of Things — لما الأشياء العادية تبدأ تتكلم مع بعض</div>
@@ -648,8 +713,8 @@ body::before {
     </div>
   </div>
 
-  <!-- SLIDE 8: IoT Uses -->
-  <div class="slide" id="s8">
+  <!-- SLIDE 9: IoT Uses -->
+  <div class="slide" id="s9">
     <div class="slide-section-tag anim-1">IoT — استخدامات وأمثلة</div>
     <div class="slide-title anim-2">IoT في حياتنا</div>
     <div class="slide-subtitle anim-3">الأجهزة الذكية موجودة حواليك أكتر مما تتخيل</div>
@@ -693,8 +758,8 @@ body::before {
     </div>
   </div>
 
-  <!-- SLIDE 9: Data importance -->
-  <div class="slide" id="s9">
+  <!-- SLIDE 10: Data importance -->
+  <div class="slide" id="s10">
     <div class="slide-section-tag anim-1">IoT — أهمية البيانات</div>
     <div class="slide-title anim-2">البيانات هي الذهب الجديد</div>
     <div class="slide-subtitle anim-3">هل نحتاج نخزن البيانات؟ — الإجابة القصيرة: نعم، دايماً</div>
@@ -725,8 +790,8 @@ body::before {
     </div>
   </div>
 
-  <!-- SLIDE 10: Summary / Tasks -->
-  <div class="slide" id="s10">
+  <!-- SLIDE 11: Summary / Tasks -->
+  <div class="slide" id="s11">
     <div class="slide-section-tag anim-1">ملخص الجلسة</div>
     <div class="slide-title anim-2">مهامك لهذا الأسبوع</div>
     <div class="slide-subtitle anim-3">اضغط على كل مهمة لما تخلصها ✅</div>
@@ -789,10 +854,11 @@ body::before {
   <button class="dot" onclick="goTo(7)"></button>
   <button class="dot" onclick="goTo(8)"></button>
   <button class="dot" onclick="goTo(9)"></button>
+  <button class="dot" onclick="goTo(10)"></button>
 </div>
 
 <script>
-const TOTAL = 10;
+const TOTAL = 11;
 let current = 0;
 
 const slides = document.querySelectorAll('.slide');
@@ -848,6 +914,48 @@ function moveTip(e) {
   tooltip.style.left = (e.clientX + 16) + 'px';
   tooltip.style.top = (e.clientY - 40) + 'px';
 }
+
+// Load videos from JSON
+fetch('videos.json')
+  .then(r => r.json())
+  .then(data => {
+    // Flowchart video (single card)
+    const fcContainer = document.getElementById('fc-video-container');
+    if (fcContainer && data.flowchart && data.flowchart.length > 0) {
+      const v = data.flowchart[0];
+      fcContainer.innerHTML = `
+        <a href="${v.url}" target="_blank"
+          style="display:flex; align-items:center; gap:20px; background:var(--card); border:1px solid rgba(255,107,107,0.3); border-radius:20px; padding:28px 36px; text-decoration:none; transition:all 0.3s ease; width:100%;"
+          onmouseenter="this.style.borderColor='rgba(255,107,107,0.7)'; this.style.transform='translateY(-4px)'; this.style.boxShadow='0 20px 50px rgba(255,107,107,0.12)'"
+          onmouseleave="this.style.borderColor='rgba(255,107,107,0.3)'; this.style.transform=''; this.style.boxShadow=''">
+          <div style="width:60px; height:60px; border-radius:50%; background:rgba(255,107,107,0.2); display:flex; align-items:center; justify-content:center; font-size:26px; flex-shrink:0; border:2px solid rgba(255,107,107,0.4);">▶</div>
+          <div>
+            <div style="font-size:17px; font-weight:700; color:var(--text); margin-bottom:6px;">${v.title}</div>
+            <div style="font-size:13px; color:var(--muted);">${v.description}</div>
+            <div style="font-size:11px; color:rgba(255,107,107,0.8); margin-top:8px; font-family:'Space Mono',monospace;">${v.platform} — اضغط للفتح ↗</div>
+          </div>
+        </a>`;
+    }
+
+    // Scratch videos list
+    const scratchList = document.getElementById('scratch-video-list');
+    if (scratchList && data.scratch) {
+      scratchList.innerHTML = data.scratch.map(v => `
+        <a href="${v.url}" target="_blank" class="video-link">
+          <div class="video-num">${v.num}</div>
+          <div>
+            <div class="video-title">${v.title}</div>
+            <div class="video-desc">${v.description}</div>
+          </div>
+          <div class="play-icon">▶</div>
+        </a>`).join('');
+    }
+  })
+  .catch(() => {
+    // Fallback: show a note if JSON fails to load (e.g. opened as file://)
+    const fcContainer = document.getElementById('fc-video-container');
+    if (fcContainer) fcContainer.innerHTML = '<div style="color:var(--muted);font-size:13px;text-align:center;">تعذّر تحميل الفيديو — تأكد من فتح الصفحة عبر سيرفر</div>';
+  });
 
 // Task checklist
 const msgs = ['', 'بداية ممتازة! 🎯', 'نص الطريق! 💪', 'تقريباً! 🔥', 'جبت عليها! 🔥', 'مبروك — الجلسة اتخلصت! 🎉 🏆'];

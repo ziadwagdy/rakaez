@@ -691,23 +691,14 @@ body::before {
     </div>
   </div>
 
-  <!-- SLIDE 9: Scratch — Coming Soon -->
+  <!-- SLIDE 9: Scratch Videos -->
   <div class="slide" id="s9">
     <div class="slide-section-tag anim-1">الجزء الثالث</div>
     <div class="slide-title anim-2">Scratch — البرمجة المرئية</div>
-    <div class="slide-subtitle anim-3">البرمجة بالسحب والإفلات — مثالي لفهم المفاهيم بصرياً قبل الانتقال إلى Python</div>
-    <div class="anim-4" style="display:flex; flex-direction:column; align-items:center; gap:20px; max-width:600px; width:100%;">
-      <div style="font-size:80px; line-height:1;">🐱</div>
-      <div style="background:rgba(91,127,255,0.08); border:2px dashed rgba(91,127,255,0.35); border-radius:20px; padding:32px 40px; text-align:center; width:100%;">
-        <div style="font-size:18px; font-weight:800; color:var(--accent2); margin-bottom:10px;">الفيديوهات قادمة قريباً</div>
-        <div style="font-size:14px; color:var(--muted); line-height:1.8;">ستُضاف فيديوهات Scratch في الجلسة القادمة<br>ترقّب الجديد! 🚀</div>
-      </div>
-      <div style="background:var(--card); border:1px solid var(--border); border-radius:14px; padding:18px 24px; width:100%;">
-        <div style="font-size:12px; font-weight:700; color:var(--accent2); letter-spacing:2px; font-family:'Space Mono',monospace; margin-bottom:10px;">في الوقت الحالي — تعرّف على Scratch</div>
-        <div style="font-size:13px; color:var(--muted); line-height:1.8;">
-          Scratch هي بيئة برمجة مرئية من MIT — تسحب المكعبات وتوصلها كقطع الأحجية بدلاً من كتابة الكود. إنها مثالية لتعلّم مفاهيم البرمجة بطريقة ممتعة وبصرية.
-        </div>
-      </div>
+    <div class="slide-subtitle anim-3">البرمجة بالسحب والإفلات — صمّم لعبتك الأولى خطوة بخطوة</div>
+    <div class="video-list anim-4" id="scratch-video-list"></div>
+    <div class="anim-5" style="margin-top:16px; background:rgba(91,127,255,0.06); border:1px solid rgba(91,127,255,0.2); border-radius:14px; padding:14px 20px; max-width:750px; width:100%; font-size:13px; color:var(--muted);">
+      🐱 شاهد الفيديو وحاول تطبيق كل خطوة مباشرةً على Scratch — ودوّن ما تعلمته في الدفتر
     </div>
   </div>
 
@@ -1052,6 +1043,20 @@ fetch('videos.json')
             <div style="font-size:11px; color:rgba(255,107,107,0.8); margin-top:8px; font-family:'Space Mono',monospace;">${v.platform} — اضغط للفتح ↗</div>
           </div>
         </a>`;
+    }
+
+    // Scratch videos list
+    const scratchList = document.getElementById('scratch-video-list');
+    if (scratchList && data.scratch && data.scratch.length > 0) {
+      scratchList.innerHTML = data.scratch.map(v => `
+        <a href="${v.url}" target="_blank" class="video-link">
+          <div class="video-num">${v.num}</div>
+          <div>
+            <div class="video-title">${v.title}</div>
+            <div class="video-desc">${v.description}</div>
+          </div>
+          <div class="play-icon">▶</div>
+        </a>`).join('');
     }
 
     // IoT video

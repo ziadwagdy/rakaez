@@ -40,5 +40,13 @@
       "url": "https://www.youtube.com/watch?v=NU_IdBZq1qc&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&index=4"
     }
   ],
-  "scratch": []
+  "scratch": [
+    {
+      "id": "scratch1",
+      "num": "١",
+      "title": "كورس برمجة | تصميم لعبة Cat Flying ببرنامج سكراتش",
+      "description": "تعلّم كيف تصمم لعبتك الأولى باستخدام Scratch خطوة بخطوة",
+      "url": "https://www.youtube.com/watch?v=FP-quRvxo9U"
+    }
+  ]
 }

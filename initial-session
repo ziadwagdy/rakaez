@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أجندة اليوم — ركائز</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0f14;
+    --bg2: #13161e;
+    --bg3: #1a1e2a;
+    --card: #181c26;
+    --border: rgba(255,255,255,0.07);
+    --border2: rgba(255,255,255,0.12);
+    --accent: #4e8ef7;
+    --accent2: #7c5cfc;
+    --gold: #f4b942;
+    --green: #3ecf8e;
+    --red: #f47f6b;
+    --text: #e8eaf0;
+    --text2: #8b92a8;
+    --text3: #565d78;
+    --font: 'IBM Plex Sans Arabic', 'Tajawal', sans-serif;
+    --radius: 14px;
+    --radius-sm: 8px;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font);
+    direction: rtl;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* ─── GRID BG ─── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(78,142,247,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(78,142,247,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ─── GLOW ─── */
+  .glow-top {
+    position: fixed;
+    top: -200px;
+    right: -100px;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(78,142,247,0.08) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .wrap {
+    position: relative;
+    z-index: 1;
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+
+  /* ─── HEADER ─── */
+  .header {
+    text-align: center;
+    margin-bottom: 52px;
+    position: relative;
+  }
+
+  .logo-row {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .logo-row img {
+    height: 52px;
+    border-radius: 10px;
+    opacity: 0.92;
+  }
+
+  .org-name {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    color: var(--text);
+  }
+
+  .header-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(78,142,247,0.1);
+    border: 1px solid rgba(78,142,247,0.2);
+    border-radius: 100px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: #7ab4fb;
+    margin-bottom: 24px;
+  }
+
+  .header-badge .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #4e8ef7;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.8); }
+  }
+
+  .header h1 {
+    font-size: clamp(28px, 5vw, 44px);
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.5px;
+    margin-bottom: 12px;
+  }
+
+  .header h1 span {
+    background: linear-gradient(135deg, #4e8ef7, #7c5cfc);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .header-sub {
+    font-size: 16px;
+    color: var(--text2);
+    line-height: 1.7;
+  }
+
+  .date-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    border-radius: 100px;
+    padding: 8px 20px;
+    font-size: 13px;
+    color: var(--text2);
+    margin-top: 20px;
+  }
+
+  /* ─── SECTION LABEL ─── */
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+    margin-top: 40px;
+  }
+
+  .section-label .num {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: var(--bg3);
+    border: 1px solid var(--border2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    flex-shrink: 0;
+  }
+
+  .section-label h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .section-label .line {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─── AGENDA ITEMS ─── */
+  .agenda-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .agenda-item {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 16px;
+    transition: border-color 0.2s, background 0.2s;
+    cursor: default;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .agenda-item::before {
+    content: '';
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: 3px;
+    background: var(--accent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .agenda-item:hover {
+    border-color: var(--border2);
+    background: var(--bg3);
+  }
+
+  .agenda-item:hover::before { opacity: 1; }
+
+  .agenda-item.highlight {
+    background: rgba(78,142,247,0.05);
+    border-color: rgba(78,142,247,0.2);
+  }
+
+  .agenda-item.highlight::before { opacity: 1; background: var(--accent); }
+
+  .item-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    flex-shrink: 0;
+  }
+
+  .item-icon.blue  { background: rgba(78,142,247,0.12); }
+  .item-icon.purple{ background: rgba(124,92,252,0.12); }
+  .item-icon.gold  { background: rgba(244,185,66,0.12); }
+  .item-icon.green { background: rgba(62,207,142,0.12); }
+  .item-icon.red   { background: rgba(244,127,107,0.12); }
+  .item-icon.teal  { background: rgba(20,184,166,0.12); }
+
+  .item-body {}
+
+  .item-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 3px;
+  }
+
+  .item-desc {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .item-time {
+    font-size: 12px;
+    color: var(--text3);
+    white-space: nowrap;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 100px;
+    padding: 4px 12px;
+    align-self: flex-start;
+  }
+
+  /* ─── GOALS GRID ─── */
+  .goals-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 12px;
+  }
+
+  .goal-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+
+  .goal-card:hover { border-color: var(--border2); }
+
+  .goal-card .icon {
+    font-size: 24px;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .goal-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+
+  .goal-card p {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+
+  /* ─── OUTCOMES ─── */
+  .outcomes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .outcome-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 14px 16px;
+  }
+
+  .outcome-check {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: rgba(62,207,142,0.12);
+    border: 1px solid rgba(62,207,142,0.25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .outcome-check svg {
+    width: 11px;
+    height: 11px;
+    stroke: var(--green);
+    fill: none;
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .outcome-text {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  .outcome-text span {
+    color: var(--text2);
+    font-size: 13px;
+    display: block;
+    margin-top: 2px;
+  }
+
+  /* ─── TASKS ─── */
+  .tasks-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 12px;
+  }
+
+  .task-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .task-card::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+  }
+
+  .task-card.t-blue::after  { background: linear-gradient(90deg, #4e8ef7, transparent); }
+  .task-card.t-purple::after{ background: linear-gradient(90deg, #7c5cfc, transparent); }
+  .task-card.t-gold::after  { background: linear-gradient(90deg, #f4b942, transparent); }
+  .task-card.t-green::after { background: linear-gradient(90deg, #3ecf8e, transparent); }
+
+  .task-num {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin-bottom: 10px;
+  }
+
+  .task-num.blue   { color: var(--accent); }
+  .task-num.purple { color: #9b7ef8; }
+  .task-num.gold   { color: var(--gold); }
+  .task-num.green  { color: var(--green); }
+
+  .task-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 6px;
+    line-height: 1.4;
+  }
+
+  .task-body {
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.65;
+  }
+
+  /* ─── RULES BOX ─── */
+  .rules-box {
+    background: rgba(244,185,66,0.06);
+    border: 1px solid rgba(244,185,66,0.18);
+    border-radius: var(--radius);
+    padding: 24px;
+  }
+
+  .rules-box h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--gold);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .rules-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .rules-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 13px;
+    color: var(--text2);
+    line-height: 1.6;
+  }
+
+  .rules-list li::before {
+    content: '—';
+    color: var(--gold);
+    flex-shrink: 0;
+    margin-top: 1px;
+    opacity: 0.6;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    margin-top: 60px;
+    text-align: center;
+    padding-top: 28px;
+    border-top: 1px solid var(--border);
+  }
+
+  .footer p {
+    font-size: 13px;
+    color: var(--text3);
+  }
+
+  .footer .brand {
+    color: var(--text2);
+    font-weight: 500;
+  }
+
+  /* ─── TIMELINE CONNECTOR ─── */
+  .agenda-list { position: relative; }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    .agenda-item {
+      grid-template-columns: auto 1fr;
+    }
+    .item-time {
+      display: none;
+    }
+    .goals-grid, .tasks-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ─── PRINT ─── */
+  @media print {
+    body { background: white; color: black; }
+    body::before, .glow-top { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="glow-top"></div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo-row">
+      <img src="https://ziadwagdy.github.io/rakaez/rakaez.jpg" alt="ركائز" onerror="this.style.display='none'">
+      <div class="org-name">ركائز</div>
+    </div>
+
+    <div class="header-badge">
+      <span class="dot"></span>
+      الجلسة الأولى — الإعلان والتعريف
+    </div>
+
+    <h1>أجندة اليوم<br><span>Room Guardian</span></h1>
+    <p class="header-sub">
+      مرحباً بكم في الدورة التقنية الأولى من نوعها — رحلة 16 أسبوعاً نكتشف فيها عالم البرمجة والإلكترونيات معاً
+    </p>
+
+    <div class="date-pill">
+      📅 &nbsp;الجلسة التأسيسية — إسطنبول
+    </div>
+  </header>
+
+  <!-- SECTION 1: GOALS -->
+  <div class="section-label">
+    <div class="num">١</div>
+    <h2>أهداف الدورة</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="goals-grid">
+    <div class="goal-card">
+      <span class="icon">🧭</span>
+      <h3>الاكتشاف</h3>
+      <p>تعرّف على نفسك — هل تميل إلى البرمجة، الإلكترونيات، أم الميكانيكا؟ هذه الدورة ستساعدك تحديد ذلك.</p>
+    </div>
+    <div class="goal-card">
+      <span class="icon">🛠</span>
+      <h3>بناء مشروع حقيقي</h3>
+      <p>ستبني بيديك نظام Room Guardian — جهاز ذكي يراقب البيئة ويرسل تنبيهات.</p>
+    </div>
+    <div class="goal-card">
+      <span class="icon">🧠</span>
+      <h3>تطوير التفكير التقني</h3>
+      <p>ستتعلم كيف يفكر المهندس — تحليل المشكلة، تقسيمها، وإيجاد الحل خطوة بخطوة.</p>
+    </div>
+    <div class="goal-card">
+      <span class="icon">🎓</span>
+      <h3>توجيه مستقبلك الجامعي</h3>
+      <p>اكتساب رؤية واضحة تساعدك عند اختيار تخصصك الجامعي في التقنية.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2: AGENDA -->
+  <div class="section-label">
+    <div class="num">٢</div>
+    <h2>جدول الجلسة اليوم</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="agenda-list">
+    <div class="agenda-item highlight">
+      <div class="item-icon blue">👋</div>
+      <div class="item-body">
+        <div class="item-title">الترحيب والتعارف</div>
+        <div class="item-desc">نتعرّف على بعض — من أنت؟ ما اهتماماتك؟ ما الذي تتوقعه من هذه الدورة؟</div>
+      </div>
+      <div class="item-time">10 دقائق</div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="item-icon purple">🗺</div>
+      <div class="item-body">
+        <div class="item-title">نظرة عامة على الدورة</div>
+        <div class="item-desc">شرح خارطة الطريق — 16 أسبوعاً، 6 مراحل، وكيف تبني مشروع Room Guardian من الصفر.</div>
+      </div>
+      <div class="item-time">15 دقيقة</div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="item-icon gold">🎯</div>
+      <div class="item-body">
+        <div class="item-title">أهداف الدورة وما ستتعلمه</div>
+        <div class="item-desc">ما الذي ستعرفه في نهاية كل مرحلة وكيف تراكم المهارات تصبح مشروعاً متكاملاً.</div>
+      </div>
+      <div class="item-time">10 دقائق</div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="item-icon green">💻</div>
+      <div class="item-body">
+        <div class="item-title">عرض مشروع Room Guardian</div>
+        <div class="item-desc">نرى معاً النسخة النهائية من المشروع — لوحة تحكم حية، حساسات، وإنذارات تلقائية.</div>
+      </div>
+      <div class="item-time">15 دقيقة</div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="item-icon red">📋</div>
+      <div class="item-body">
+        <div class="item-title">المهام والتوقعات المطلوبة منكم</div>
+        <div class="item-desc">شرح نظام الواجبات، دفتر الملاحظات، حضور الجلسات، والعمل البيتي الأسبوعي.</div>
+      </div>
+      <div class="item-time">10 دقائق</div>
+    </div>
+
+    <div class="agenda-item">
+      <div class="item-icon teal">❓</div>
+      <div class="item-body">
+        <div class="item-title">أسئلة وإجابات مفتوحة</div>
+        <div class="item-desc">وقت حر لأي استفسار — لا يوجد سؤال صغير أو غير مناسب.</div>
+      </div>
+      <div class="item-time">15 دقيقة</div>
+    </div>
+  </div>
+
+  <!-- SECTION 3: WHAT THEY WILL LEARN -->
+  <div class="section-label">
+    <div class="num">٣</div>
+    <h2>ما الذي ستتعلمونه؟</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="outcomes-list">
+    <div class="outcome-row">
+      <div class="outcome-check">
+        <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+      </div>
+      <div class="outcome-text">
+        البرمجة بلغة Python من الصفر
+        <span>متغيرات، حلقات، شروط، دوال — وربطها بقاعدة بيانات حقيقية</span>
+      </div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-check">
+        <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+      </div>
+      <div class="outcome-text">
+        بناء واجهة ويب تفاعلية
+        <span>HTML، CSS، JavaScript — لوحة تحكم تعرض البيانات الحية</span>
+      </div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-check">
+        <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+      </div>
+      <div class="outcome-text">
+        الإلكترونيات والأردوينو
+        <span>توصيل الحساسات، قراءة البيانات، التحكم بالأجهزة الحقيقية</span>
+      </div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-check">
+        <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+      </div>
+      <div class="outcome-text">
+        إنترنت الأشياء (IoT)
+        <span>ربط الأجهزة بالإنترنت ومشاركة البيانات عبر الشبكة</span>
+      </div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-check">
+        <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+      </div>
+      <div class="outcome-text">
+        التفكير الهندسي وحل المشكلات
+        <span>المخططات الانسيابية، تقسيم المشكلة، اختبار الحلول</span>
+      </div>
+    </div>
+    <div class="outcome-row">
+      <div class="outcome-check">
+        <svg viewBox="0 0 12 12"><polyline points="2,6 5,9 10,3"/></svg>
+      </div>
+      <div class="outcome-text">
+        العمل على مشروع متكامل من البداية للنهاية
+        <span>تخطيط → بناء → اختبار → عرض أمام الجمهور</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- SECTION 4: TASKS -->
+  <div class="section-label">
+    <div class="num">٤</div>
+    <h2>المطلوب منكم طوال الدورة</h2>
+    <div class="line"></div>
+  </div>
+
+  <div class="tasks-grid">
+    <div class="task-card t-blue">
+      <div class="task-num blue">المهمة ١</div>
+      <div class="task-title">📓 دفتر الملاحظات</div>
+      <div class="task-body">احضر دفتراً مخصصاً للدورة — كل واجب وتأمل أسبوعي يُكتب فيه بيدك.</div>
+    </div>
+    <div class="task-card t-purple">
+      <div class="task-num purple">المهمة ٢</div>
+      <div class="task-title">🏠 الواجبات البيتية</div>
+      <div class="task-body">فيديوهات أسبوعية، تمارين على Replit، وأسئلة للتأمل — كل هذا بدون جهاز خاص.</div>
+    </div>
+    <div class="task-card t-gold">
+      <div class="task-num gold">المهمة ٣</div>
+      <div class="task-title">📅 الحضور المنتظم</div>
+      <div class="task-body">16 جلسة أسبوعية، 4 ساعات لكل جلسة — الحضور والمشاركة الفعّالة أساسية.</div>
+    </div>
+    <div class="task-card t-green">
+      <div class="task-num green">المهمة ٤</div>
+      <div class="task-title">🚀 المشاركة في العرض النهائي</div>
+      <div class="task-body">في الأسبوع الأخير تعرض مشروعك Room Guardian أمام الجميع.</div>
+    </div>
+  </div>
+
+  <!-- RULES BOX -->
+  <div style="margin-top: 24px;">
+    <div class="rules-box">
+      <h3>⭐ توقعاتنا منكم — قواعد اللعبة</h3>
+      <ul class="rules-list">
+        <li>الفضول هو أهم مهارة — لا تخف من السؤال عن أي شيء لا تفهمه</li>
+        <li>الأخطاء طبيعية ومتوقعة — المبرمج الحقيقي يتعلم من كل خطأ</li>
+        <li>المشاركة والتفاعل خلال الجلسات أهم من الحفظ والاستيعاب الفوري</li>
+        <li>احترام الوقت وزملاءك في الفريق الصغير</li>
+        <li>التجربة والاستكشاف مشجَّعان — جرب حتى لو لم تكن متأكداً</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <p>دورة Room Guardian — <span class="brand">ركائز ٢٠٢٥</span></p>
+    <p style="margin-top: 6px;">إسطنبول · 16 أسبوعاً · 8 طلاب</p>
+  </footer>
+
+</div>
+
+</body>
+</html>

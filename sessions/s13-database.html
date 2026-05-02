@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الجلسة ١٣ — قاعدة البيانات SQLite</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c14;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
+.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
+.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s;z-index:100;box-shadow:0 0 12px var(--accent);}
+#counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;letter-spacing:1px;}
+#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;z-index:100;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);padding:4px 12px;border-radius:20px;}
+#nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s;border:none;padding:0;}
+.dot.active{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:scale(1.4);}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);}
+.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
+#btn-prev{right:20px;}#btn-next{left:20px;}
+#slides{position:fixed;inset:0;z-index:1;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s,transform .6s;transform:translateY(30px);overflow-y:auto;}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.slide.exit{opacity:0;transform:translateY(-30px);}
+.eyebrow{font-size:13px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
+.title-main{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
+.subtitle{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;margin-bottom:32px;}
+.tag-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
+.badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
+.badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
+.badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
+.stag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
+.stitle{font-size:clamp(26px,4vw,44px);font-weight:900;text-align:center;margin-bottom:8px;}
+.ssub{font-size:15px;color:var(--muted);text-align:center;max-width:650px;line-height:1.7;margin-bottom:28px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s;}
+.card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);}
+.card .ico{font-size:28px;margin-bottom:10px;display:block;}
+.card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.7;}
+.list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:740px;}
+.li-item{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
+.li-num{width:36px;height:36px;border-radius:50%;background:rgba(0,229,192,0.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;border:1px solid rgba(0,229,192,0.25);}
+.li-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
+.box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
+.big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.9;max-width:680px;width:100%;text-align:left;direction:ltr;}
+.table-wrap{overflow-x:auto;max-width:800px;width:100%;}
+.db-table{border-collapse:collapse;width:100%;font-size:13px;font-family:'Space Mono',monospace;}
+.db-table th{background:rgba(0,229,192,0.1);color:var(--accent);padding:10px 16px;border:1px solid rgba(0,229,192,0.2);text-align:left;}
+.db-table td{padding:10px 16px;border:1px solid rgba(255,255,255,0.06);color:var(--muted);}
+.db-table tr:hover td{background:rgba(255,255,255,0.02);}
+@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div><div class="orb orb2"></div>
+<div id="progress-bar"></div><div id="counter">01 / 10</div>
+<div id="session-badge">W13 · المرحلة ٥</div>
+<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">›</button>
+<button class="nav-btn" id="btn-next" onclick="navigate(1)">‹</button>
+<div id="slides">
+
+<div class="slide active">
+  <div class="eyebrow">الجلسة الثالثة عشرة — المرحلة الخامسة</div>
+  <div class="title-main">قاعدة البيانات — SQLite 🗄</div>
+  <div class="subtitle">نكشف أين تعيش بيانات رصد (Rasd) — ونتعلم كيف نُحدّثها ونستعلم عنها</div>
+  <div class="tag-row">
+    <div class="badge teal">🗄 SQLite</div>
+    <div class="badge blue">🔍 SQL</div>
+    <div class="badge amber">📊 بيانات حقيقية</div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">لماذا قاعدة بيانات؟</div>
+  <div class="stitle">ملف نصي vs قاعدة بيانات 📂</div>
+  <div class="ssub">لماذا لا نحفظ البيانات في ملف .txt فقط؟</div>
+  <div class="grid">
+    <div class="card"><span class="ico">🔍</span><h3>بحث سريع</h3><p>ابحث عن قراءات الحرارة فوق 30° من بين مليون سجل — في ثوانٍ</p></div>
+    <div class="card"><span class="ico">🗂</span><h3>تنظيم</h3><p>بيانات منظمة في جداول — كل حقل له نوع محدد ودور واضح</p></div>
+    <div class="card"><span class="ico">🔄</span><h3>استعلامات معقدة</h3><p>احسب المتوسط، ابحث بالتاريخ، رتّب، صفّي — كل ذلك بسطر واحد</p></div>
+    <div class="card"><span class="ico">🔒</span><h3>أمان وموثوقية</h3><p>لا تفقد البيانات عند انقطاع الكهرباء — SQLite تضمن سلامة البيانات</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">جداول رصد (Rasd)</div>
+  <div class="stitle">هيكل قاعدة البيانات 📋</div>
+  <div class="ssub">جدولان — كل واحد يُخزّن نوعاً مختلفاً من البيانات</div>
+  <div class="table-wrap">
+    <p style="font-size:12px;color:var(--accent);font-family:'Space Mono',monospace;margin-bottom:8px;letter-spacing:2px;">TABLE: readings</p>
+    <table class="db-table" style="margin-bottom:20px;">
+      <tr><th>id</th><th>temperature</th><th>humidity</th><th>vibration</th><th>timestamp</th></tr>
+      <tr><td>1</td><td>24.5</td><td>58.2</td><td>0</td><td>2025-01-15 14:30:22</td></tr>
+      <tr><td>2</td><td>24.7</td><td>57.9</td><td>1</td><td>2025-01-15 14:30:24</td></tr>
+    </table>
+    <p style="font-size:12px;color:var(--amber);font-family:'Space Mono',monospace;margin-bottom:8px;letter-spacing:2px;">TABLE: alerts</p>
+    <table class="db-table">
+      <tr><th>id</th><th>type</th><th>message</th><th>timestamp</th></tr>
+      <tr><td>1</td><td>TEMP_HIGH</td><td>الحرارة تجاوزت 30°</td><td>2025-01-15 14:31:00</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">SQL — لغة البيانات</div>
+  <div class="stitle">أوامر SQL الأساسية 🔍</div>
+  <div class="ssub">ثلاثة أوامر تكفيك لاستعراض كل بيانات رصد (Rasd)</div>
+  <div class="code-block">
+<span style="color:var(--muted);">-- عرض كل القراءات</span><br>
+SELECT * FROM readings;<br><br>
+<span style="color:var(--muted);">-- فلترة: الحرارة فوق 25 درجة فقط</span><br>
+SELECT * FROM readings<br>
+WHERE temperature > 25;<br><br>
+<span style="color:var(--muted);">-- متوسط درجة الحرارة</span><br>
+SELECT AVG(temperature) AS avg_temp<br>
+FROM readings;<br><br>
+<span style="color:var(--muted);">-- آخر 10 قراءات فقط</span><br>
+SELECT * FROM readings<br>
+ORDER BY timestamp DESC LIMIT 10;
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">DB Browser</div>
+  <div class="stitle">نفتح قاعدة البيانات بصرياً 🖥</div>
+  <div class="ssub">DB Browser for SQLite — أداة مجانية تُظهر البيانات كجداول Excel</div>
+  <div class="list">
+    <div class="li-item"><div class="li-num">١</div><div><div class="li-title">افتح DB Browser for SQLite</div><div class="li-sub">مجاني من: sqlitebrowser.org</div></div></div>
+    <div class="li-item"><div class="li-num">٢</div><div><div class="li-title">افتح ملف room_guardian.db</div><div class="li-sub">File → Open Database → اختر الملف من مجلد المشروع</div></div></div>
+    <div class="li-item"><div class="li-num">٣</div><div><div class="li-title">استعرض الجداول</div><div class="li-sub">Browse Data → اختر readings → شاهد كل القراءات المخزّنة</div></div></div>
+    <div class="li-item"><div class="li-num">٤</div><div><div class="li-title">نفّذ استعلاماً</div><div class="li-sub">Execute SQL → اكتب الأمر → اضغط Run</div></div></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">نشاط</div>
+  <div class="stitle">نفّذ الاستعلامات الثلاثة ✏️</div>
+  <div class="ssub">في DB Browser — نفّذ كل استعلام وسجّل النتيجة في الدفتر</div>
+  <div class="list">
+    <div class="li-item"><div class="li-num">١</div><div><div class="li-title">SELECT * FROM readings LIMIT 5</div><div class="li-sub">ما أول ٥ قراءات في قاعدة البيانات؟</div></div></div>
+    <div class="li-item"><div class="li-num">٢</div><div><div class="li-title">SELECT AVG(temperature) FROM readings</div><div class="li-sub">ما متوسط درجة الحرارة في الجلسة كلها؟</div></div></div>
+    <div class="li-item"><div class="li-num">٣</div><div><div class="li-title">SELECT COUNT(*) FROM alerts</div><div class="li-sub">كم تنبيهاً صدر حتى الآن؟</div></div></div>
+  </div>
+  <div class="box" style="margin-top:16px;">💡 SQL تقرأها بالإنجليزية مثل جملة: "اختر كل شيء من readings حيث الحرارة أكبر من 25"</div>
+</div>
+
+<div class="slide">
+  <div class="stag">Flask والـ Database</div>
+  <div class="stitle">كيف يُخزّن Flask البيانات؟ 💾</div>
+  <div class="ssub">في database.py — كل قراءة جديدة تُحفظ هكذا</div>
+  <div class="code-block">
+<span style="color:var(--muted);"># في database.py</span><br>
+import sqlite3<br><br>
+def save_reading(temp, hum, vib):<br>
+&nbsp;&nbsp;conn = sqlite3.connect('room_guardian.db')<br>
+&nbsp;&nbsp;cursor = conn.cursor()<br>
+&nbsp;&nbsp;cursor.execute(<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"INSERT INTO readings (temperature, humidity, vibration)"<br>
+&nbsp;&nbsp;&nbsp;&nbsp;" VALUES (?, ?, ?)",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(temp, hum, vib)<br>
+&nbsp;&nbsp;)<br>
+&nbsp;&nbsp;conn.commit()<br>
+&nbsp;&nbsp;conn.close()
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">استعلامات متقدمة</div>
+  <div class="stitle">SQL أقوى مما تظن 🚀</div>
+  <div class="ssub">بجملة واحدة تحصل على إجابة لأسئلة معقدة</div>
+  <div class="code-block">
+<span style="color:var(--muted);">-- أعلى درجة حرارة تم تسجيلها</span><br>
+SELECT MAX(temperature) FROM readings;<br><br>
+<span style="color:var(--muted);">-- متوسط الرطوبة خلال آخر ساعة</span><br>
+SELECT AVG(humidity) FROM readings<br>
+WHERE timestamp > datetime('now', '-1 hour');<br><br>
+<span style="color:var(--muted);">-- عدد مرات كشف الاهتزاز</span><br>
+SELECT COUNT(*) FROM readings<br>
+WHERE vibration = 1;
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">واجب الأسبوع</div>
+  <div class="stitle">🏠 مهمتك هذا الأسبوع</div>
+  <div class="ssub">استعلامات SQL وتحضير للـ Dashboard</div>
+  <div class="list">
+    <div class="li-item"><div class="li-num">✍️</div><div><div class="li-title">اكتب SQL يُظهر آخر ٢٠ قراءة فقط</div><div class="li-sub">ORDER BY timestamp DESC LIMIT 20 — نفّذه في DB Browser</div></div></div>
+    <div class="li-item"><div class="li-num">🧮</div><div><div class="li-title">احسب متوسط الحرارة والرطوبة معاً</div><div class="li-sub">SELECT AVG(temperature), AVG(humidity) FROM readings</div></div></div>
+    <div class="li-item"><div class="li-num">💭</div><div><div class="li-title">اكتب: لماذا نُخزّن الـ timestamp مع كل قراءة؟</div><div class="li-sub">ما الفوائد؟ ما الاستعلامات التي تصبح ممكنة بسببه؟</div></div></div>
+    <div class="li-item" style="border-color:rgba(0,229,192,0.3);"><div class="li-num">⭐</div><div><div class="li-title">تحدي: اكتب استعلاماً لإيجاد أكثر ساعة تنبيهاً</div><div class="li-sub">استخدم GROUP BY وCOUNT — وفّق!</div></div></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="big-e">📊</div>
+  <div class="stitle">الأسبوع القادم — لوحة التحكم!</div>
+  <div class="ssub" style="margin-bottom:32px;">نُخصّص الـ Dashboard — HTML وCSS وJavaScript تجتمع لتُظهر البيانات بشكل جميل</div>
+  <div class="tag-row">
+    <div class="badge teal">🎨 HTML/CSS/JS</div>
+    <div class="badge blue">📊 Dashboard</div>
+    <div class="badge amber">✏️ تخصيص</div>
+  </div>
+  <div class="box" style="margin-top:36px;">البيانات محفوظة — الآن نجعلها تبدو رائعة على الشاشة 🎨</div>
+</div>
+
+</div>
+<div id="nav-dots"></div>
+<script>
+const total=10;let current=0;const slides=document.querySelectorAll('.slide');const dotsEl=document.getElementById('nav-dots');const counter=document.getElementById('counter');const bar=document.getElementById('progress-bar');
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
+function goTo(n){slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),600);current=(n+total)%total;slides[current].classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');bar.style.width=((current+1)/total*100)+'%';}
+function navigate(dir){goTo(current+dir);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.key==='ArrowRight')navigate(-1);});
+let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
+bar.style.width=(1/total*100)+'%';
+</script>
+</body>
+</html>

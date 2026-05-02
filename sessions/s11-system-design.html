@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رصد (Rasd) — تصميم النظام والمعمارية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c14;--bg2:#0e1520;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
+.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
+.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s;z-index:100;box-shadow:0 0 12px var(--accent);}
+#counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;letter-spacing:1px;}
+#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;z-index:100;letter-spacing:2px;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);padding:4px 12px;border-radius:20px;}
+#nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s;border:none;padding:0;}
+.dot.active{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:scale(1.4);}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);}
+.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
+#btn-prev{right:20px;}#btn-next{left:20px;}
+#slides{position:fixed;inset:0;z-index:1;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s,transform .6s;transform:translateY(30px);overflow-y:auto;}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.slide.exit{opacity:0;transform:translateY(-30px);}
+.eyebrow{font-size:13px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
+.title-main{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
+.subtitle{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;margin-bottom:32px;}
+.tag-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
+.badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
+.badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
+.badge.red{border-color:var(--accent3);color:var(--accent3);background:rgba(255,107,107,0.08);}
+.badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
+.stag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
+.stitle{font-size:clamp(26px,4vw,44px);font-weight:900;text-align:center;margin-bottom:8px;}
+.ssub{font-size:15px;color:var(--muted);text-align:center;max-width:650px;line-height:1.7;margin-bottom:28px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s;}
+.card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);}
+.card .ico{font-size:28px;margin-bottom:10px;display:block;}
+.card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.7;}
+.list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:740px;}
+.li-item{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
+.li-num{width:36px;height:36px;border-radius:50%;background:rgba(0,229,192,0.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;border:1px solid rgba(0,229,192,0.25);}
+.li-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
+.box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
+.big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.8;max-width:680px;width:100%;text-align:left;direction:ltr;}
+.flow{display:flex;align-items:center;gap:0;flex-wrap:wrap;justify-content:center;margin-bottom:24px;}
+.flow-node{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 18px;font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap;}
+.flow-arrow{color:var(--muted);font-size:20px;padding:0 8px;}
+@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}.flow{flex-direction:column;}}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div id="progress-bar"></div>
+<div id="counter">01 / 10</div>
+<div id="session-badge">W11 · المرحلة ٥</div>
+<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">&#8594;</button>
+<button class="nav-btn" id="btn-next" onclick="navigate(1)">&#8592;</button>
+<div id="nav-dots"></div>
+
+<div id="slides">
+
+  <!-- Slide 1 -->
+  <div class="slide active">
+    <div class="eyebrow">رصد (Rasd) — الجلسة الحادية عشرة</div>
+    <div class="title-main">تصميم النظام والمعمارية 🗺</div>
+    <div class="subtitle">كيف تتحدث الأجزاء مع بعضها؟ نرسم اليوم الصورة الكاملة لـ رصد (Rasd) ونفهم كل طبقة من طبقاته</div>
+    <div class="tag-row">
+      <span class="badge teal">🏗 هندسة</span>
+      <span class="badge blue">📐 System Design</span>
+      <span class="badge amber">🛡 رصد (Rasd)</span>
+    </div>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slide">
+    <div class="stag">مراجعة الجلسة السابقة</div>
+    <div class="stitle">الحساسات والأجهزة — ماذا تعلمنا؟</div>
+    <div class="ssub">سريعاً نتذكر ما أنجزناه في الجلسة الماضية مع الحساسات الحقيقية</div>
+    <div class="grid">
+      <div class="card">
+        <span class="ico">🌡</span>
+        <h3>DHT22</h3>
+        <p>وصّلناه على Pin 2 وقرأنا الحرارة والرطوبة بمكتبة DHT — قراءة كل 2 ثانية</p>
+      </div>
+      <div class="card">
+        <span class="ico">📳</span>
+        <h3>حساس الاهتزاز</h3>
+        <p>وصّلناه على Pin 3 ويُرسل HIGH عند الاهتزاز — أبسط حساس رقمي في المشروع</p>
+      </div>
+      <div class="card">
+        <span class="ico">📺</span>
+        <h3>Serial Monitor</h3>
+        <p>شاهدنا البيانات تتدفق في الوقت الحقيقي — الخطوة الأولى في رحلة البيانات</p>
+      </div>
+      <div class="card">
+        <span class="ico">🎯</span>
+        <h3>البيانات الحقيقية</h3>
+        <p>قارنّا Demo Mode ببيانات حقيقية — الفرق واضح في الرسم البياني وأنماط التغيير</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slide">
+    <div class="stag">مفهوم المعمارية</div>
+    <div class="stitle">ما هي معمارية النظام؟</div>
+    <div class="ssub">معمارية النظام هي المخطط العام الذي يُظهر كل مكوّن وكيف يتواصل مع المكوّنات الأخرى</div>
+    <div class="grid">
+      <div class="card">
+        <span class="ico">🖥️</span>
+        <h3>Frontend</h3>
+        <p>ما يراه المستخدم — HTML وCSS وJavaScript يُكوّنون لوحة التحكم التفاعلية في المتصفح</p>
+      </div>
+      <div class="card">
+        <span class="ico">🧠</span>
+        <h3>Backend</h3>
+        <p>عقل النظام — Python و Flask يعالجان الطلبات ويُطبّقان القواعد ويُولّدان التنبيهات</p>
+      </div>
+      <div class="card">
+        <span class="ico">💾</span>
+        <h3>Database</h3>
+        <p>ذاكرة النظام — SQLite يحفظ كل قراءة وكل تنبيه مع وقته بشكل منظّم وقابل للبحث</p>
+      </div>
+      <div class="card">
+        <span class="ico">⚡</span>
+        <h3>Hardware</h3>
+        <p>عيون وآذان النظام — Arduino والحساسات تجمع البيانات من العالم الفيزيائي</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4 -->
+  <div class="slide">
+    <div class="stag">رحلة البيانات</div>
+    <div class="stitle">كيف تتدفق البيانات في رصد (Rasd)؟</div>
+    <div class="ssub">كل قراءة تبدأ من الحساس وتصل إلى شاشتك — إليك رحلتها الكاملة خطوة بخطوة</div>
+    <div class="flow" style="margin-bottom:20px;">
+      <div class="flow-node">🌡 DHT22</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">⚡ Arduino</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">🐍 Python</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">💾 SQLite</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">🌐 Flask API</div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-node">📊 Dashboard</div>
+    </div>
+    <div class="box">
+      كل ثانيتين: DHT22 يقرأ الحرارة → Arduino يُرسلها عبر Serial → Python يستقبلها ويُعالجها<br>
+      → SQLite يُخزّنها مع الوقت → Flask يُقدّمها كـ JSON → JavaScript يعرضها على الشاشة
+    </div>
+  </div>
+
+  <!-- Slide 5 -->
+  <div class="slide">
+    <div class="stag">هيكل المشروع</div>
+    <div class="stitle">الملفات التي يتكوّن منها رصد (Rasd)</div>
+    <div class="ssub">كل ملف له دور محدد — معرفة دور كل ملف يساعدك على إيجاد المشاكل وإضافة الميزات</div>
+    <div class="list">
+      <div class="li-item">
+        <div class="li-num">⚡</div>
+        <div><div class="li-title">arduino_sketch.ino</div><div class="li-sub">كود Arduino — يقرأ الحساسات ويُرسل البيانات عبر Serial Port بتنسيق CSV</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">📡</div>
+        <div><div class="li-title">sensor_reader.py</div><div class="li-sub">يقرأ من المنفذ التسلسلي ويُحلّل البيانات القادمة من Arduino ويُرسلها لـ Flask</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">🌐</div>
+        <div><div class="li-title">app.py</div><div class="li-sub">خادم Flask الرئيسي — يحتوي على كل الـ routes والـ API endpoints</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">💾</div>
+        <div><div class="li-title">database.py</div><div class="li-sub">يُدير قاعدة البيانات — إنشاء الجداول وحفظ القراءات واسترجاع البيانات</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">🎨</div>
+        <div><div class="li-title">dashboard.html</div><div class="li-sub">واجهة المستخدم — HTML وCSS وJS تعرض البيانات وتُحدّثها كل 3 ثوانٍ</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6 -->
+  <div class="slide">
+    <div class="stag">تشبيه من الحياة</div>
+    <div class="stitle">ما هو API؟ — تشبيه المطعم 🍽</div>
+    <div class="ssub">API هو الواجهة التي تسمح للأجزاء المختلفة بالتحدث مع بعضها — مثل النادل في المطعم تماماً</div>
+    <div class="grid" style="max-width:800px;">
+      <div class="card">
+        <span class="ico">🙋</span>
+        <h3>العميل — Frontend</h3>
+        <p>يجلس في المطعم ويطلب الطعام — مثل المتصفح الذي يطلب بيانات من الـ Backend</p>
+      </div>
+      <div class="card">
+        <span class="ico">🤵</span>
+        <h3>النادل — API</h3>
+        <p>يستقبل الطلب ويُوصّله للمطبخ ويُعيد الطعام — مثل Flask الذي يستقبل الطلبات ويُرجع JSON</p>
+      </div>
+      <div class="card">
+        <span class="ico">👨‍🍳</span>
+        <h3>المطبخ — Backend</h3>
+        <p>يُعدّ الطعام الفعلي ويُخزّن المقادير — مثل Python الذي يُعالج البيانات ويُخزّنها في SQLite</p>
+      </div>
+      <div class="card">
+        <span class="ico">📋</span>
+        <h3>قائمة الطعام — Endpoints</h3>
+        <p>قائمة ما يمكن طلبه — مثل /api/readings و /api/alerts التي يُقدّمها رصد (Rasd)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7 -->
+  <div class="slide">
+    <div class="stag">نشاط تفاعلي</div>
+    <div class="stitle">ارسم مخطط النظام من ذاكرتك! ✏️</div>
+    <div class="ssub">الآن تحدّي ذاكرتك — في دفترك ارسم مخطط كامل لـ رصد (Rasd) بدون النظر إلى الشاشة</div>
+    <div class="list">
+      <div class="li-item">
+        <div class="li-num">①</div>
+        <div><div class="li-title">ابدأ بالحساسات</div><div class="li-sub">ارسم DHT22 وحساس الاهتزاز على اليمين — هذه نقطة البداية</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">②</div>
+        <div><div class="li-title">ارسم Arduino في المنتصف</div><div class="li-sub">وصّل الحساسات به بأسهم تُشير نحوه — البيانات تتدفق للداخل</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">③</div>
+        <div><div class="li-title">ارسم Python وSQLite</div><div class="li-sub">وصّلهما بـ Arduino بسهم — ثم SQLite تحت Python</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">④</div>
+        <div><div class="li-title">أنهِ بـ Dashboard</div><div class="li-sub">على اليسار ارسم المتصفح — وصّله بـ Flask بسهمين (طلب ← استجابة)</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 8 -->
+  <div class="slide">
+    <div class="stag">نقاش جماعي</div>
+    <div class="stitle">ماذا يحدث إذا توقّف كل جزء؟ 🤔</div>
+    <div class="ssub">فكّر مثل مهندس — كيف يؤثر تعطّل كل جزء على النظام بأكمله؟</div>
+    <div class="grid">
+      <div class="card">
+        <span class="ico">💀</span>
+        <h3>Backend يتوقف؟</h3>
+        <p>Dashboard لن يحصل على بيانات — سيظهر خطأ في المتصفح — لكن Arduino لا يزال يقرأ</p>
+      </div>
+      <div class="card">
+        <span class="ico">💾</span>
+        <h3>Database تتلف؟</h3>
+        <p>نفقد كل السجل التاريخي للقراءات — لكن النظام قد يستمر في العمل بدون تخزين مؤقتاً</p>
+      </div>
+      <div class="card">
+        <span class="ico">🔌</span>
+        <h3>Arduino ينفصل؟</h3>
+        <p>لا بيانات جديدة — الـ Dashboard سيعرض آخر قراءة محفوظة — تنبيه "فقدان الاتصال"</p>
+      </div>
+      <div class="card">
+        <span class="ico">🌐</span>
+        <h3>الإنترنت ينقطع؟</h3>
+        <p>ngrok يتوقف — لكن النظام يعمل محلياً على localhost — يمكن الوصول من نفس الشبكة</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 9 -->
+  <div class="slide">
+    <div class="stag">واجب الأسبوع</div>
+    <div class="stitle">مهامك هذا الأسبوع 📋</div>
+    <div class="ssub">ثلاث مهام تُرسّخ فهمك للمعمارية وتُجهّزك للغوص في الـ Backend الأسبوع القادم</div>
+    <div class="list">
+      <div class="li-item">
+        <div class="li-num">١</div>
+        <div><div class="li-title">اقرأ app.py وحدّد الـ Routes</div><div class="li-sub">افتح ملف app.py واستخرج كل السطور التي تبدأ بـ @app.route — اكتبها في دفترك مع شرح قصير لكل منها</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٢</div>
+        <div><div class="li-title">اشرح API بمثال من حياتك اليومية</div><div class="li-sub">فكّر في مثال خاص بك يشرح فكرة API — غير مثال المطعم — واكتبه في جملتين أو ثلاث</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٣</div>
+        <div><div class="li-title">ابحث عن HTTP GET vs POST</div><div class="li-sub">ما الفرق بين GET و POST في HTTP؟ متى نستخدم كل منهما في رصد (Rasd)؟ اكتب ما تعلمته</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10 -->
+  <div class="slide">
+    <span class="big-e">🐍</span>
+    <div class="stag">الأسبوع القادم</div>
+    <div class="stitle">نُشغّل الـ Backend ونختبر الـ API!</div>
+    <div class="ssub">الجلسة القادمة نغوص في Python وFlask — نُشغّل الخادم ونُرسل طلبات حقيقية ونرى الـ JSON يتدفق</div>
+    <div class="box" style="margin-bottom:24px;">
+      الأسبوع القادم: <strong>Backend — Python & Flask</strong><br>
+      سنكتب routes جديدة، نُشغّل الخادم، ونختبر الـ API من المتصفح مباشرة<br>
+      python app.py → Running on http://127.0.0.1:5000 ✓
+    </div>
+    <div class="tag-row">
+      <span class="badge teal">🐍 Python</span>
+      <span class="badge blue">🌐 Flask</span>
+      <span class="badge amber">📡 API Testing</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const total=10;let current=0;const slides=document.querySelectorAll('.slide');const dotsEl=document.getElementById('nav-dots');const counter=document.getElementById('counter');const bar=document.getElementById('progress-bar');
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
+function goTo(n){slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),600);current=(n+total)%total;slides[current].classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');bar.style.width=((current+1)/total*100)+'%';}
+function navigate(dir){goTo(current+dir);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.key==='ArrowRight')navigate(-1);});
+let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
+bar.style.width=(1/total*100)+'%';
+</script>
+</body>
+</html>

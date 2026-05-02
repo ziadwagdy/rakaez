@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رصد (Rasd) — الحساسات وإنترنت الأشياء</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c14;--bg2:#0e1520;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
+.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
+.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s;z-index:100;box-shadow:0 0 12px var(--accent);}
+#counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;letter-spacing:1px;}
+#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;z-index:100;letter-spacing:2px;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);padding:4px 12px;border-radius:20px;}
+#nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s;border:none;padding:0;}
+.dot.active{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:scale(1.4);}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);}
+.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
+#btn-prev{right:20px;}#btn-next{left:20px;}
+#slides{position:fixed;inset:0;z-index:1;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s,transform .6s;transform:translateY(30px);overflow-y:auto;}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.slide.exit{opacity:0;transform:translateY(-30px);}
+.eyebrow{font-size:13px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
+.title-main{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
+.subtitle{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;margin-bottom:32px;}
+.tag-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
+.badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
+.badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
+.badge.red{border-color:var(--accent3);color:var(--accent3);background:rgba(255,107,107,0.08);}
+.badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
+.stag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
+.stitle{font-size:clamp(26px,4vw,44px);font-weight:900;text-align:center;margin-bottom:8px;}
+.ssub{font-size:15px;color:var(--muted);text-align:center;max-width:650px;line-height:1.7;margin-bottom:28px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s;}
+.card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);}
+.card .ico{font-size:28px;margin-bottom:10px;display:block;}
+.card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.7;}
+.list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:740px;}
+.li-item{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
+.li-num{width:36px;height:36px;border-radius:50%;background:rgba(0,229,192,0.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;border:1px solid rgba(0,229,192,0.25);}
+.li-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
+.box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
+.big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.8;max-width:680px;width:100%;text-align:left;direction:ltr;}
+@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div id="progress-bar"></div>
+<div id="counter">01 / 10</div>
+<div id="session-badge">W10 · المرحلة ٤</div>
+<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">&#8594;</button>
+<button class="nav-btn" id="btn-next" onclick="navigate(1)">&#8592;</button>
+<div id="nav-dots"></div>
+
+<div id="slides">
+
+  <!-- Slide 1 -->
+  <div class="slide active">
+    <div class="eyebrow">رصد (Rasd) — الجلسة العاشرة</div>
+    <div class="title-main">الحساسات وإنترنت الأشياء 🌡</div>
+    <div class="subtitle">اليوم نوصّل حساسات حقيقية بـ Arduino ونُشغّل رصد (Rasd) بالكامل — بيانات حية من العالم الحقيقي!</div>
+    <div class="tag-row">
+      <span class="badge teal">🌡 DHT11</span>
+      <span class="badge blue">📡 IoT</span>
+      <span class="badge amber">🛡 رصد (Rasd) حي</span>
+    </div>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slide">
+    <div class="stag">مراجعة سريعة</div>
+    <div class="stitle">ماذا نعرف عن Arduino؟</div>
+    <div class="ssub">قبل أن نضيف الحساسات، نتذكر الأساسيات التي بنيناها معاً في الجلسات السابقة</div>
+    <div class="grid">
+      <div class="card">
+        <span class="ico">⚙️</span>
+        <h3>دالة setup()</h3>
+        <p>تعمل مرة واحدة عند التشغيل — نضع فيها إعدادات المنافذ وتهيئة الحساسات والمكتبات</p>
+      </div>
+      <div class="card">
+        <span class="ico">🔁</span>
+        <h3>دالة loop()</h3>
+        <p>تعمل للأبد في حلقة لانهائية — هنا نقرأ الحساسات ونُرسل البيانات ونتحكم في الأجهزة</p>
+      </div>
+      <div class="card">
+        <span class="ico">💡</span>
+        <h3>LED Blink</h3>
+        <p>أول مشروع — كتبنا كوداً يُضيء LED ثم يُطفئها كل ثانية باستخدام digitalWrite و delay</p>
+      </div>
+      <div class="card">
+        <span class="ico">📺</span>
+        <h3>Serial Monitor</h3>
+        <p>نافذة الاتصال بين Arduino والكمبيوتر — Serial.begin(9600) لفتحها و Serial.println() للطباعة</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slide">
+    <div class="stag">مفهوم جديد</div>
+    <div class="stitle">ما هي الحساسات؟</div>
+    <div class="ssub">الحساسات هي عيون وآذان الجهاز — تُحوّل الظواهر الفيزيائية إلى إشارات رقمية يفهمها Arduino</div>
+    <div class="grid">
+      <div class="card">
+        <span class="ico">🔘</span>
+        <h3>حساس رقمي</h3>
+        <p>يُعطي قيمتين فقط: 0 أو 1 — مثل: مفتاح الضغط، حساس المطر وحساس التربة، حساس الباب</p>
+      </div>
+      <div class="card">
+        <span class="ico">📈</span>
+        <h3>حساس تناظري</h3>
+        <p>يُعطي قيمة مستمرة من 0 إلى 1023 — مثل: حساس الضوء LDR، حساس الصوت، الجهد المتغير</p>
+      </div>
+      <div class="card">
+        <span class="ico">🌡</span>
+        <h3>DHT11</h3>
+        <p>حساس ذكي يقيس درجة الحرارة من ‑40° إلى 80° والرطوبة من 0% إلى 100% بدقة ±0.5%</p>
+      </div>
+      <div class="card">
+        <span class="ico">📳</span>
+        <h3>حساس المطر وحساس التربة</h3>
+        <p>يكتشف الاهتزازات والصدمات — يُرسل HIGH عند الاهتزاز و LOW عند السكون التام</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4 -->
+  <div class="slide">
+    <div class="stag">التوصيل والكود</div>
+    <div class="stitle">توصيل DHT11 بـ Arduino</div>
+    <div class="ssub">DHT11 له 4 أرجل — نوصّل 3 منها ونترك Pin 3 فارغاً</div>
+    <div class="list" style="margin-bottom:18px;">
+      <div class="li-item">
+        <div class="li-num">1</div>
+        <div><div class="li-title">Pin 1 → VCC (5V)</div><div class="li-sub">طرف الطاقة — وصّله بمنفذ 5V على Arduino لتشغيل الحساس</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">2</div>
+        <div><div class="li-title">Pin 2 → Digital Pin 2 (DATA)</div><div class="li-sub">طرف البيانات — هنا تأتي قراءات الحرارة والرطوبة. ضع مقاومة 10kΩ بينه وبين 5V</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">4</div>
+        <div><div class="li-title">Pin 4 → GND</div><div class="li-sub">طرف الأرضي — يُغلق الدائرة الكهربائية ويُثبّت الجهد</div></div>
+      </div>
+    </div>
+    <div class="code-block">#include &lt;DHT.h&gt;
+DHT dht(2, DHT11);
+
+void setup() {
+  Serial.begin(9600);
+  dht.begin();
+}
+
+void loop() {
+  float temp = dht.readTemperature();
+  float hum  = dht.readHumidity();
+  Serial.print("Temp: "); Serial.print(temp); Serial.println(" C");
+  Serial.print("Hum:  "); Serial.print(hum);  Serial.println(" %");
+  delay(2000);
+}</div>
+  </div>
+
+  <!-- Slide 5 -->
+  <div class="slide">
+    <div class="stag">تجربة عملية</div>
+    <div class="stitle">عرض قراءات DHT11 على Serial Monitor</div>
+    <div class="ssub">بعد رفع الكود، افتح Serial Monitor من Tools ← Serial Monitor — ستظهر القراءات كل ثانيتين</div>
+    <div class="code-block" style="margin-bottom:20px;">Temp: 23.50 C
+Hum:  61.20 %
+Temp: 23.60 C
+Hum:  61.00 %
+Temp: 24.10 C
+Hum:  60.80 %
+Temp: 24.30 C
+Hum:  59.50 %</div>
+    <div class="box">
+      💡 <strong>جرّب:</strong> ضع إصبعك على DHT11 — ستلاحظ ارتفاع درجة الحرارة فوراً!<br>
+      أو انفخ عليه بلطف لترى تغيير قراءة الرطوبة.
+    </div>
+  </div>
+
+  <!-- Slide 6 -->
+  <div class="slide">
+    <div class="stag">الحساس الثاني</div>
+    <div class="stitle">حساس المطر وحساس التربة 📳</div>
+    <div class="ssub">نُضيف حساس المطر وحساس التربة على المنفذ الرقمي 3 — سيُنبّهنا عند أي حركة أو اهتزاز في الغرفة</div>
+    <div class="code-block" style="margin-bottom:20px;">// حساس المطر وحساس التربة على Pin 3
+void setup() {
+  Serial.begin(9600);
+  pinMode(3, INPUT);
+}
+
+void loop() {
+  int vib = digitalRead(3);
+  if (vib == HIGH) {
+    Serial.println("تحذير: تم رصد اهتزاز!");
+  } else {
+    Serial.println("الغرفة هادئة...");
+  }
+  delay(500);
+}</div>
+    <div class="box">
+      🔧 <strong>توصيل بسيط:</strong> VCC → 5V | OUT → Pin 3 | GND → GND<br>
+      اطرق الطاولة بلطف وانظر ماذا يحدث في Serial Monitor!
+    </div>
+  </div>
+
+  <!-- Slide 7 -->
+  <div class="slide">
+    <div class="stag">اللحظة الكبيرة</div>
+    <div class="stitle">رصد (Rasd) بالأجهزة الحقيقية! 🛡</div>
+    <div class="ssub">الآن نُشغّل النظام كاملاً — بيانات حقيقية من حساسات حقيقية في الغرفة التي نجلس فيها!</div>
+    <div class="list">
+      <div class="li-item">
+        <div class="li-num">①</div>
+        <div><div class="li-title">Arduino يقرأ الحساسات</div><div class="li-sub">DHT11 يُرسل الحرارة والرطوبة — حساس المطر وحساس التربة يرصد الحركة — كل 2 ثانية</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">②</div>
+        <div><div class="li-title">Python يستقبل البيانات</div><div class="li-sub">sensor_reader.py يقرأ من المنفذ التسلسلي ويُحلّل البيانات ويُرسلها للـ Flask</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">③</div>
+        <div><div class="li-title">Flask يُخزّن ويُعالج</div><div class="li-sub">app.py يستقبل القراءات ويُخزّنها في SQLite ويُولّد التنبيهات عند الحاجة</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">④</div>
+        <div><div class="li-title">Dashboard يعرض مباشرة</div><div class="li-sub">المتصفح يُحدّث البيانات كل 3 ثوانٍ — الرسم البياني يتحرك — التنبيهات تظهر</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 8 -->
+  <div class="slide">
+    <div class="stag">تحليل ومقارنة</div>
+    <div class="stitle">بيانات حقيقية vs Demo Mode</div>
+    <div class="ssub">ما الفرق بين تشغيل النظام بحساسات حقيقية وبين الـ Demo Mode الذي استخدمناه سابقاً؟</div>
+    <div class="grid" style="max-width:800px;">
+      <div class="card">
+        <span class="ico">🎭</span>
+        <h3>Demo Mode</h3>
+        <p>أرقام عشوائية تنتج بواسطة random() في Python — مفيد للاختبار ولكن ليست بيانات حقيقية</p>
+      </div>
+      <div class="card">
+        <span class="ico">🌡</span>
+        <h3>بيانات حقيقية</h3>
+        <p>قراءات فعلية من DHT11 — تعكس درجة حرارة الغرفة ورطوبتها الحقيقية لحظة بلحظة</p>
+      </div>
+      <div class="card">
+        <span class="ico">📊</span>
+        <h3>الفرق في الرسم البياني</h3>
+        <p>البيانات الحقيقية تتغير ببطء وبشكل منطقي — Demo Mode يقفز بشكل عشوائي</p>
+      </div>
+      <div class="card">
+        <span class="ico">🚨</span>
+        <h3>التنبيهات الحقيقية</h3>
+        <p>في وضع Demo: تنبيهات تجريبية عشوائية. مع الحساس: تنبيه حقيقي عند حرارة أو رطوبة غير طبيعية</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 9 -->
+  <div class="slide">
+    <div class="stag">واجب الأسبوع</div>
+    <div class="stitle">مهامك هذا الأسبوع 📋</div>
+    <div class="ssub">ثلاث مهام تُعمّق فهمك للحساسات وإنترنت الأشياء وتُجهّزك للجلسة القادمة</div>
+    <div class="list">
+      <div class="li-item">
+        <div class="li-num">١</div>
+        <div><div class="li-title">ابحث عن منتجات IoT حول منزلك</div><div class="li-sub">ابحث عن Nest Thermostat و Ring Doorbell و Smart Bulb — ما الحساسات التي تستخدمها كل منها؟ واكتب ملاحظاتك</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٢</div>
+        <div><div class="li-title">ما الحساس الذي تودّ إضافته ولماذا؟</div><div class="li-sub">فكّر في حساس إضافي لـ رصد (Rasd) — حساس الغاز؟ حساس الضوء؟ حساس الصوت؟ اكتب فكرتك مع التبرير</div></div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٣</div>
+        <div><div class="li-title">اقرأ README.md للمشروع</div><div class="li-sub">افتح ملف README.md في مجلد رصد (Rasd) واقرأه بالكامل — هل هناك شيء لم تفهمه؟ دوّنه</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10 -->
+  <div class="slide">
+    <span class="big-e">🚀</span>
+    <div class="stag">الأسبوع القادم</div>
+    <div class="stitle">ندخل مرحلة البناء الكاملة!</div>
+    <div class="ssub">في الجلسة القادمة نُصمّم النظام من الألف إلى الياء — معمارية متكاملة وكل قطعة في مكانها الصحيح</div>
+    <div class="box" style="margin-bottom:24px;">
+      الأسبوع القادم: <strong>تصميم النظام والمعمارية</strong><br>
+      سنرسم مخطط النظام كاملاً ونفهم كيف تتحدث كل الأجزاء مع بعضها<br>
+      Arduino ↔ Python ↔ SQLite ↔ Flask ↔ Dashboard
+    </div>
+    <div class="tag-row">
+      <span class="badge teal">🏗 System Design</span>
+      <span class="badge blue">📐 Architecture</span>
+      <span class="badge amber">🛡 رصد (Rasd)</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const total=10;let current=0;const slides=document.querySelectorAll('.slide');const dotsEl=document.getElementById('nav-dots');const counter=document.getElementById('counter');const bar=document.getElementById('progress-bar');
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
+function goTo(n){slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),600);current=(n+total)%total;slides[current].classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');bar.style.width=((current+1)/total*100)+'%';}
+function navigate(dir){goTo(current+dir);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.key==='ArrowRight')navigate(-1);});
+let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
+bar.style.width=(1/total*100)+'%';
+</script>
+</body>
+</html>

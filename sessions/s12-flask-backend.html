@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الجلسة ١٢ — Backend: Python & Flask</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c14;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
+.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
+.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s;z-index:100;box-shadow:0 0 12px var(--accent);}
+#counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;letter-spacing:1px;}
+#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;z-index:100;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);padding:4px 12px;border-radius:20px;}
+#nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s;border:none;padding:0;}
+.dot.active{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:scale(1.4);}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);}
+.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
+#btn-prev{right:20px;}#btn-next{left:20px;}
+#slides{position:fixed;inset:0;z-index:1;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s,transform .6s;transform:translateY(30px);overflow-y:auto;}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.slide.exit{opacity:0;transform:translateY(-30px);}
+.eyebrow{font-size:13px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
+.title-main{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
+.subtitle{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;margin-bottom:32px;}
+.tag-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
+.badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
+.badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
+.badge.red{border-color:var(--accent3);color:var(--accent3);background:rgba(255,107,107,0.08);}
+.badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
+.stag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
+.stitle{font-size:clamp(26px,4vw,44px);font-weight:900;text-align:center;margin-bottom:8px;}
+.ssub{font-size:15px;color:var(--muted);text-align:center;max-width:650px;line-height:1.7;margin-bottom:28px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s;}
+.card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);}
+.card .ico{font-size:28px;margin-bottom:10px;display:block;}
+.card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.7;}
+.list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:740px;}
+.li-item{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
+.li-num{width:36px;height:36px;border-radius:50%;background:rgba(0,229,192,0.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;border:1px solid rgba(0,229,192,0.25);}
+.li-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
+.box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
+.big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.9;max-width:680px;width:100%;text-align:left;direction:ltr;}
+.route-row{display:flex;flex-direction:column;gap:10px;width:100%;max-width:640px;}
+.route-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;}
+.method{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;padding:4px 10px;border-radius:6px;}
+.method.get{background:rgba(0,229,192,0.12);color:var(--accent);border:1px solid rgba(0,229,192,0.3);}
+.method.post{background:rgba(255,179,71,0.12);color:var(--amber);border:1px solid rgba(255,179,71,0.3);}
+.route-path{font-family:'Space Mono',monospace;font-size:12px;color:var(--accent2);flex:1;}
+.route-desc{font-size:12px;color:var(--muted);}
+@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div><div class="orb orb2"></div>
+<div id="progress-bar"></div><div id="counter">01 / 10</div>
+<div id="session-badge">W12 · المرحلة ٥</div>
+<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">›</button>
+<button class="nav-btn" id="btn-next" onclick="navigate(1)">‹</button>
+<div id="slides">
+
+<div class="slide active">
+  <div class="eyebrow">الجلسة الثانية عشرة — المرحلة الخامسة</div>
+  <div class="title-main">Backend — Python & Flask 🖥</div>
+  <div class="subtitle">نُشغّل العقل الذي يُدير رصد (Rasd) — الـ API الذي يربط كل شيء</div>
+  <div class="tag-row">
+    <div class="badge teal">🐍 Flask</div>
+    <div class="badge blue">🌐 API</div>
+    <div class="badge amber">💾 JSON</div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">مراجعة</div>
+  <div class="stitle">معمارية النظام — تذكّر 🔄</div>
+  <div class="ssub">رسمنا المخطط الأسبوع الماضي — اليوم نُشغّل الـ Backend فعلياً</div>
+  <div class="list">
+    <div class="li-item"><div class="li-num">❓</div><div><div class="li-title">ما الفرق بين Frontend وBackend؟</div><div class="li-sub">Frontend: ما يراه المستخدم | Backend: المنطق والحسابات خلف الكواليس</div></div></div>
+    <div class="li-item"><div class="li-num">❓</div><div><div class="li-title">ما هو API؟</div><div class="li-sub">واجهة تُتيح للبرامج التواصل مع بعضها — كالنادل بين المطبخ والعميل</div></div></div>
+    <div class="li-item"><div class="li-num">❓</div><div><div class="li-title">ما الـ routes التي وجدتها في app.py؟</div><div class="li-sub">شارك ما قرأته في الواجب — ما الذي فهمته وما الذي لم تفهمه؟</div></div></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">ما هو Flask؟</div>
+  <div class="stitle">Flask — مكتبة Python السحرية ✨</div>
+  <div class="ssub">بضعة أسطر من Python تُحوّل حاسوبك إلى سيرفر ويب حقيقي</div>
+  <div class="grid">
+    <div class="card"><span class="ico">🐍</span><h3>مبني على Python</h3><p>كل ما تعلمته في Python يعمل هنا — متغيرات، دوال، شروط، كل شيء</p></div>
+    <div class="card"><span class="ico">⚡</span><h3>خفيف وسريع</h3><p>لا يحتاج إعداداً معقداً — سطر واحد لتشغيله، ملف واحد للبداية</p></div>
+    <div class="card"><span class="ico">🛡</span><h3>قلب رصد (Rasd)</h3><p>app.py هو Flask — يستقبل بيانات Arduino ويُرسلها للـ Dashboard</p></div>
+    <div class="card"><span class="ico">🌍</span><h3>مستخدم عالمياً</h3><p>Pinterest، LinkedIn، وآلاف الشركات تبني APIs بـ Flask</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">أول Flask App</div>
+  <div class="stitle">Hello Flask! 👋</div>
+  <div class="ssub">أبسط سيرفر ممكن — ٦ أسطر فقط</div>
+  <div class="code-block">
+<span style="color:var(--muted);"># pip install flask</span><br>
+from flask import Flask, jsonify<br><br>
+app = Flask(__name__)<br><br>
+<span style="color:var(--accent2);">@app.route('/')</span><br>
+def home():<br>
+&nbsp;&nbsp;return 'مرحباً من رصد (Rasd)!'<br><br>
+<span style="color:var(--accent2);">@app.route('/api/status')</span><br>
+def status():<br>
+&nbsp;&nbsp;return jsonify({"status": "online", "guardian": True})<br><br>
+if __name__ == '__main__':<br>
+&nbsp;&nbsp;app.run(debug=True)
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">Routes في رصد (Rasd)</div>
+  <div class="stitle">الـ API Endpoints 🗺</div>
+  <div class="ssub">كل endpoint هو بوابة للبيانات — الـ Frontend يطرق عليها ليأخذ ما يحتاج</div>
+  <div class="route-row">
+    <div class="route-item"><span class="method get">GET</span><span class="route-path">/api/readings</span><span class="route-desc">آخر قراءات الحساسات</span></div>
+    <div class="route-item"><span class="method get">GET</span><span class="route-path">/api/readings/history</span><span class="route-desc">سجل القراءات التاريخية</span></div>
+    <div class="route-item"><span class="method get">GET</span><span class="route-path">/api/alerts</span><span class="route-desc">قائمة التنبيهات</span></div>
+    <div class="route-item"><span class="method get">GET</span><span class="route-path">/api/status</span><span class="route-desc">حالة النظام</span></div>
+    <div class="route-item"><span class="method post">POST</span><span class="route-path">/api/readings</span><span class="route-desc">إرسال قراءة جديدة من Arduino</span></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">تشغيل الـ Backend</div>
+  <div class="stitle">نُشغّل رصد (Rasd)! 🚀</div>
+  <div class="ssub">في Terminal — من مجلد المشروع</div>
+  <div class="code-block">
+<span style="color:var(--muted);"># ١. انتقل لمجلد المشروع</span><br>
+cd room_guardian<br><br>
+<span style="color:var(--muted);"># ٢. ثبّت المتطلبات</span><br>
+pip install -r requirements.txt<br><br>
+<span style="color:var(--muted);"># ٣. شغّل الـ Backend</span><br>
+python app.py<br><br>
+<span style="color:var(--muted);"># ٤. ستظهر هذه الرسالة:</span><br>
+* Running on http://127.0.0.1:5000<br>
+* Debug mode: on
+  </div>
+  <div class="box" style="margin-top:16px;">🌐 افتح المتصفح على: <strong style="color:var(--accent);font-family:'Space Mono',monospace;">http://localhost:5000</strong></div>
+</div>
+
+<div class="slide">
+  <div class="stag">اختبار الـ API</div>
+  <div class="stitle">JSON في المتصفح 📊</div>
+  <div class="ssub">افتح هذا الرابط وشاهد بيانات رصد (Rasd) تظهر مباشرة</div>
+  <div class="code-block">
+<span style="color:var(--muted);">// http://localhost:5000/api/readings</span><br><br>
+{<br>
+&nbsp;&nbsp;"temperature": 24.5,<br>
+&nbsp;&nbsp;"humidity": 58.2,<br>
+&nbsp;&nbsp;"vibration": false,<br>
+&nbsp;&nbsp;"timestamp": "2025-01-15T14:30:22",<br>
+&nbsp;&nbsp;"status": "normal"<br>
+}
+  </div>
+  <div class="box" style="margin-top:16px;">🤔 هذا هو الـ JSON الذي يقرأه الـ Dashboard ليعرض الأرقام على الشاشة</div>
+</div>
+
+<div class="slide">
+  <div class="stag">نشاط — تعديل</div>
+  <div class="stitle">أضف Route جديداً ✏️</div>
+  <div class="ssub">في app.py — أضف هذا الـ endpoint ثم اختبره في المتصفح</div>
+  <div class="code-block">
+<span style="color:var(--accent2);">@app.route('/api/hello')</span><br>
+def hello():<br>
+&nbsp;&nbsp;return jsonify({<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"message": "أهلاً من رصد (Rasd)!",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"version": "1.0",<br>
+&nbsp;&nbsp;&nbsp;&nbsp;"guardian": "active"<br>
+&nbsp;&nbsp;})<br><br>
+<span style="color:var(--muted);"># اختبر: http://localhost:5000/api/hello</span>
+  </div>
+  <div class="box" style="margin-top:16px;">🎯 هدف إضافي: أضف اسمك في الـ JSON — اجعله يقول "مرحباً من [اسمك]"</div>
+</div>
+
+<div class="slide">
+  <div class="stag">واجب الأسبوع</div>
+  <div class="stitle">🏠 مهمتك هذا الأسبوع</div>
+  <div class="ssub">نتعمق في الـ Backend ونستعد للـ Database</div>
+  <div class="list">
+    <div class="li-item"><div class="li-num">📖</div><div><div class="li-title">اقرأ database.py بالكامل</div><div class="li-sub">كيف يُنشئ الجداول؟ كيف يُخزّن القراءات؟ كيف يسترجعها؟</div></div></div>
+    <div class="li-item"><div class="li-num">⚙️</div><div><div class="li-title">جرّب: عدّل حد التنبيه في config.py</div><div class="li-sub">غيّر TEMP_THRESHOLD من 30 إلى 25 — شاهد ما يتغير في التنبيهات</div></div></div>
+    <div class="li-item"><div class="li-num">✍️</div><div><div class="li-title">اشرح بكلامك: ماذا يُرجع /api/status؟</div><div class="li-sub">اقرأ الكود في app.py ثم اكتب شرحاً لكل حقل في الـ JSON</div></div></div>
+    <div class="li-item" style="border-color:rgba(0,229,192,0.3);"><div class="li-num">⭐</div><div><div class="li-title">تحدي: أضف route يُرجع عدد القراءات في قاعدة البيانات</div><div class="li-sub">اسمه /api/count — يُرجع {"count": 150} مثلاً</div></div></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="big-e">🗄</div>
+  <div class="stitle">الأسبوع القادم — قاعدة البيانات</div>
+  <div class="ssub" style="margin-bottom:32px;">نكشف أين تذهب البيانات — SQLite وكيف نستعرضها ونستعلم عنها</div>
+  <div class="tag-row">
+    <div class="badge teal">🗄 SQLite</div>
+    <div class="badge blue">🔍 SQL Queries</div>
+    <div class="badge amber">📊 بيانات حقيقية</div>
+  </div>
+  <div class="box" style="margin-top:36px;">أنت الآن تعرف كيف يعمل الـ Backend — الجلسة القادمة: أين تُخزَّن البيانات؟ 💾</div>
+</div>
+
+</div>
+<div id="nav-dots"></div>
+<script>
+const total=10;let current=0;const slides=document.querySelectorAll('.slide');const dotsEl=document.getElementById('nav-dots');const counter=document.getElementById('counter');const bar=document.getElementById('progress-bar');
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
+function goTo(n){slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),600);current=(n+total)%total;slides[current].classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');bar.style.width=((current+1)/total*100)+'%';}
+function navigate(dir){goTo(current+dir);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.key==='ArrowRight')navigate(-1);});
+let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
+bar.style.width=(1/total*100)+'%';
+</script>
+</body>
+</html>

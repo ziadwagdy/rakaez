@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rakaez — كورس رصد (Rasd)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --surface2: #1e1e1e;
+    --border: #2a2a2a;
+    --text: #f0f0f0;
+    --muted: #888;
+    --p1: #00c9a7;
+    --p2: #ff6b6b;
+    --p3: #4fc3f7;
+    --p4: #ffb347;
+    --p5: #ce93d8;
+    --p6: #a5d6a7;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', sans-serif;
+    min-height: 100vh;
+    padding: 2rem 1.5rem 4rem;
+  }
+
+  /* Header */
+  .header {
+    text-align: center;
+    margin-bottom: 3rem;
+  }
+  .header h1 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    background: linear-gradient(135deg, var(--p1), var(--p3));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: .4rem;
+  }
+  .header p {
+    color: var(--muted);
+    font-size: .95rem;
+  }
+  .header .meta {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 1rem;
+    flex-wrap: wrap;
+  }
+  .meta-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: .3rem .9rem;
+    font-size: .82rem;
+    color: var(--muted);
+  }
+  .meta-chip span { color: var(--text); font-weight: 700; }
+
+  /* Agenda link */
+  .agenda-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: .8rem 1.4rem;
+    text-decoration: none;
+    color: var(--text);
+    font-size: .95rem;
+    font-weight: 600;
+    max-width: 340px;
+    margin: 0 auto 3rem;
+    transition: border-color .2s, background .2s;
+  }
+  .agenda-link:hover { border-color: var(--p1); background: #0d1f1c; }
+  .agenda-link .icon { font-size: 1.2rem; }
+  .agenda-link .arrow { margin-right: auto; color: var(--muted); }
+
+  /* Phase sections */
+  .phase { margin-bottom: 2.5rem; }
+  .phase-label {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: 1rem;
+    font-size: .8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .08em;
+    color: var(--muted);
+  }
+  .phase-label::before {
+    content: '';
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--phase-color);
+    flex-shrink: 0;
+  }
+  .phase-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* Session grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: .75rem;
+  }
+
+  /* Session card */
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.1rem 1.1rem .9rem;
+    text-decoration: none;
+    color: var(--text);
+    transition: transform .15s, border-color .15s, background .15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; right: 0; left: 0;
+    height: 3px;
+    background: var(--phase-color);
+    border-radius: 14px 14px 0 0;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--phase-color);
+    background: var(--surface2);
+  }
+
+  .card-week {
+    font-size: .72rem;
+    color: var(--muted);
+    margin-bottom: .35rem;
+  }
+  .card-num {
+    font-size: 1.7rem;
+    font-weight: 900;
+    color: var(--phase-color);
+    line-height: 1;
+    margin-bottom: .4rem;
+    font-variant-numeric: tabular-nums;
+    direction: ltr;
+    text-align: right;
+  }
+  .card-title {
+    font-size: .92rem;
+    font-weight: 700;
+    line-height: 1.4;
+    flex: 1;
+  }
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .3rem;
+    margin-top: .65rem;
+  }
+  .tag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 99px;
+    padding: .15rem .5rem;
+    font-size: .68rem;
+    color: var(--muted);
+  }
+  .open-icon {
+    position: absolute;
+    top: .9rem;
+    left: .9rem;
+    font-size: .85rem;
+    opacity: 0;
+    transition: opacity .15s;
+    color: var(--phase-color);
+  }
+  .card:hover .open-icon { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🛡 رصد (Rasd) Course</h1>
+  <p>كورس إنترنت الأشياء — مؤسسة ركائز، إسطنبول</p>
+  <div class="meta">
+    <div class="meta-chip"><span>١٦</span> جلسة</div>
+    <div class="meta-chip"><span>٦٤</span> ساعة</div>
+    <div class="meta-chip"><span>٦</span> مراحل</div>
+    <div class="meta-chip"><span>٨</span> طلاب</div>
+  </div>
+</div>
+
+<a class="agenda-link" href="course-agenda.html">
+  <span class="icon">📋</span>
+  جدول الكورس الكامل
+  <span class="arrow">←</span>
+</a>
+
+<!-- Phase 1 -->
+<div class="phase" style="--phase-color: var(--p1)">
+  <div class="phase-label">المرحلة ١ — أساسيات التفكير الحاسوبي</div>
+  <div class="grid">
+    <a class="card" href="sessions/s01-welcome.html" style="--phase-color: var(--p1)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ١</div>
+      <div class="card-num">01</div>
+      <div class="card-title">مرحباً بعالم التكنولوجيا 🌍</div>
+      <div class="card-tags"><span class="tag">تعارف</span><span class="tag">معاينة المشروع</span></div>
+    </a>
+    <a class="card" href="sessions/s02-algorithms.html" style="--phase-color: var(--p1)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ٢</div>
+      <div class="card-num">02</div>
+      <div class="card-title">كيف يفكر الحاسوب؟ 🧠</div>
+      <div class="card-tags"><span class="tag">خوارزميات</span><span class="tag">مخططات انسيابية</span></div>
+    </a>
+  </div>
+</div>
+
+<!-- Phase 2 -->
+<div class="phase" style="--phase-color: var(--p2)">
+  <div class="phase-label">المرحلة ٢ — البرمجة المرئية بـ Scratch</div>
+  <div class="grid">
+    <a class="card" href="sessions/s03-scratch-intro.html" style="--phase-color: var(--p2)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ٣</div>
+      <div class="card-num">03</div>
+      <div class="card-title">مقدمة في Scratch 🐱</div>
+      <div class="card-tags"><span class="tag">Scratch</span><span class="tag">الأحداث والحركة</span></div>
+    </a>
+    <a class="card" href="sessions/s04-scratch-game.html" style="--phase-color: var(--p2)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ٤</div>
+      <div class="card-num">04</div>
+      <div class="card-title">نبني لعبة بـ Scratch 🎮</div>
+      <div class="card-tags"><span class="tag">شروط</span><span class="tag">حلقات</span><span class="tag">لعبة</span></div>
+    </a>
+  </div>
+</div>
+
+<!-- Phase 3 -->
+<div class="phase" style="--phase-color: var(--p3)">
+  <div class="phase-label">المرحلة ٣ — Python للمبتدئين</div>
+  <div class="grid">
+    <a class="card" href="sessions/s05-python-intro.html" style="--phase-color: var(--p3)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ٥</div>
+      <div class="card-num">05</div>
+      <div class="card-title">مقدمة في Python 🐍</div>
+      <div class="card-tags"><span class="tag">Trinket</span><span class="tag">المتغيرات</span><span class="tag">الإدخال</span></div>
+    </a>
+    <a class="card" href="sessions/s06-python-logic.html" style="--phase-color: var(--p3)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ٦</div>
+      <div class="card-num">06</div>
+      <div class="card-title">المنطق والحلقات 🔁</div>
+      <div class="card-tags"><span class="tag">if/else</span><span class="tag">for/while</span></div>
+    </a>
+    <a class="card" href="sessions/s07-python-functions.html" style="--phase-color: var(--p3)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ٧</div>
+      <div class="card-num">07</div>
+      <div class="card-title">الدوال والوحدات 🔧</div>
+      <div class="card-tags"><span class="tag">def</span><span class="tag">parameters</span><span class="tag">return</span></div>
+    </a>
+  </div>
+</div>
+
+<!-- Phase 4 -->
+<div class="phase" style="--phase-color: var(--p4)">
+  <div class="phase-label">المرحلة ٤ — إلكترونيات وأردوينو</div>
+  <div class="grid">
+    <a class="card" href="sessions/s08-electronics.html" style="--phase-color: var(--p4)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ٨</div>
+      <div class="card-num">08</div>
+      <div class="card-title">أساسيات الإلكترونيات ⚡</div>
+      <div class="card-tags"><span class="tag">LED</span><span class="tag">مقاوم</span><span class="tag">V=IR</span></div>
+    </a>
+    <a class="card" href="sessions/s09-arduino.html" style="--phase-color: var(--p4)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ٩</div>
+      <div class="card-num">09</div>
+      <div class="card-title">مقدمة في Arduino 🤖</div>
+      <div class="card-tags"><span class="tag">setup/loop</span><span class="tag">Blink</span><span class="tag">Serial</span></div>
+    </a>
+    <a class="card" href="sessions/s10-sensors-iot.html" style="--phase-color: var(--p4)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ١٠</div>
+      <div class="card-num">10</div>
+      <div class="card-title">الحساسات وإنترنت الأشياء 🌡</div>
+      <div class="card-tags"><span class="tag">DHT22</span><span class="tag">IoT</span><span class="tag">بيانات</span></div>
+    </a>
+  </div>
+</div>
+
+<!-- Phase 5 -->
+<div class="phase" style="--phase-color: var(--p5)">
+  <div class="phase-label">المرحلة ٥ — بناء رصد (Rasd)</div>
+  <div class="grid">
+    <a class="card" href="sessions/s11-system-design.html" style="--phase-color: var(--p5)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ١١</div>
+      <div class="card-num">11</div>
+      <div class="card-title">تصميم النظام 🗺</div>
+      <div class="card-tags"><span class="tag">معمارية</span><span class="tag">API</span></div>
+    </a>
+    <a class="card" href="sessions/s12-flask-backend.html" style="--phase-color: var(--p5)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ١٢</div>
+      <div class="card-num">12</div>
+      <div class="card-title">Backend — Python & Flask 🖥</div>
+      <div class="card-tags"><span class="tag">Flask</span><span class="tag">routes</span><span class="tag">JSON</span></div>
+    </a>
+    <a class="card" href="sessions/s13-database.html" style="--phase-color: var(--p5)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ١٣</div>
+      <div class="card-num">13</div>
+      <div class="card-title">قاعدة البيانات — SQLite 🗄</div>
+      <div class="card-tags"><span class="tag">SQL</span><span class="tag">SELECT</span><span class="tag">DB Browser</span></div>
+    </a>
+    <a class="card" href="sessions/s14-dashboard.html" style="--phase-color: var(--p5)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ١٤</div>
+      <div class="card-num">14</div>
+      <div class="card-title">Frontend — لوحة التحكم 📊</div>
+      <div class="card-tags"><span class="tag">HTML/CSS</span><span class="tag">fetch()</span><span class="tag">charts</span></div>
+    </a>
+  </div>
+</div>
+
+<!-- Phase 6 -->
+<div class="phase" style="--phase-color: var(--p6)">
+  <div class="phase-label">المرحلة ٦ — التكامل والعرض النهائي</div>
+  <div class="grid">
+    <a class="card" href="sessions/s15-integration.html" style="--phase-color: var(--p6)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ١٥</div>
+      <div class="card-num">15</div>
+      <div class="card-title">التكامل والاختبار الكامل 🔗</div>
+      <div class="card-tags"><span class="tag">ngrok</span><span class="tag">debugging</span><span class="tag">checklist</span></div>
+    </a>
+    <a class="card" href="sessions/s16-showcase.html" style="--phase-color: var(--p6)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ١٦</div>
+      <div class="card-num">16</div>
+      <div class="card-title">العرض النهائي والاحتفال 🎓</div>
+      <div class="card-tags"><span class="tag">showcase</span><span class="tag">مسارات</span><span class="tag">احتفال</span></div>
+    </a>
+  </div>
+</div>
+
+</body>
+</html>

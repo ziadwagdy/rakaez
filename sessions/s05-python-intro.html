@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الجلسة ٥ — Python: أول سطر كود</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c14;--bg2:#0e1520;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
+.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
+.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s;z-index:100;box-shadow:0 0 12px var(--accent);}
+#counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;letter-spacing:1px;}
+#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;z-index:100;letter-spacing:2px;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);padding:4px 12px;border-radius:20px;}
+#nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s;border:none;padding:0;}
+.dot.active{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:scale(1.4);}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);}
+.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
+#btn-prev{right:20px;}#btn-next{left:20px;}
+#slides{position:fixed;inset:0;z-index:1;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s,transform .6s;transform:translateY(30px);overflow-y:auto;}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.slide.exit{opacity:0;transform:translateY(-30px);}
+.eyebrow{font-size:13px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
+.title-main{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
+.subtitle{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;margin-bottom:32px;}
+.tag-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
+.badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
+.badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
+.badge.red{border-color:var(--accent3);color:var(--accent3);background:rgba(255,107,107,0.08);}
+.badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
+.stag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
+.stitle{font-size:clamp(26px,4vw,44px);font-weight:900;text-align:center;margin-bottom:8px;}
+.ssub{font-size:15px;color:var(--muted);text-align:center;max-width:650px;line-height:1.7;margin-bottom:28px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s;}
+.card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);}
+.card .ico{font-size:28px;margin-bottom:10px;display:block;}
+.card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.7;}
+.list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:740px;}
+.li-item{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
+.li-num{width:36px;height:36px;border-radius:50%;background:rgba(0,229,192,0.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;border:1px solid rgba(0,229,192,0.25);}
+.li-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
+.box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
+.big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:14px;color:#a0f0e0;line-height:1.8;max-width:680px;width:100%;text-align:left;direction:ltr;}
+.code-comment{color:var(--muted);}
+.code-keyword{color:var(--accent2);}
+.code-string{color:var(--amber);}
+.code-func{color:var(--accent);}
+@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div id="progress-bar"></div>
+<div id="counter">01 / 10</div>
+<div id="session-badge">W5 · المرحلة ٣</div>
+<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">&#8250;</button>
+<button class="nav-btn" id="btn-next" onclick="navigate(1)">&#8249;</button>
+<div id="nav-dots"></div>
+
+<div id="slides">
+
+  <!-- Slide 1 -->
+  <div class="slide active">
+    <div class="eyebrow">الجلسة الخامسة · رصد (Rasd)</div>
+    <div class="title-main">Python — أول سطر كود 🐍</div>
+    <div class="subtitle">اليوم نكتب كود حقيقي بأيدينا — من الصفر — ونتعلم لغة البرمجة الأكثر شهرة في العالم!</div>
+    <div class="tag-row">
+      <span class="badge teal">🐍 Python</span>
+      <span class="badge blue">💻 Trinket</span>
+      <span class="badge amber">⌨️ كتابة كود</span>
+    </div>
+  </div>
+
+  <!-- Slide 2: Review -->
+  <div class="slide">
+    <div class="stag">مراجعة</div>
+    <div class="stitle">من Scratch إلى Python 🔄</div>
+    <div class="ssub">ما الفرق بين البرمجة المرئية والنصية؟ — هيا نناقش!</div>
+    <div class="grid" style="max-width:800px;">
+      <div class="card" style="border-color:rgba(91,127,255,0.3);">
+        <span class="ico">🧩</span>
+        <h3 style="color:var(--accent2);">Scratch — المرئية</h3>
+        <p>كتل جاهزة، سحب وإفلات، سهلة للمبتدئين، محدودة الإمكانيات</p>
+      </div>
+      <div class="card" style="border-color:rgba(0,229,192,0.3);">
+        <span class="ico">⌨️</span>
+        <h3>Python — النصية</h3>
+        <p>تكتب الكود بنفسك، قدرات لا حدود لها، تُستخدم في الشركات الكبرى</p>
+      </div>
+    </div>
+    <div class="box" style="margin-top:20px;">
+      🧠 <strong style="color:var(--accent);">تفكير:</strong> Scratch مثل الرسم بأقلام التلوين الجاهزة — Python مثل أن تصنع قلمك بنفسك وترسم ما تشاء!
+    </div>
+  </div>
+
+  <!-- Slide 3: Why Python -->
+  <div class="slide">
+    <div class="stag">لماذا Python؟</div>
+    <div class="stitle">اختيار اللغة المثالية 🎯</div>
+    <div class="ssub">Python هي اللغة الأولى المُوصى بها للمبتدئين والمحترفين معاً</div>
+    <div class="grid">
+      <div class="card">
+        <span class="ico">📖</span>
+        <h3>بسيطة وواضحة</h3>
+        <p>قريبة من الإنجليزي العادي — print("مرحبا") واضحة بدون شرح!</p>
+      </div>
+      <div class="card">
+        <span class="ico">🤖</span>
+        <h3>الذكاء الاصطناعي</h3>
+        <p>ChatGPT، صور AI، رصد (Rasd) — كلها تعمل بـ Python!</p>
+      </div>
+      <div class="card">
+        <span class="ico">🌐</span>
+        <h3>تعمل في Trinket</h3>
+        <p>لا تثبيت ولا إعداد — افتح المتصفح وابدأ الكتابة مباشرة</p>
+      </div>
+      <div class="card">
+        <span class="ico">🌍</span>
+        <h3>مجتمع ضخم</h3>
+        <p>ملايين المبرمجين حول العالم يساعدون بالعربي والإنجليزي</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Trinket Setup -->
+  <div class="slide">
+    <div class="stag">الإعداد</div>
+    <div class="stitle">افتح Trinket الآن! 💻</div>
+    <div class="ssub">trinket.io/python3 — بيئة برمجة كاملة في المتصفح، مجانية تماماً</div>
+    <div class="list">
+      <div class="li-item">
+        <div class="li-num">١</div>
+        <div>
+          <div class="li-title">افتح trinket.io/python3 في المتصفح</div>
+          <div class="li-sub">لا تحتاج تنزيل أي شيء — كل شيء يعمل في المتصفح مباشرة</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٢</div>
+        <div>
+          <div class="li-title">أنشئ حساباً مجانياً</div>
+          <div class="li-sub">Sign Up → اكتب اسمك وبريدك الإلكتروني → تأكيد الإيميل</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٣</div>
+        <div>
+          <div class="li-title">ابدأ مشروع Python جديد</div>
+          <div class="li-sub">Create Repl → اختر Python → سمّ المشروع "hello-world" → Create</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٤</div>
+        <div>
+          <div class="li-title">تعرف على الواجهة</div>
+          <div class="li-sub">يسار: الملفات | وسط: المحرر | يمين: Terminal — اضغط Run لتشغيل الكود</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: First Code -->
+  <div class="slide">
+    <div class="stag">أول كود</div>
+    <div class="stitle">مرحباً يا عالم! 🌍</div>
+    <div class="ssub">تقليد عريق في البرمجة — أول برنامج تكتبه دائماً يطبع "Hello World"</div>
+    <div class="code-block" style="margin-bottom:16px;">
+<span class="code-comment"># أول برنامج Python في حياتك!</span>
+<span class="code-func">print</span>(<span class="code-string">"مرحباً يا عالم! 🌍"</span>)
+<span class="code-func">print</span>(<span class="code-string">"أنا أتعلم Python في Rakaez"</span>)
+
+<span class="code-comment"># المتغيرات — صناديق لحفظ البيانات</span>
+name = <span class="code-string">"أحمد"</span>
+age = <span class="code-keyword">14</span>
+city = <span class="code-string">"إسطنبول"</span>
+
+<span class="code-func">print</span>(<span class="code-string">"اسمي:"</span>, name)
+<span class="code-func">print</span>(<span class="code-string">"عمري:"</span>, age, <span class="code-string">"سنة"</span>)
+<span class="code-func">print</span>(<span class="code-string">"مدينتي:"</span>, city)
+    </div>
+    <div class="box">▶️ اضغط <strong style="color:var(--accent);">Run</strong> وشاهد الكلمات تظهر في Terminal — هذا هو أول كود Python لك!</div>
+  </div>
+
+  <!-- Slide 6: Data Types -->
+  <div class="slide">
+    <div class="stag">أنواع البيانات</div>
+    <div class="stitle">أنواع البيانات في Python 📦</div>
+    <div class="ssub">كل متغير له "نوع" يحدد ما يمكن تخزينه</div>
+    <div class="grid">
+      <div class="card" style="border-color:rgba(0,229,192,0.3);">
+        <span class="ico">📝</span>
+        <h3>str — نص</h3>
+        <p>أي نص بين علامات تنصيص<br><code style="color:var(--amber);font-size:12px;">name = "زياد"</code></p>
+      </div>
+      <div class="card" style="border-color:rgba(91,127,255,0.3);">
+        <span class="ico">🔢</span>
+        <h3>int — عدد صحيح</h3>
+        <p>أرقام بدون فاصلة<br><code style="color:var(--amber);font-size:12px;">age = 14</code></p>
+      </div>
+      <div class="card" style="border-color:rgba(255,179,71,0.3);">
+        <span class="ico">🔣</span>
+        <h3>float — عدد عشري</h3>
+        <p>أرقام بفاصلة عشرية<br><code style="color:var(--amber);font-size:12px;">temp = 36.6</code></p>
+      </div>
+      <div class="card" style="border-color:rgba(255,107,107,0.3);">
+        <span class="ico">✅</span>
+        <h3>bool — صح/خطأ</h3>
+        <p>قيمتان فقط: True أو False<br><code style="color:var(--amber);font-size:12px;">active = True</code></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 7: Input -->
+  <div class="slide">
+    <div class="stag">المدخلات</div>
+    <div class="stitle">اجعل البرنامج يتحدث معك! 🗣️</div>
+    <div class="ssub">دالة input() تأخذ مدخلات من المستخدم أثناء تشغيل البرنامج</div>
+    <div class="code-block" style="margin-bottom:16px;">
+<span class="code-comment"># برنامج يسألك أسئلة</span>
+name = <span class="code-func">input</span>(<span class="code-string">"ما اسمك؟ "</span>)
+age = <span class="code-func">int</span>(<span class="code-func">input</span>(<span class="code-string">"كم عمرك؟ "</span>))
+
+<span class="code-comment"># نطبع ترحيباً مخصصاً</span>
+<span class="code-func">print</span>(<span class="code-string">"أهلاً وسهلاً يا"</span>, name, <span class="code-string">"! 👋"</span>)
+<span class="code-func">print</span>(<span class="code-string">"عمرك"</span>, age, <span class="code-string">"سنة — رائع!"</span>)
+
+next_year = age + <span class="code-keyword">1</span>
+<span class="code-func">print</span>(<span class="code-string">"في السنة القادمة ستكون عمرك:"</span>, next_year)
+    </div>
+    <div class="box">⚠️ <strong style="color:var(--amber);">مهم:</strong> input() يعطيك دائماً نصاً (str) — استخدم int() لتحويله لرقم إذا أردت حساباً رياضياً</div>
+  </div>
+
+  <!-- Slide 8: Calculator Activity -->
+  <div class="slide">
+    <div class="stag">نشاط</div>
+    <div class="stitle">ابنِ حاسبة بسيطة! 🧮</div>
+    <div class="ssub">نطبق ما تعلمناه في مشروع صغير كامل</div>
+    <div class="code-block" style="margin-bottom:16px;">
+<span class="code-comment"># الحاسبة البسيطة</span>
+<span class="code-func">print</span>(<span class="code-string">"=== حاسبة رصد (Rasd) ==="</span>)
+
+a = <span class="code-func">int</span>(<span class="code-func">input</span>(<span class="code-string">"أدخل الرقم الأول: "</span>))
+b = <span class="code-func">int</span>(<span class="code-func">input</span>(<span class="code-string">"أدخل الرقم الثاني: "</span>))
+
+<span class="code-func">print</span>(<span class="code-string">"الجمع:"</span>,      a + b)
+<span class="code-func">print</span>(<span class="code-string">"الطرح:"</span>,      a - b)
+<span class="code-func">print</span>(<span class="code-string">"الضرب:"</span>,      a * b)
+<span class="code-func">print</span>(<span class="code-string">"القسمة:"</span>,     a / b)
+    </div>
+    <div class="box">🎯 <strong style="color:var(--accent);">تحدي إضافي:</strong> أضف القسمة الصحيحة (//) والباقي (%) — وماذا يحدث إذا قسمت على صفر؟</div>
+  </div>
+
+  <!-- Slide 9: Homework -->
+  <div class="slide">
+    <div class="stag">واجب البيت</div>
+    <div class="stitle">مهامك للأسبوع القادم 📚</div>
+    <div class="ssub">ثلاث برامج Python تكتبها بنفسك في Trinket</div>
+    <div class="list">
+      <div class="li-item">
+        <div class="li-num">١</div>
+        <div>
+          <div class="li-title">برنامج الترحيب الشخصي</div>
+          <div class="li-sub">يسأل: الاسم، العمر، المدينة — ثم يطبع جملة ترحيب مخصصة لكل طالب</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٢</div>
+        <div>
+          <div class="li-title">محوّل الدرجات: مئوي → فهرنهايت</div>
+          <div class="li-sub">القانون: F = (C × 9/5) + 32 — اسأل المستخدم الدرجة المئوية واطبع الفهرنهايت</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٣</div>
+        <div>
+          <div class="li-title">اكتب الفرق: int وstr وfloat</div>
+          <div class="li-sub">مع مثال لكل نوع من حياتك اليومية وكيف يستخدمه رصد (Rasd)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10: End -->
+  <div class="slide">
+    <span class="big-e">🔁</span>
+    <div class="stag">نهاية الجلسة الخامسة</div>
+    <div class="stitle">كتبتم كود Python حقيقي!</div>
+    <div class="ssub">print، input، المتغيرات، أنواع البيانات — هذا هو أساس كل برنامج في العالم!</div>
+    <div class="box">
+      🔀 <strong style="color:var(--accent);">الأسبوع القادم:</strong> الشروط والحلقات — نجعل البرنامج يتخذ قرارات ويكرر الأوامر!
+    </div>
+    <div class="tag-row" style="margin-top:24px;">
+      <span class="badge teal">🐍 Python ✓</span>
+      <span class="badge blue">💻 Trinket ✓</span>
+      <span class="badge amber">🔁 الشروط تنتظر</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const total=10;let current=0;const slides=document.querySelectorAll('.slide');const dotsEl=document.getElementById('nav-dots');const counter=document.getElementById('counter');const bar=document.getElementById('progress-bar');
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
+function goTo(n){slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),600);current=(n+total)%total;slides[current].classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');bar.style.width=((current+1)/total*100)+'%';}
+function navigate(dir){goTo(current+dir);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.key==='ArrowRight')navigate(-1);});
+let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
+bar.style.width=(1/total*100)+'%';
+</script>
+</body>
+</html>

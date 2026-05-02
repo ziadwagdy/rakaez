@@ -1,0 +1,5 @@
+.DS_Store
+room-guardian/data.db
+room-guardian/venv/
+room-guardian/__pycache__/
+CLAUDE.md

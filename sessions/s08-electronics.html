@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الجلسة ٨ — أساسيات الإلكترونيات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c14;--bg2:#0e1520;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
+.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
+.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s;z-index:100;box-shadow:0 0 12px var(--accent);}
+#counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;letter-spacing:1px;}
+#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;z-index:100;letter-spacing:2px;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);padding:4px 12px;border-radius:20px;}
+#nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s;border:none;padding:0;}
+.dot.active{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:scale(1.4);}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);}
+.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
+#btn-prev{right:20px;}#btn-next{left:20px;}
+#slides{position:fixed;inset:0;z-index:1;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s,transform .6s;transform:translateY(30px);overflow-y:auto;}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.slide.exit{opacity:0;transform:translateY(-30px);}
+.eyebrow{font-size:13px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
+.title-main{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
+.subtitle{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;margin-bottom:32px;}
+.tag-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
+.badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
+.badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
+.badge.red{border-color:var(--accent3);color:var(--accent3);background:rgba(255,107,107,0.08);}
+.badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
+.stag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
+.stitle{font-size:clamp(26px,4vw,44px);font-weight:900;text-align:center;margin-bottom:8px;}
+.ssub{font-size:15px;color:var(--muted);text-align:center;max-width:650px;line-height:1.7;margin-bottom:28px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s;}
+.card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);}
+.card .ico{font-size:28px;margin-bottom:10px;display:block;}
+.card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.7;}
+.list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:740px;}
+.li-item{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
+.li-num{width:36px;height:36px;border-radius:50%;background:rgba(0,229,192,0.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;border:1px solid rgba(0,229,192,0.25);}
+.li-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
+.box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
+.box.danger{background:rgba(255,107,107,0.06);border-color:rgba(255,107,107,0.3);}
+.big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
+.formula{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 32px;font-family:'Space Mono',monospace;font-size:22px;color:#a0f0e0;text-align:center;max-width:500px;width:100%;}
+.formula span{color:var(--accent2);}
+.circ-row{display:flex;gap:24px;justify-content:center;align-items:center;flex-wrap:wrap;width:100%;max-width:800px;}
+.circ-box{flex:1;min-width:200px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;}
+.circ-box.open{border-color:rgba(255,107,107,0.4);}
+.circ-box.closed{border-color:rgba(0,229,192,0.4);}
+.circ-title{font-size:16px;font-weight:700;margin-bottom:8px;}
+.circ-sub{font-size:12px;color:var(--muted);line-height:1.6;}
+@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div id="progress-bar"></div>
+<div id="counter">01 / 10</div>
+<div id="session-badge">W8 · المرحلة ٤</div>
+<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">&#8250;</button>
+<button class="nav-btn" id="btn-next" onclick="navigate(1)">&#8249;</button>
+<div id="nav-dots"></div>
+
+<div id="slides">
+
+  <!-- Slide 1 -->
+  <div class="slide active">
+    <div class="eyebrow">الجلسة الثامنة · رصد (Rasd)</div>
+    <div class="title-main">أساسيات الإلكترونيات ⚡</div>
+    <div class="subtitle">اليوم نغادر الشاشة ونلمس الأسلاك والمكونات — هذا هو عالم الإلكترونيات المادي!</div>
+    <div class="tag-row">
+      <span class="badge teal">⚡ إلكترونيات</span>
+      <span class="badge blue">🔌 دوائر</span>
+      <span class="badge amber">💡 LED</span>
+    </div>
+  </div>
+
+  <!-- Slide 2: Code to Hardware -->
+  <div class="slide">
+    <div class="stag">الجسر</div>
+    <div class="stitle">من الكود إلى العالم المادي 🌉</div>
+    <div class="ssub">البرمجة تتحكم في الأجهزة — وهذا ما يجعل رصد (Rasd) يعمل!</div>
+    <div class="grid" style="max-width:860px;">
+      <div class="card">
+        <span class="ico">🐍</span>
+        <h3>Python يُصدر أمراً</h3>
+        <p>"اضيء LED رقم 13" — سطر كود واحد يكفي</p>
+      </div>
+      <div class="card">
+        <span class="ico">🤖</span>
+        <h3>Arduino يُنفذ</h3>
+        <p>يستقبل الأمر ويُرسل الجهد الكهربي للدائرة</p>
+      </div>
+      <div class="card">
+        <span class="ico">⚡</span>
+        <h3>الكهرباء تتدفق</h3>
+        <p>تيار كهربي يمر عبر الأسلاك والمقاومة والـ LED</p>
+      </div>
+      <div class="card">
+        <span class="ico">💡</span>
+        <h3>النتيجة في الواقع</h3>
+        <p>الـ LED يضيء! برمجتك أضاءت شيئاً حقيقياً</p>
+      </div>
+    </div>
+    <div class="box" style="margin-top:20px;">🤩 هذا بالضبط كيف يعمل رصد (Rasd) — Python يقرأ من الحساس ويتحكم في كل شيء!</div>
+  </div>
+
+  <!-- Slide 3: Components -->
+  <div class="slide">
+    <div class="stag">المكونات</div>
+    <div class="stitle">المكونات الأساسية 🔩</div>
+    <div class="ssub">هذه هي اللبنات الأساسية لكل دائرة إلكترونية</div>
+    <div class="grid">
+      <div class="card" style="border-color:rgba(255,179,71,0.3);">
+        <span class="ico">💡</span>
+        <h3 style="color:var(--amber);">LED — الضوء</h3>
+        <p>Light Emitting Diode — يحوّل الكهرباء لضوء. له قطبان: طويل (+) وقصير (-)</p>
+      </div>
+      <div class="card" style="border-color:rgba(255,107,107,0.3);">
+        <span class="ico">🌀</span>
+        <h3 style="color:var(--accent3);">مقاومة Resistor</h3>
+        <p>تقلل التيار لحماية الـ LED من الاحتراق — قيّاسها بالأوم (Ω)</p>
+      </div>
+      <div class="card" style="border-color:rgba(91,127,255,0.3);">
+        <span class="ico">🔋</span>
+        <h3 style="color:var(--accent2);">بطارية Battery</h3>
+        <p>مصدر الطاقة — تُعطي جهداً كهربياً (V) يدفع التيار في الدائرة</p>
+      </div>
+      <div class="card" style="border-color:rgba(0,229,192,0.3);">
+        <span class="ico">🟫</span>
+        <h3>Breadboard — لوح التجارب</h3>
+        <p>لوح بثقوب متصلة داخلياً — توصّل المكونات بدون لحام</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: V = IR -->
+  <div class="slide">
+    <div class="stag">قانون أوم</div>
+    <div class="stitle">الجهد، التيار، والمقاومة ⚡</div>
+    <div class="ssub">قانون أوم — أهم قانون في الإلكترونيات — بمثال بسيط جداً</div>
+    <div class="formula" style="margin-bottom:24px;">
+      <span>V</span> = <span>I</span> × <span>R</span>
+    </div>
+    <div class="grid" style="max-width:800px;">
+      <div class="card">
+        <span class="ico">💧</span>
+        <h3>تشبيه الماء</h3>
+        <p>الجهد (V) = ضغط الماء في الخزان<br>التيار (I) = كمية الماء المتدفقة<br>المقاومة (R) = ضيق الأنبوب</p>
+      </div>
+      <div class="card">
+        <span class="ico">📐</span>
+        <h3>مثال عملي</h3>
+        <p>بطارية 5V + مقاومة 220Ω<br>التيار = 5 ÷ 220 = 0.023A<br>= 23 milliampere — آمن لـ LED!</p>
+      </div>
+    </div>
+    <div class="box" style="margin-top:16px;">🔴 LED يحتاج: جهد 2-3V، تيار 20mA — احسب المقاومة دائماً قبل التوصيل!</div>
+  </div>
+
+  <!-- Slide 5: Open vs Closed Circuit -->
+  <div class="slide">
+    <div class="stag">مفهوم أساسي</div>
+    <div class="stitle">الدائرة المفتوحة والمغلقة 🔌</div>
+    <div class="ssub">الكهرباء تحتاج دائرة مغلقة لتتدفق — مثل الماء في حلقة</div>
+    <div class="circ-row" style="margin-bottom:20px;">
+      <div class="circ-box open">
+        <div style="font-size:48px;margin-bottom:12px;">🔴</div>
+        <div class="circ-title" style="color:var(--accent3);">دائرة مفتوحة</div>
+        <div class="circ-sub">+ البطارية — — — — — [فراغ] — LED — البطارية -<br><br>التيار لا يتدفق — LED لا يضيء<br>مثل أنبوب ماء مقطوع</div>
+      </div>
+      <div class="circ-box closed">
+        <div style="font-size:48px;margin-bottom:12px;">🟢</div>
+        <div class="circ-title" style="color:var(--accent);">دائرة مغلقة</div>
+        <div class="circ-sub">+ البطارية — مقاومة — LED — البطارية -<br><br>التيار يتدفق — LED يضيء!<br>مثل أنبوب ماء متصل بالكامل</div>
+      </div>
+    </div>
+    <div class="box">⚡ الزر (Button) يعمل كـ "switch" — يفتح ويغلق الدائرة — وهذا أساس كل أجهزة الكترونية!</div>
+  </div>
+
+  <!-- Slide 6: Experiment 1 -->
+  <div class="slide">
+    <div class="stag">تجربة ١</div>
+    <div class="stitle">LED + بطارية مباشرة ⚠️</div>
+    <div class="ssub">نجرب توصيل LED مباشرة بالبطارية — وندرس ما يحدث</div>
+    <div class="list" style="max-width:700px;">
+      <div class="li-item">
+        <div class="li-num">١</div>
+        <div>
+          <div class="li-title">خذ LED وبطارية 3V (خلية كنعانية)</div>
+          <div class="li-sub">تعرّف على الأطراف: الطرف الأطول (+) موجب، الأقصر (-) سالب</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٢</div>
+        <div>
+          <div class="li-title">صل الطرف الموجب بـ (+) البطارية والسالب بـ (-)</div>
+          <div class="li-sub">ماذا تلاحظ؟ هل يضيء؟ هل الضوء طبيعي أم قوي جداً؟</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٣</div>
+        <div>
+          <div class="li-title">لاحظ درجة الحرارة</div>
+          <div class="li-sub">الـ LED سيضيء لكنه قد يسخن سريعاً — هذا دليل على أن التيار زائد</div>
+        </div>
+      </div>
+    </div>
+    <div class="box danger" style="margin-top:16px;">⚠️ <strong style="color:var(--accent3);">تحذير:</strong> لا تترك الـ LED متصلاً بدون مقاومة لوقت طويل — قد يحترق!</div>
+  </div>
+
+  <!-- Slide 7: Experiment 2 -->
+  <div class="slide">
+    <div class="stag">تجربة ٢</div>
+    <div class="stitle">LED + مقاومة + Breadboard 🔬</div>
+    <div class="ssub">الطريقة الصحيحة والآمنة لتشغيل LED</div>
+    <div class="list" style="max-width:700px;">
+      <div class="li-item">
+        <div class="li-num">١</div>
+        <div>
+          <div class="li-title">ضع الـ LED في Breadboard</div>
+          <div class="li-sub">الطرف الأطول في صف — الأقصر في صف آخر — الثقوب في نفس الصف متصلة</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٢</div>
+        <div>
+          <div class="li-title">ضع مقاومة 220Ω في سلسلة مع LED</div>
+          <div class="li-sub">في نفس الصف مع الطرف الموجب للـ LED — المقاومة تقلل التيار</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٣</div>
+        <div>
+          <div class="li-title">وصل الأسلاك للبطارية</div>
+          <div class="li-sub">سلك أحمر من البطارية + إلى المقاومة | سلك أسود من LED - إلى البطارية -</div>
+        </div>
+      </div>
+    </div>
+    <div class="box" style="margin-top:16px;">✅ الـ LED يضيء بأمان الآن — المقاومة حمته من التلف!</div>
+  </div>
+
+  <!-- Slide 8: Experiment 3 -->
+  <div class="slide">
+    <div class="stag">تجربة ٣</div>
+    <div class="stitle">LED-ين بالتسلسل 💡💡</div>
+    <div class="ssub">ماذا يحدث عند توصيل مصباحين بنفس الدائرة؟</div>
+    <div class="grid" style="max-width:800px;">
+      <div class="card">
+        <span class="ico">🔗</span>
+        <h3>التسلسل Series</h3>
+        <p>LED1 → LED2 في نفس الخط — التيار يمر عبر كليهما<br><br>الجهد ينقسم: كل LED يأخذ نصف الجهد → يضيئان بخفوت</p>
+      </div>
+      <div class="card">
+        <span class="ico">⚡</span>
+        <h3>التوازي Parallel</h3>
+        <p>LED1 و LED2 في خطين منفصلين — كل LED يأخذ جهداً كاملاً<br><br>يضيئان بنفس السطوع — لكن البطارية تنفد أسرع!</p>
+      </div>
+    </div>
+    <div class="box" style="margin-top:20px;">
+      🧪 <strong style="color:var(--accent);">سؤال:</strong> إذا قاطعنا أحد الـ LED-ين في التسلسل، هل يستمر الآخر في الإضاءة؟ وماذا في التوازي؟
+    </div>
+  </div>
+
+  <!-- Slide 9: Homework -->
+  <div class="slide">
+    <div class="stag">واجب البيت</div>
+    <div class="stitle">مهامك للأسبوع القادم 📚</div>
+    <div class="ssub">استعد لجلسة Arduino — الأسبوع القادم نبرمج الأجهزة!</div>
+    <div class="list">
+      <div class="li-item">
+        <div class="li-num">١</div>
+        <div>
+          <div class="li-title">ابحث عن قانون أوم وكيف تختار المقاومة</div>
+          <div class="li-sub">إذا عندك LED أحمر (Vf=2V) وبطارية 5V وتيار 20mA — ما المقاومة المناسبة؟ R = (V - Vf) / I</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٢</div>
+        <div>
+          <div class="li-title">ارسم دائرة LED مع ٥ فولت</div>
+          <div class="li-sub">ورقة وقلم — ارسم: مصدر 5V، مقاومة 150Ω، LED، الأرضي GND — مع التسمية الصحيحة</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٣</div>
+        <div>
+          <div class="li-title">الفرق بين الإشارة الرقمية والتناظرية</div>
+          <div class="li-sub">Digital: 0 أو 1 فقط | Analog: أي قيمة بين 0 و5V — أعطِ مثالاً على كل نوع من حياتك</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10: End -->
+  <div class="slide">
+    <span class="big-e">🤖</span>
+    <div class="stag">نهاية الجلسة الثامنة</div>
+    <div class="stitle">لمستم الإلكترونيات بأيديكم!</div>
+    <div class="ssub">LED، مقاومة، Breadboard، قانون أوم — هذه هي أدوات مهندس الإلكترونيات الأساسية!</div>
+    <div class="box">
+      🤖 <strong style="color:var(--accent);">الأسبوع القادم:</strong> Arduino! نبرمج الأجهزة بـ C++ بسيط — ونجعل LED يومض بكوده!
+    </div>
+    <div class="tag-row" style="margin-top:24px;">
+      <span class="badge teal">⚡ إلكترونيات ✓</span>
+      <span class="badge blue">💡 LED ✓</span>
+      <span class="badge amber">🤖 Arduino ينتظر</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const total=10;let current=0;const slides=document.querySelectorAll('.slide');const dotsEl=document.getElementById('nav-dots');const counter=document.getElementById('counter');const bar=document.getElementById('progress-bar');
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
+function goTo(n){slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),600);current=(n+total)%total;slides[current].classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');bar.style.width=((current+1)/total*100)+'%';}
+function navigate(dir){goTo(current+dir);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.key==='ArrowRight')navigate(-1);});
+let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
+bar.style.width=(1/total*100)+'%';
+</script>
+</body>
+</html>

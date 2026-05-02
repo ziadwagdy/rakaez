@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رصد — Rasd IoT Monitor</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:       #060a12;
+    --surface:  #0d1422;
+    --surface2: #111827;
+    --surface3: #1a2338;
+    --border:   #1e2d45;
+    --border2:  #243350;
+    --text:     #e8edf5;
+    --muted:    #5a7090;
+    --muted2:   #8099bb;
+    --teal:     #00c9a7;
+    --teal-dim: rgba(0,201,167,.12);
+    --teal-glow:rgba(0,201,167,.25);
+    --red:      #ff6b6b;
+    --red-dim:  rgba(255,107,107,.12);
+    --red-glow: rgba(255,107,107,.30);
+    --blue:     #4fc3f7;
+    --blue-dim: rgba(79,195,247,.12);
+    --blue-glow:rgba(79,195,247,.25);
+    --amber:    #ffb347;
+    --amber-dim:rgba(255,179,71,.12);
+    --amber-glow:rgba(255,179,71,.25);
+    --purple:   #c084fc;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Cairo', 'Segoe UI', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ── Background grid ── */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0,201,167,.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,201,167,.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,201,167,.07) 0%, transparent 70%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .page-wrap {
+    position: relative;
+    z-index: 1;
+    padding: 1.5rem 2rem 3rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  /* ── HEADER ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    padding-bottom: 1.2rem;
+    border-bottom: 1px solid var(--border);
+    position: relative;
+  }
+
+  .header-left {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .logo-ring {
+    width: 52px;
+    height: 52px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .logo-ring svg {
+    width: 100%;
+    height: 100%;
+    animation: spin-slow 8s linear infinite;
+  }
+
+  @keyframes spin-slow { to { transform: rotate(360deg); } }
+
+  .logo-icon {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+  }
+
+  .header-title {
+    display: flex;
+    flex-direction: column;
+    gap: .1rem;
+  }
+
+  .header-title h1 {
+    font-size: 2rem;
+    font-weight: 900;
+    line-height: 1;
+    background: linear-gradient(135deg, var(--teal), var(--blue));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -.5px;
+  }
+
+  .header-title .subtitle {
+    font-size: .72rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .header-right {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    flex-wrap: wrap;
+  }
+
+  #last-update {
+    font-size: .72rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+  }
+
+  #last-update::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    display: inline-block;
+    animation: blink 2s ease-in-out infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: .2; }
+  }
+
+  #mode-badge {
+    padding: .3rem .9rem;
+    border-radius: 99px;
+    font-size: .72rem;
+    font-weight: 700;
+    background: var(--amber-dim);
+    color: var(--amber);
+    border: 1px solid rgba(255,179,71,.3);
+    font-family: 'Space Mono', monospace;
+    letter-spacing: .05em;
+  }
+  #mode-badge.live {
+    background: var(--teal-dim);
+    color: var(--teal);
+    border-color: rgba(0,201,167,.3);
+  }
+
+  /* ── SENSOR CARDS GRID ── */
+  .sensor-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 1100px) { .sensor-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 600px)  { .sensor-grid { grid-template-columns: 1fr; } }
+
+  .s-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .4s, box-shadow .4s;
+    cursor: default;
+  }
+
+  .s-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 20px 20px 0 0;
+    transition: opacity .4s;
+  }
+
+  .s-card.c-teal::before  { background: linear-gradient(90deg, transparent, var(--teal), transparent); }
+  .s-card.c-blue::before  { background: linear-gradient(90deg, transparent, var(--blue), transparent); }
+  .s-card.c-amber::before { background: linear-gradient(90deg, transparent, var(--amber), transparent); }
+  .s-card.c-purple::before{ background: linear-gradient(90deg, transparent, var(--purple), transparent); }
+
+  .s-card.s-alert {
+    border-color: var(--red);
+    box-shadow: 0 0 30px var(--red-glow), inset 0 0 30px rgba(255,107,107,.04);
+    animation: pulse-alert 1.5s ease-in-out infinite alternate;
+  }
+
+  .s-card.s-alert::before { background: linear-gradient(90deg, transparent, var(--red), transparent); }
+
+  .s-card.s-ok.c-teal  { border-color: rgba(0,201,167,.25); box-shadow: 0 0 20px rgba(0,201,167,.08); }
+  .s-card.s-ok.c-blue  { border-color: rgba(79,195,247,.25); box-shadow: 0 0 20px rgba(79,195,247,.08); }
+  .s-card.s-ok.c-amber { border-color: rgba(255,179,71,.25); box-shadow: 0 0 20px rgba(255,179,71,.08); }
+  .s-card.s-ok.c-purple{ border-color: rgba(192,132,252,.25); box-shadow: 0 0 20px rgba(192,132,252,.08); }
+
+  @keyframes pulse-alert {
+    from { box-shadow: 0 0 20px var(--red-glow); }
+    to   { box-shadow: 0 0 45px var(--red-glow), 0 0 8px var(--red-glow); }
+  }
+
+  .card-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+  }
+
+  .card-label-wrap {}
+  .card-icon-label {
+    font-size: .72rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+  }
+  .card-name {
+    font-size: .95rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: .15rem;
+  }
+
+  .card-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    flex-shrink: 0;
+  }
+  .c-teal  .card-badge { background: var(--teal-dim); }
+  .c-blue  .card-badge { background: var(--blue-dim); }
+  .c-amber .card-badge { background: var(--amber-dim); }
+  .c-purple .card-badge { background: rgba(192,132,252,.12); }
+  .s-alert .card-badge  { background: var(--red-dim); }
+
+  /* Radial ring */
+  .ring-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .ring-svg {
+    width: 120px;
+    height: 120px;
+    transform: rotate(-90deg);
+  }
+
+  .ring-bg {
+    fill: none;
+    stroke: var(--border2);
+    stroke-width: 8;
+  }
+
+  .ring-fill {
+    fill: none;
+    stroke-width: 8;
+    stroke-linecap: round;
+    transition: stroke-dashoffset .8s cubic-bezier(.4,0,.2,1), stroke .4s;
+  }
+
+  .ring-center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+  }
+
+  .ring-value {
+    font-size: 1.8rem;
+    font-weight: 900;
+    line-height: 1;
+    font-family: 'Space Mono', monospace;
+    transition: color .4s;
+  }
+
+  .ring-unit {
+    font-size: .72rem;
+    color: var(--muted2);
+    margin-top: .1rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* Binary sensor display */
+  .binary-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: .6rem;
+    padding: .8rem 0;
+    margin-bottom: .5rem;
+  }
+
+  .binary-icon {
+    font-size: 2.8rem;
+    line-height: 1;
+  }
+
+  .binary-status {
+    font-size: 1.35rem;
+    font-weight: 900;
+    letter-spacing: .05em;
+    font-family: 'Space Mono', monospace;
+    transition: color .4s;
+  }
+
+  .binary-adc {
+    font-size: .68rem;
+    color: var(--muted);
+    font-family: 'Space Mono', monospace;
+  }
+
+  .status-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    padding: .3rem .8rem;
+    border-radius: 99px;
+    font-size: .7rem;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    letter-spacing: .05em;
+    width: 100%;
+    justify-content: center;
+    transition: background .4s, color .4s, border-color .4s;
+  }
+
+  .pill-ok {
+    background: var(--teal-dim);
+    color: var(--teal);
+    border: 1px solid rgba(0,201,167,.2);
+  }
+
+  .pill-alert {
+    background: var(--red-dim);
+    color: var(--red);
+    border: 1px solid rgba(255,107,107,.3);
+    animation: pill-pulse 1.2s ease-in-out infinite alternate;
+  }
+
+  @keyframes pill-pulse {
+    from { box-shadow: none; }
+    to   { box-shadow: 0 0 10px var(--red-glow); }
+  }
+
+  .card-bar {
+    height: 3px;
+    border-radius: 99px;
+    background: var(--border2);
+    margin-top: .8rem;
+    overflow: hidden;
+  }
+
+  .card-bar-fill {
+    height: 100%;
+    border-radius: 99px;
+    transition: width .8s cubic-bezier(.4,0,.2,1), background .4s;
+  }
+
+  /* ── STATUS + CHART ROW ── */
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  @media (max-width: 900px) { .bottom-row { grid-template-columns: 1fr; } }
+
+  /* Status card */
+  .status-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .4s, box-shadow .4s;
+  }
+
+  .status-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: 20px;
+    opacity: 0;
+    transition: opacity .4s;
+  }
+
+  .status-card.all-ok::before {
+    background: radial-gradient(circle at 50% 100%, rgba(0,201,167,.08) 0%, transparent 70%);
+    opacity: 1;
+  }
+
+  .status-card.has-alert {
+    border-color: var(--red);
+    box-shadow: 0 0 30px var(--red-glow);
+    animation: pulse-alert 1.5s ease-in-out infinite alternate;
+  }
+
+  .status-card.has-alert::before {
+    background: radial-gradient(circle at 50% 100%, rgba(255,107,107,.08) 0%, transparent 70%);
+    opacity: 1;
+  }
+
+  .status-orb {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    position: relative;
+    transition: background .4s, box-shadow .4s;
+    z-index: 1;
+  }
+
+  .status-orb.ok-orb {
+    background: radial-gradient(circle, rgba(0,201,167,.2), rgba(0,201,167,.05));
+    box-shadow: 0 0 30px rgba(0,201,167,.3), inset 0 0 20px rgba(0,201,167,.1);
+    border: 1px solid rgba(0,201,167,.3);
+  }
+
+  .status-orb.alert-orb {
+    background: radial-gradient(circle, rgba(255,107,107,.2), rgba(255,107,107,.05));
+    box-shadow: 0 0 30px rgba(255,107,107,.4), inset 0 0 20px rgba(255,107,107,.1);
+    border: 1px solid rgba(255,107,107,.4);
+    animation: orb-pulse 1.2s ease-in-out infinite alternate;
+  }
+
+  @keyframes orb-pulse {
+    from { box-shadow: 0 0 20px rgba(255,107,107,.3), inset 0 0 15px rgba(255,107,107,.08); }
+    to   { box-shadow: 0 0 50px rgba(255,107,107,.6), inset 0 0 25px rgba(255,107,107,.15); }
+  }
+
+  .status-label {
+    font-size: .7rem;
+    font-weight: 700;
+    color: var(--muted);
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+  }
+
+  .status-value {
+    font-size: 1.25rem;
+    font-weight: 900;
+    transition: color .4s;
+    z-index: 1;
+  }
+
+  .status-sub {
+    font-size: .7rem;
+    color: var(--muted2);
+    font-family: 'Space Mono', monospace;
+    z-index: 1;
+    max-width: 200px;
+    line-height: 1.4;
+  }
+
+  /* Chart card */
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .chart-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--teal), var(--blue), transparent);
+    border-radius: 20px 20px 0 0;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .section-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-size: .75rem;
+    font-weight: 700;
+    color: var(--muted2);
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-family: 'Space Mono', monospace;
+  }
+
+  canvas { width: 100% !important; }
+
+  /* ── ALERTS ── */
+  .alerts-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .alerts-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--red), transparent);
+    border-radius: 20px 20px 0 0;
+  }
+
+  #alerts-list {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border2) transparent;
+  }
+
+  .alert-item {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    background: rgba(255,107,107,.06);
+    border: 1px solid rgba(255,107,107,.15);
+    border-radius: 10px;
+    padding: .6rem 1rem;
+    font-size: .8rem;
+    transition: background .2s;
+  }
+
+  .alert-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--red);
+    flex-shrink: 0;
+    animation: blink 1.5s ease-in-out infinite;
+  }
+
+  .alert-msg { flex: 1; color: var(--text); }
+
+  .alert-time {
+    color: var(--muted);
+    font-size: .68rem;
+    font-family: 'Space Mono', monospace;
+    white-space: nowrap;
+  }
+
+  .no-alerts {
+    color: var(--muted);
+    font-size: .82rem;
+    display: flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .5rem 0;
+  }
+
+  /* ── Pico W info ── */
+  .pico-info {
+    background: var(--surface);
+    border: 1px solid rgba(255,179,71,.2);
+    border-radius: 14px;
+    padding: .9rem 1.2rem;
+    margin-bottom: 1.25rem;
+    font-size: .8rem;
+    color: var(--muted2);
+    display: none;
+  }
+  .pico-info.show { display: block; }
+  .pico-info strong { color: var(--amber); }
+  .pico-info code {
+    background: var(--surface2);
+    padding: .1rem .4rem;
+    border-radius: 4px;
+    color: var(--blue);
+    font-size: .75rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* ── Scan lines overlay (subtle CRT feel) ── */
+  .scanlines {
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 2px,
+      rgba(0,0,0,.04) 2px,
+      rgba(0,0,0,.04) 4px
+    );
+    pointer-events: none;
+    z-index: 999;
+    opacity: .6;
+  }
+
+  /* ── Value flash animation ── */
+  @keyframes value-flash {
+    0%   { opacity: .5; transform: scale(.97); }
+    100% { opacity: 1;  transform: scale(1); }
+  }
+
+  .flash { animation: value-flash .35s ease-out; }
+</style>
+</head>
+<body>
+
+<div class="scanlines"></div>
+
+<div class="page-wrap">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-left">
+      <div class="logo-ring">
+        <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="26" cy="26" r="22" fill="none" stroke="rgba(0,201,167,.2)" stroke-width="1.5"/>
+          <circle cx="26" cy="26" r="22" fill="none" stroke="var(--teal)" stroke-width="1.5"
+            stroke-dasharray="20 118.44" stroke-linecap="round"/>
+          <circle cx="26" cy="26" r="16" fill="none" stroke="rgba(79,195,247,.15)" stroke-width="1"/>
+          <circle cx="26" cy="26" r="16" fill="none" stroke="var(--blue)" stroke-width="1"
+            stroke-dasharray="12 88.49" stroke-linecap="round"/>
+        </svg>
+        <div class="logo-icon">📡</div>
+      </div>
+      <div class="header-title">
+        <h1>رصد</h1>
+        <div class="subtitle">IoT Environment Monitor · Rakaez</div>
+      </div>
+    </div>
+    <div class="header-right">
+      <span id="last-update">جاري التحميل…</span>
+      <span id="mode-badge">⏳ جاري…</span>
+    </div>
+  </header>
+
+  <!-- Pico W hint -->
+  <div class="pico-info" id="pico-info">
+    <strong>⚙️ Pico W غير متصل بعد</strong> — تأكد أن <code>main.py</code> يشير إلى IP جهازك،
+    وأن كلاهما على نفس الشبكة. البيانات ترسل إلى <code>POST /api/data</code>
+  </div>
+
+  <!-- SENSOR CARDS -->
+  <div class="sensor-grid">
+
+    <!-- Temperature -->
+    <div class="s-card c-teal s-ok" id="card-temp">
+      <div class="card-header">
+        <div class="card-label-wrap">
+          <div class="card-icon-label">TEMP · DHT11</div>
+          <div class="card-name">درجة الحرارة</div>
+        </div>
+        <div class="card-badge">🌡️</div>
+      </div>
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 120 120">
+          <circle class="ring-bg" cx="60" cy="60" r="50"/>
+          <circle class="ring-fill" id="ring-temp" cx="60" cy="60" r="50"
+            stroke="var(--teal)"
+            stroke-dasharray="314.16"
+            stroke-dashoffset="314.16"/>
+        </svg>
+        <div class="ring-center">
+          <span class="ring-value" id="val-temp" style="color:var(--teal)">--</span>
+          <span class="ring-unit">°C</span>
+        </div>
+      </div>
+      <div class="card-bar"><div class="card-bar-fill" id="bar-temp" style="width:0%;background:var(--teal)"></div></div>
+    </div>
+
+    <!-- Humidity -->
+    <div class="s-card c-blue s-ok" id="card-humid">
+      <div class="card-header">
+        <div class="card-label-wrap">
+          <div class="card-icon-label">HUMID · DHT11</div>
+          <div class="card-name">الرطوبة</div>
+        </div>
+        <div class="card-badge">💧</div>
+      </div>
+      <div class="ring-wrap">
+        <svg class="ring-svg" viewBox="0 0 120 120">
+          <circle class="ring-bg" cx="60" cy="60" r="50"/>
+          <circle class="ring-fill" id="ring-humid" cx="60" cy="60" r="50"
+            stroke="var(--blue)"
+            stroke-dasharray="314.16"
+            stroke-dashoffset="314.16"/>
+        </svg>
+        <div class="ring-center">
+          <span class="ring-value" id="val-humid" style="color:var(--blue)">--</span>
+          <span class="ring-unit">%</span>
+        </div>
+      </div>
+      <div class="card-bar"><div class="card-bar-fill" id="bar-humid" style="width:0%;background:var(--blue)"></div></div>
+    </div>
+
+    <!-- Rain / Water -->
+    <div class="s-card c-amber s-ok" id="card-water">
+      <div class="card-header">
+        <div class="card-label-wrap">
+          <div class="card-icon-label">RAIN · ADC0 / GP26</div>
+          <div class="card-name">حساس المطر</div>
+        </div>
+        <div class="card-badge">🌧️</div>
+      </div>
+      <div class="binary-display">
+        <div class="binary-icon" id="icon-water">☀️</div>
+        <div class="binary-status" id="val-water" style="color:var(--teal)">جاف</div>
+        <div class="binary-adc" id="unit-water">ADC: --</div>
+      </div>
+      <div class="status-pill pill-ok" id="pill-water">
+        <span id="pill-water-dot">●</span> <span id="pill-water-text">جاف · لا ماء</span>
+      </div>
+    </div>
+
+    <!-- Soil Moisture -->
+    <div class="s-card c-purple s-ok" id="card-soil">
+      <div class="card-header">
+        <div class="card-label-wrap">
+          <div class="card-icon-label">SOIL · ADC1 / GP27</div>
+          <div class="card-name">رطوبة التربة</div>
+        </div>
+        <div class="card-badge">🪴</div>
+      </div>
+      <div class="binary-display">
+        <div class="binary-icon" id="icon-soil">🌱</div>
+        <div class="binary-status" id="val-soil" style="color:var(--teal)">طبيعي</div>
+        <div class="binary-adc" id="unit-soil">ADC: --</div>
+      </div>
+      <div class="status-pill pill-ok" id="pill-soil">
+        <span id="pill-soil-dot">●</span> <span id="pill-soil-text">طبيعي · جاف</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- BOTTOM ROW: status + chart -->
+  <div class="bottom-row">
+
+    <!-- Status card -->
+    <div class="status-card all-ok" id="card-status">
+      <div class="status-label">حالة الغرفة</div>
+      <div class="status-orb ok-orb" id="status-orb">✅</div>
+      <div class="status-value" id="val-status" style="color:var(--teal)">جيدة</div>
+      <div class="status-sub" id="val-status-sub">لا توجد تنبيهات نشطة</div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-card">
+      <div class="section-header">
+        <div class="section-dot" style="background:var(--teal);box-shadow:0 0 6px var(--teal)"></div>
+        <div class="section-title">الحرارة والرطوبة — آخر ٥٠ قراءة</div>
+      </div>
+      <canvas id="chart" height="130"></canvas>
+    </div>
+
+  </div>
+
+  <!-- ALERTS -->
+  <div class="alerts-card">
+    <div class="section-header">
+      <div class="section-dot" style="background:var(--red);box-shadow:0 0 6px var(--red)"></div>
+      <div class="section-title">آخر التنبيهات</div>
+    </div>
+    <div id="alerts-list">
+      <span class="no-alerts">✓ &nbsp;لا توجد تنبيهات</span>
+    </div>
+  </div>
+
+</div><!-- /page-wrap -->
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const WATER_THRESH = 20000;
+const SOIL_THRESH  = 20000;
+const CIRCUM       = 314.16; // 2π × 50
+
+// ── Chart ──────────────────────────────────────────────────────
+const ctx = document.getElementById("chart").getContext("2d");
+const chart = new Chart(ctx, {
+  type: "line",
+  data: {
+    labels: [],
+    datasets: [
+      {
+        label: "الحرارة °C",
+        data: [],
+        borderColor: "#00c9a7",
+        backgroundColor: "rgba(0,201,167,.08)",
+        tension: .4,
+        pointRadius: 0,
+        borderWidth: 2
+      },
+      {
+        label: "الرطوبة %",
+        data: [],
+        borderColor: "#4fc3f7",
+        backgroundColor: "rgba(79,195,247,.08)",
+        tension: .4,
+        pointRadius: 0,
+        borderWidth: 2
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    animation: { duration: 600 },
+    plugins: {
+      legend: {
+        labels: {
+          color: "#8099bb",
+          font: { size: 11, family: "'Space Mono', monospace" },
+          boxWidth: 12,
+          usePointStyle: true,
+          pointStyle: 'circle'
+        }
+      }
+    },
+    scales: {
+      x: {
+        ticks: { color: "#3d5070", maxTicksLimit: 8, font: { size: 10, family: "'Space Mono', monospace" } },
+        grid: { color: "rgba(30,45,69,.8)" }
+      },
+      y: {
+        ticks: { color: "#3d5070", font: { size: 10, family: "'Space Mono', monospace" } },
+        grid: { color: "rgba(30,45,69,.8)" }
+      }
+    }
+  }
+});
+
+// ── Helpers ────────────────────────────────────────────────────
+function pct(val, max) { return Math.min(100, Math.max(0, (val / max) * 100)); }
+
+function setRing(id, fraction, color) {
+  const el = document.getElementById(id);
+  el.style.strokeDashoffset = CIRCUM * (1 - fraction);
+  el.style.stroke = color;
+}
+
+function flashEl(el) {
+  el.classList.remove("flash");
+  void el.offsetWidth; // reflow
+  el.classList.add("flash");
+}
+
+// ── fetchLatest ────────────────────────────────────────────────
+async function fetchLatest() {
+  try {
+    const d = await fetch("/api/latest").then(r => r.json());
+
+    // Temperature
+    const tempEl = document.getElementById("val-temp");
+    const tempAlert = d.temperature > 35 || d.temperature < 10;
+    tempEl.textContent = d.temperature;
+    flashEl(tempEl);
+    const tempColor = tempAlert ? "#ff6b6b" : "#00c9a7";
+    tempEl.style.color = tempColor;
+    const tempPct = pct(d.temperature, 50);
+    setRing("ring-temp", tempPct / 100, tempColor);
+    const tb = document.getElementById("bar-temp");
+    tb.style.width = tempPct + "%";
+    tb.style.background = tempColor;
+    const cardTemp = document.getElementById("card-temp");
+    cardTemp.classList.toggle("s-alert", tempAlert);
+    cardTemp.classList.toggle("s-ok", !tempAlert);
+
+    // Humidity
+    const humidEl = document.getElementById("val-humid");
+    const humidAlert = d.humidity > 80 || d.humidity < 20;
+    humidEl.textContent = d.humidity;
+    flashEl(humidEl);
+    const humidColor = humidAlert ? "#ff6b6b" : "#4fc3f7";
+    humidEl.style.color = humidColor;
+    const humidPct = pct(d.humidity, 100);
+    setRing("ring-humid", humidPct / 100, humidColor);
+    const hb = document.getElementById("bar-humid");
+    hb.style.width = humidPct + "%";
+    hb.style.background = humidColor;
+    const cardHumid = document.getElementById("card-humid");
+    cardHumid.classList.toggle("s-alert", humidAlert);
+    cardHumid.classList.toggle("s-ok", !humidAlert);
+
+    // Water sensor (LOW = wet)
+    const waterWet = d.water_level < WATER_THRESH;
+    const waterValEl = document.getElementById("val-water");
+    waterValEl.textContent = waterWet ? "مبلّل!" : "جاف";
+    waterValEl.style.color = waterWet ? "#ff6b6b" : "#00c9a7";
+    flashEl(waterValEl);
+    document.getElementById("icon-water").textContent = waterWet ? "🌊" : "☀️";
+    document.getElementById("unit-water").textContent = "ADC: " + d.water_level;
+    const pillW = document.getElementById("pill-water");
+    pillW.className = "status-pill " + (waterWet ? "pill-alert" : "pill-ok");
+    document.getElementById("pill-water-text").textContent = waterWet ? "ماء مكتشف!" : "جاف · لا ماء";
+    const cardWater = document.getElementById("card-water");
+    cardWater.classList.toggle("s-alert", waterWet);
+    cardWater.classList.toggle("s-ok", !waterWet);
+
+    // Soil sensor (LOW = wet)
+    const soilWet = d.soil_moisture < SOIL_THRESH;
+    const soilValEl = document.getElementById("val-soil");
+    soilValEl.textContent = soilWet ? "رطبة!" : "طبيعي";
+    soilValEl.style.color = soilWet ? "#ff6b6b" : "#00c9a7";
+    flashEl(soilValEl);
+    document.getElementById("icon-soil").textContent = soilWet ? "💦" : "🌱";
+    document.getElementById("unit-soil").textContent = "ADC: " + d.soil_moisture;
+    const pillS = document.getElementById("pill-soil");
+    pillS.className = "status-pill " + (soilWet ? "pill-alert" : "pill-ok");
+    document.getElementById("pill-soil-text").textContent = soilWet ? "رطبة جداً!" : "طبيعي · جاف";
+    const cardSoil = document.getElementById("card-soil");
+    cardSoil.classList.toggle("s-alert", soilWet);
+    cardSoil.classList.toggle("s-ok", !soilWet);
+
+    // Status card
+    const hasAlert = d.alerts && d.alerts.length > 0;
+    const statusCard = document.getElementById("card-status");
+    statusCard.classList.toggle("all-ok", !hasAlert);
+    statusCard.classList.toggle("has-alert", hasAlert);
+    const orb = document.getElementById("status-orb");
+    orb.textContent = hasAlert ? "⚠️" : "✅";
+    orb.className = "status-orb " + (hasAlert ? "alert-orb" : "ok-orb");
+    const statusVal = document.getElementById("val-status");
+    statusVal.textContent = hasAlert ? "تنبيه!" : "جيدة";
+    statusVal.style.color = hasAlert ? "#ff6b6b" : "#00c9a7";
+    document.getElementById("val-status-sub").textContent = hasAlert
+      ? d.alerts.map(a => a.type || a.message).join(" · ")
+      : "لا توجد تنبيهات نشطة";
+
+    document.getElementById("last-update").textContent =
+      "آخر تحديث: " + new Date().toLocaleTimeString("ar-SA");
+
+  } catch(e) { console.error(e); }
+}
+
+// ── fetchChart ─────────────────────────────────────────────────
+async function fetchChart() {
+  try {
+    const rows = await fetch("/api/readings").then(r => r.json());
+    chart.data.labels = rows.map(r => r.timestamp.split(" ")[1].slice(0, 5));
+    chart.data.datasets[0].data = rows.map(r => r.temperature);
+    chart.data.datasets[1].data = rows.map(r => r.humidity);
+    chart.update();
+  } catch(e) {}
+}
+
+// ── fetchAlerts ────────────────────────────────────────────────
+async function fetchAlerts() {
+  try {
+    const rows = await fetch("/api/alerts").then(r => r.json());
+    const list = document.getElementById("alerts-list");
+    if (!rows.length) {
+      list.innerHTML = '<span class="no-alerts">✓ &nbsp;لا توجد تنبيهات</span>';
+      return;
+    }
+    list.innerHTML = rows.map(a => `
+      <div class="alert-item">
+        <div class="alert-dot"></div>
+        <span class="alert-msg">${a.message}</span>
+        <span class="alert-time">${a.timestamp.split(" ")[1]}</span>
+      </div>`).join("");
+  } catch(e) {}
+}
+
+// ── fetchStatus ────────────────────────────────────────────────
+async function fetchStatus() {
+  try {
+    const d = await fetch("/api/status").then(r => r.json());
+    const badge = document.getElementById("mode-badge");
+    const info  = document.getElementById("pico-info");
+    if (d.mode === "demo") {
+      badge.textContent = "🎭 Demo Mode";
+      badge.className = "";
+      info.classList.remove("show");
+    } else {
+      badge.textContent = "🔌 Live · Pico W";
+      badge.className = "live";
+      info.classList.add("show");
+    }
+  } catch(e) {}
+}
+
+// ── Boot ───────────────────────────────────────────────────────
+fetchStatus();
+fetchLatest();
+fetchChart();
+fetchAlerts();
+setInterval(fetchLatest, 3000);
+setInterval(() => { fetchChart(); fetchAlerts(); }, 10000);
+</script>
+</body>
+</html>

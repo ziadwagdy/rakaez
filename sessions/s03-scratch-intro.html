@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الجلسة ٣ — Scratch: البرمجة بالكتل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c14;--bg2:#0e1520;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
+.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
+.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s;z-index:100;box-shadow:0 0 12px var(--accent);}
+#counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;letter-spacing:1px;}
+#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;z-index:100;letter-spacing:2px;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);padding:4px 12px;border-radius:20px;}
+#nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s;border:none;padding:0;}
+.dot.active{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:scale(1.4);}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);}
+.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
+#btn-prev{right:20px;}#btn-next{left:20px;}
+#slides{position:fixed;inset:0;z-index:1;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s,transform .6s;transform:translateY(30px);overflow-y:auto;}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.slide.exit{opacity:0;transform:translateY(-30px);}
+.eyebrow{font-size:13px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
+.title-main{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
+.subtitle{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;margin-bottom:32px;}
+.tag-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
+.badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
+.badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
+.badge.red{border-color:var(--accent3);color:var(--accent3);background:rgba(255,107,107,0.08);}
+.badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
+.stag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
+.stitle{font-size:clamp(26px,4vw,44px);font-weight:900;text-align:center;margin-bottom:8px;}
+.ssub{font-size:15px;color:var(--muted);text-align:center;max-width:650px;line-height:1.7;margin-bottom:28px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s;}
+.card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);}
+.card .ico{font-size:28px;margin-bottom:10px;display:block;}
+.card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.7;}
+.list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:740px;}
+.li-item{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
+.li-num{width:36px;height:36px;border-radius:50%;background:rgba(0,229,192,0.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;border:1px solid rgba(0,229,192,0.25);}
+.li-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
+.box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
+.big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:14px;color:#a0f0e0;line-height:1.8;max-width:680px;width:100%;text-align:left;direction:ltr;}
+.code-comment{color:var(--muted);}
+.code-keyword{color:var(--accent2);}
+.code-string{color:var(--amber);}
+.code-func{color:var(--accent);}
+.q-card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:20px 24px;width:100%;max-width:700px;margin-bottom:12px;}
+.q-card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:8px;}
+.q-card p{font-size:13px;color:var(--muted);line-height:1.7;}
+@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div id="progress-bar"></div>
+<div id="counter">01 / 10</div>
+<div id="session-badge">W3 · المرحلة ٢</div>
+<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">&#8250;</button>
+<button class="nav-btn" id="btn-next" onclick="navigate(1)">&#8249;</button>
+<div id="nav-dots"></div>
+
+<div id="slides">
+
+  <!-- Slide 1: Title -->
+  <div class="slide active">
+    <div class="eyebrow">الجلسة الثالثة · رصد (Rasd)</div>
+    <div class="title-main">Scratch — البرمجة بالكتل 🐱</div>
+    <div class="subtitle">اليوم نتعلم كيف نبني برامج حقيقية بالسحب والإفلات — بدون كتابة كود معقد!</div>
+    <div class="tag-row">
+      <span class="badge teal">⏱ ٤ ساعات</span>
+      <span class="badge blue">🐱 برمجة مرئية</span>
+      <span class="badge amber">🎮 لعبة أولى</span>
+    </div>
+  </div>
+
+  <!-- Slide 2: Review -->
+  <div class="slide">
+    <div class="stag">مراجعة سريعة</div>
+    <div class="stitle">الجلسة السابقة — الخوارزميات</div>
+    <div class="ssub">قبل أن نبدأ، هل تتذكرون الجلسة الماضية؟ 🤔</div>
+    <div class="list">
+      <div class="li-item">
+        <div class="li-num">١</div>
+        <div>
+          <div class="li-title">ما هي الخوارزمية؟</div>
+          <div class="li-sub">سلسلة من الخطوات المرتبة لحل مشكلة ما — مثل وصفة الطبخ</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٢</div>
+        <div>
+          <div class="li-title">ما هو المخطط الانسيابي؟</div>
+          <div class="li-sub">رسم بياني يوضح خطوات الخوارزمية بأشكال وأسهم</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٣</div>
+        <div>
+          <div class="li-title">أعطِ مثالاً على خوارزمية من حياتك اليومية</div>
+          <div class="li-sub">مثال: خوارزمية صنع السندويش، خوارزمية الذهاب إلى المدرسة...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3: What is Scratch -->
+  <div class="slide">
+    <div class="stag">تعريف</div>
+    <div class="stitle">ما هو Scratch؟</div>
+    <div class="ssub">بيئة برمجة مرئية طورها معهد MIT — مثالية للمبتدئين</div>
+    <div class="grid">
+      <div class="card">
+        <span class="ico">🖼️</span>
+        <h3>البيئة المرئية</h3>
+        <p>تبرمج بسحب وإفلات الكتل الملونة — لا حاجة لكتابة كود معقد</p>
+      </div>
+      <div class="card">
+        <span class="ico">🐱</span>
+        <h3>الـ Sprites</h3>
+        <p>الشخصيات المتحركة في مشروعك — القطة، البطل، العدو، أي شيء تخيله!</p>
+      </div>
+      <div class="card">
+        <span class="ico">⚡</span>
+        <h3>الأحداث Events</h3>
+        <p>ما يشغّل الكود — ضغط المفتاح، النقر على الـ Sprite، بداية اللعبة</p>
+      </div>
+      <div class="card">
+        <span class="ico">🧩</span>
+        <h3>الأوامر Commands</h3>
+        <p>كتل تأمر الـ Sprite بالتحرك أو الكلام أو تغيير اللون أو الدوران</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 4: Scratch Interface -->
+  <div class="slide">
+    <div class="stag">الواجهة</div>
+    <div class="stitle">أجزاء واجهة Scratch</div>
+    <div class="ssub">افتح scratch.mit.edu — دعنا نتعرف على كل منطقة</div>
+    <div class="list">
+      <div class="li-item">
+        <div class="li-num">🧩</div>
+        <div>
+          <div class="li-title">منطقة الكتل — Block Palette</div>
+          <div class="li-sub">على اليسار — فيها كل الكتل مقسمة بالألوان: حركة (أزرق)، مظهر (بنفسجي)، صوت (وردي)...</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">🎭</div>
+        <div>
+          <div class="li-title">الـ Stage — المسرح</div>
+          <div class="li-sub">على اليمين — هنا يتحرك الـ Sprite وتشوف نتيجة كودك مباشرة</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">🐱</div>
+        <div>
+          <div class="li-title">قائمة الـ Sprites</div>
+          <div class="li-sub">أسفل المسرح — تضيف شخصيات جديدة وتختار أي Sprite تبرمج</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">📝</div>
+        <div>
+          <div class="li-title">منطقة الـ Scripts</div>
+          <div class="li-sub">في المنتصف — تسحب الكتل هنا وتربطها ببعض لتبني كودك</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 5: App 1 -->
+  <div class="slide">
+    <div class="stag">تطبيق ١</div>
+    <div class="stitle">حرّك الـ Sprite! 🏃</div>
+    <div class="ssub">أول كود Scratch لنا — نجعل القطة تتحرك للأمام والخلف</div>
+    <div class="list" style="max-width:680px;">
+      <div class="li-item">
+        <div class="li-num" style="background:rgba(91,127,255,0.15);color:var(--accent2);border-color:rgba(91,127,255,0.3);">١</div>
+        <div>
+          <div class="li-title">🏳️ When Green Flag Clicked</div>
+          <div class="li-sub">هذه الكتلة تشغّل الكود عند الضغط على العلم الأخضر</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num" style="background:rgba(0,229,192,0.1);color:var(--accent);border-color:rgba(0,229,192,0.25);">٢</div>
+        <div>
+          <div class="li-title">🔁 Repeat 10</div>
+          <div class="li-sub">كرر الخطوات التالية عشر مرات</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num" style="background:rgba(91,127,255,0.15);color:var(--accent2);border-color:rgba(91,127,255,0.3);">٣</div>
+        <div>
+          <div class="li-title">➡️ Move 10 Steps</div>
+          <div class="li-sub">تحرك القطة 10 خطوات للأمام</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num" style="background:rgba(255,179,71,0.1);color:var(--amber);border-color:rgba(255,179,71,0.3);">٤</div>
+        <div>
+          <div class="li-title">⏱️ Wait 0.1 Seconds</div>
+          <div class="li-sub">انتظر قليلاً بين كل خطوة لترى الحركة بوضوح</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 6: App 2 -->
+  <div class="slide">
+    <div class="stag">تطبيق ٢</div>
+    <div class="stitle">اجعل الـ Sprite يتكلم! 💬</div>
+    <div class="ssub">نضيف حدث النقر على الـ Sprite لنجعله يرد علينا</div>
+    <div class="code-block" style="margin-bottom:20px;">
+<span class="code-comment">// عند النقر على القطة</span>
+<span class="code-keyword">When this Sprite Clicked</span>
+  ↓
+<span class="code-func">Say</span> <span class="code-string">"مرحباً! كيف حالك؟ 😊"</span> <span class="code-keyword">for</span> 2 secs
+  ↓
+<span class="code-func">Say</span> <span class="code-string">"أنا قطة رصد (Rasd)! 🐱"</span> <span class="code-keyword">for</span> 2 secs
+  ↓
+<span class="code-func">Play Sound</span> <span class="code-string">"Meow"</span>
+    </div>
+    <div class="box">
+      💡 <strong style="color:var(--accent);">جرّب:</strong> غيّر النص العربي لجملة من اختيارك — وأضف صوتاً مختلفاً من مكتبة الأصوات!
+    </div>
+  </div>
+
+  <!-- Slide 7: App 3 -->
+  <div class="slide">
+    <div class="stag">تطبيق ٣</div>
+    <div class="stitle">أنيميشن بالمفاتيح! ⌨️</div>
+    <div class="ssub">القطة تمشي وتصدر صوتاً عند الضغط على مفتاح السهم</div>
+    <div class="list" style="max-width:700px;">
+      <div class="li-item">
+        <div class="li-num">←</div>
+        <div>
+          <div class="li-title">When [Right Arrow] Key Pressed</div>
+          <div class="li-sub">Move 15 Steps → Next Costume → Play Sound "Footsteps"</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">→</div>
+        <div>
+          <div class="li-title">When [Left Arrow] Key Pressed</div>
+          <div class="li-sub">Move -15 Steps → Next Costume → الاتجاه: اضغط Set Rotation Style Left-Right</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">↑</div>
+        <div>
+          <div class="li-title">When [Space] Key Pressed</div>
+          <div class="li-sub">Play Sound "Meow" → Say "قفزت! 🐾" for 1 sec</div>
+        </div>
+      </div>
+    </div>
+    <div class="box" style="margin-top:16px;">🎨 غيّر زي القطة (Costume) وأضف خلفية جميلة من مكتبة الخلفيات!</div>
+  </div>
+
+  <!-- Slide 8: Free Activity -->
+  <div class="slide">
+    <div class="stag">نشاط إبداعي</div>
+    <div class="stitle">وقت الإبداع الحر! 🎨</div>
+    <div class="ssub">لديك ٣٠ دقيقة — ابنِ مشروع Scratch من اختيارك</div>
+    <div class="grid">
+      <div class="card">
+        <span class="ico">🎮</span>
+        <h3>لعبة صغيرة</h3>
+        <p>شخصية تتجنب عقبات، أو تجمع نقاط</p>
+      </div>
+      <div class="card">
+        <span class="ico">🎬</span>
+        <h3>أنيميشن قصير</h3>
+        <p>قصة مصورة مع حوار بين شخصيتين</p>
+      </div>
+      <div class="card">
+        <span class="ico">🎵</span>
+        <h3>آلة موسيقية</h3>
+        <p>اضغط مفاتيح مختلفة لتشغيل أصوات</p>
+      </div>
+      <div class="card">
+        <span class="ico">🌟</span>
+        <h3>فكرتك أنت!</h3>
+        <p>لا حدود لخيالك — ابنِ ما تحلم به</p>
+      </div>
+    </div>
+    <div class="box" style="margin-top:20px;">
+      ⏰ بعد انتهاء الوقت، كل طالب يعرض مشروعه لمدة دقيقتين 💪
+    </div>
+  </div>
+
+  <!-- Slide 9: Homework -->
+  <div class="slide">
+    <div class="stag">واجب البيت</div>
+    <div class="stitle">مهامك للأسبوع القادم 📚</div>
+    <div class="ssub">ثلاث مهام تساعدك تتطور وتستعد للجلسة القادمة</div>
+    <div class="list">
+      <div class="li-item">
+        <div class="li-num">١</div>
+        <div>
+          <div class="li-title">شاهد فيديو Cat Flying</div>
+          <div class="li-sub">ابحث في YouTube عن "Scratch Cat Flying tutorial" — لاحظ الكتل المستخدمة وكيف صُنع المشروع</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٢</div>
+        <div>
+          <div class="li-title">أنشئ مشروع Scratch جديد</div>
+          <div class="li-sub">طبّق ما تعلمته اليوم وأضف شيئاً جديداً من عندك — Sprite مختلف، خلفية، وصوت</div>
+        </div>
+      </div>
+      <div class="li-item">
+        <div class="li-num">٣</div>
+        <div>
+          <div class="li-title">اكتب الفرق بين Visual و Text Programming</div>
+          <div class="li-sub">في ٥-٦ جمل: ما مزايا كل نوع؟ ومتى نستخدم كل واحد؟ أحضر إجابتك الأسبوع القادم</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 10: End -->
+  <div class="slide">
+    <span class="big-e">🚀</span>
+    <div class="stag">نهاية الجلسة الثالثة</div>
+    <div class="stitle">أحسنتم اليوم!</div>
+    <div class="ssub">لقد تعلمتم واجهة Scratch، الأحداث، الحركة، والكلام — الأسبوع القادم نبني لعبة كاملة!</div>
+    <div class="box">
+      🎮 <strong style="color:var(--accent);">الأسبوع القادم:</strong> نكمل مشاريع Scratch ونبني لعبتنا الأولى الكاملة مع نقاط وعقبات وعروض!
+    </div>
+    <div class="tag-row" style="margin-top:24px;">
+      <span class="badge teal">🐱 Scratch ✓</span>
+      <span class="badge blue">🎮 اللعبة تنتظر</span>
+      <span class="badge amber">💪 تدربوا في البيت</span>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const total=10;let current=0;const slides=document.querySelectorAll('.slide');const dotsEl=document.getElementById('nav-dots');const counter=document.getElementById('counter');const bar=document.getElementById('progress-bar');
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
+function goTo(n){slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),600);current=(n+total)%total;slides[current].classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');bar.style.width=((current+1)/total*100)+'%';}
+function navigate(dir){goTo(current+dir);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.key==='ArrowRight')navigate(-1);});
+let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
+bar.style.width=(1/total*100)+'%';
+</script>
+</body>
+</html>

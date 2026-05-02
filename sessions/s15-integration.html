@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>الجلسة ١٥ — التكامل والاختبار الكامل</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#080c14;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
+.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
+.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s;z-index:100;box-shadow:0 0 12px var(--accent);}
+#counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;}
+#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;z-index:100;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);padding:4px 12px;border-radius:20px;}
+#nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s;border:none;padding:0;}
+.dot.active{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:scale(1.4);}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);}
+.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
+#btn-prev{right:20px;}#btn-next{left:20px;}
+#slides{position:fixed;inset:0;z-index:1;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s,transform .6s;transform:translateY(30px);overflow-y:auto;}
+.slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
+.slide.exit{opacity:0;transform:translateY(-30px);}
+.eyebrow{font-size:13px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
+.title-main{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
+.subtitle{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;margin-bottom:32px;}
+.tag-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
+.badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
+.badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
+.badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
+.badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
+.stag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
+.stitle{font-size:clamp(26px,4vw,44px);font-weight:900;text-align:center;margin-bottom:8px;}
+.ssub{font-size:15px;color:var(--muted);text-align:center;max-width:650px;line-height:1.7;margin-bottom:28px;}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s;}
+.card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);}
+.card .ico{font-size:28px;margin-bottom:10px;display:block;}
+.card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.card p{font-size:13px;color:var(--muted);line-height:1.7;}
+.list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:740px;}
+.li-item{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
+.li-num{width:36px;height:36px;border-radius:50%;background:rgba(0,229,192,0.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;border:1px solid rgba(0,229,192,0.25);}
+.li-title{font-size:14px;font-weight:700;margin-bottom:4px;}
+.li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
+.box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
+.big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.9;max-width:680px;width:100%;text-align:left;direction:ltr;}
+.checklist{display:flex;flex-direction:column;gap:10px;width:100%;max-width:640px;}
+.check-item{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;cursor:pointer;transition:all .3s;}
+.check-item.done{border-color:rgba(0,229,192,0.4);background:rgba(0,229,192,0.04);}
+.check-box{width:24px;height:24px;border-radius:6px;border:2px solid var(--muted);display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .3s;font-size:14px;}
+.check-item.done .check-box{border-color:var(--accent);background:rgba(0,229,192,0.15);color:var(--accent);}
+.check-text{font-size:14px;font-weight:600;}
+.check-item.done .check-text{color:var(--accent);}
+@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div><div class="orb orb2"></div>
+<div id="progress-bar"></div><div id="counter">01 / 10</div>
+<div id="session-badge">W15 · المرحلة ٦</div>
+<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">›</button>
+<button class="nav-btn" id="btn-next" onclick="navigate(1)">‹</button>
+<div id="slides">
+
+<div class="slide active">
+  <div class="eyebrow">الجلسة الخامسة عشرة — المرحلة السادسة</div>
+  <div class="title-main">التكامل والاختبار الكامل 🔗</div>
+  <div class="subtitle">كل ما تعلمناه في ١٥ جلسة يجتمع اليوم — رصد (Rasd) يُشارك العالم</div>
+  <div class="tag-row">
+    <div class="badge teal">🔗 تكامل</div>
+    <div class="badge blue">🌐 ngrok</div>
+    <div class="badge amber">🧪 اختبار شامل</div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">الصورة الكاملة</div>
+  <div class="stitle">١٥ جلسة تجتمع اليوم 🎯</div>
+  <div class="ssub">كل مهارة تعلمتها لها دور في هذه اللحظة</div>
+  <div class="grid">
+    <div class="card"><span class="ico">🧠</span><h3>التفكير المنطقي</h3><p>الخوارزميات التي رسمناها في الأسبوع الثاني — موجودة في كل سطر كود</p></div>
+    <div class="card"><span class="ico">🐍</span><h3>Python</h3><p>الدوال والشروط والحلقات — تُشغّل الـ Backend وتقرأ الحساسات</p></div>
+    <div class="card"><span class="ico">⚡</span><h3>الإلكترونيات</h3><p>Arduino وDHT22 — يُرسلان البيانات الحقيقية كل ثانيتين</p></div>
+    <div class="card"><span class="ico">🎨</span><h3>Frontend</h3><p>HTML وCSS وJS — تُحوّل البيانات إلى واجهة جميلة على الشاشة</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">ما هو ngrok؟</div>
+  <div class="stitle">نفق سحري للإنترنت 🌐</div>
+  <div class="ssub">حاسوبك يعمل كسيرفر — ngrok يجعله متاحاً للعالم</div>
+  <div class="grid">
+    <div class="card"><span class="ico">🚇</span><h3>نفق آمن</h3><p>يُنشئ نفقاً مشفراً بين حاسوبك وخوادم ngrok — آمن وسريع</p></div>
+    <div class="card"><span class="ico">🔗</span><h3>رابط عام</h3><p>يُعطيك رابطاً مثل: https://abc123.ngrok.io — يعمل من أي مكان</p></div>
+    <div class="card"><span class="ico">🆓</span><h3>مجاني</h3><p>الخطة المجانية تكفي تماماً للعرض والاختبار</p></div>
+    <div class="card"><span class="ico">⚡</span><h3>فوري</h3><p>سطر واحد في Terminal ويكون مشروعك متاحاً للعالم في ثوانٍ</p></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">تشغيل رصد (Rasd)</div>
+  <div class="stitle">الخطوات الكاملة 🚀</div>
+  <div class="ssub">ثلاثة Terminals مفتوحة في آنٍ واحد</div>
+  <div class="list">
+    <div class="li-item"><div class="li-num">١</div><div><div class="li-title">تأكد أن Arduino متصل ويُرسل البيانات</div><div class="li-sub">افتح Serial Monitor — يجب أن ترى قراءات DHT22</div></div></div>
+    <div class="li-item"><div class="li-num">٢</div><div><div class="li-title">شغّل الـ Backend في Terminal الأول</div><div class="li-sub">cd room_guardian && python app.py</div></div></div>
+    <div class="li-item"><div class="li-num">٣</div><div><div class="li-title">افتح Dashboard في VS Code Live Server</div><div class="li-sub">اضغط Go Live — يفتح المتصفح تلقائياً</div></div></div>
+    <div class="li-item"><div class="li-num">٤</div><div><div class="li-title">شغّل ngrok في Terminal الثاني</div><div class="li-sub">ngrok http 5000 — انسخ الـ HTTPS URL</div></div></div>
+    <div class="li-item"><div class="li-num">٥</div><div><div class="li-title">اختبر من هاتفك</div><div class="li-sub">افتح الرابط على هاتفك — هل يعمل رصد (Rasd)؟</div></div></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">كود ngrok</div>
+  <div class="stitle">تشغيل ngrok 🖥</div>
+  <div class="ssub">في Terminal — بعد تسجيل الدخول بـ authtoken</div>
+  <div class="code-block">
+<span style="color:var(--muted);"># أولاً: أضف الـ authtoken (مرة واحدة فقط)</span><br>
+ngrok config add-authtoken YOUR_TOKEN<br><br>
+<span style="color:var(--muted);"># ثانياً: شغّل الـ tunnel</span><br>
+ngrok http 5000<br><br>
+<span style="color:var(--muted);"># ستظهر هذه الرسالة:</span><br>
+Forwarding  https://abc123.ngrok.io -> localhost:5000<br><br>
+<span style="color:var(--muted);"># هذا الرابط يعمل من أي جهاز في العالم!</span>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">وقت التخصيص</div>
+  <div class="stitle">اجعله مشروعك أنت ✨</div>
+  <div class="ssub">٣٠ دقيقة — كل طالب يختار ما يُضيفه أو يعدّله</div>
+  <div class="list">
+    <div class="li-item"><div class="li-num">🌡</div><div><div class="li-title">عتبة التنبيه</div><div class="li-sub">غيّر TEMP_THRESHOLD في config.py — ٢٨ بدل ٣٠؟ ٢٢؟</div></div></div>
+    <div class="li-item"><div class="li-num">💬</div><div><div class="li-title">رسائل التنبيه</div><div class="li-sub">اكتب رسائل بأسلوبك الخاص — جدية؟ فكاهية؟ بالعامية؟</div></div></div>
+    <div class="li-item"><div class="li-num">🎨</div><div><div class="li-title">لون الـ Dashboard</div><div class="li-sub">غيّر --accent في CSS — كل طالب لون مختلف</div></div></div>
+    <div class="li-item"><div class="li-num">🏷</div><div><div class="li-title">اسم الغرفة</div><div class="li-sub">سمّها باسم حقيقي — "غرفة النوم"، "مكتبي"، "مطبخ البيت"</div></div></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">اختبار شامل</div>
+  <div class="stitle">قائمة التحقق ✅</div>
+  <div class="ssub">انقر على كل عنصر عند التحقق منه — تأكد أن كل شيء يعمل</div>
+  <div class="checklist">
+    <div class="check-item" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':'';">
+      <div class="check-box"></div><div class="check-text">Arduino يقرأ ويُرسل بيانات DHT22</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':'';">
+      <div class="check-box"></div><div class="check-text">Flask Backend يعمل على localhost:5000</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':'';">
+      <div class="check-box"></div><div class="check-text">Dashboard يعرض أرقاماً حية تتحدث</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':'';">
+      <div class="check-box"></div><div class="check-text">التنبيهات تظهر عند تجاوز الحد</div>
+    </div>
+    <div class="check-item" onclick="this.classList.toggle('done');this.querySelector('.check-box').textContent=this.classList.contains('done')?'✓':'';">
+      <div class="check-box"></div><div class="check-text">ngrok يعمل والرابط يفتح من الهاتف</div>
+    </div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">تحضير العرض</div>
+  <div class="stitle">ماذا ستقول غداً؟ 🎤</div>
+  <div class="ssub">في الدفتر — حضّر ٣ نقاط لعرضك النهائي</div>
+  <div class="list">
+    <div class="li-item"><div class="li-num">١</div><div><div class="li-title">ما الذي بنيته؟</div><div class="li-sub">اشرح رصد (Rasd) بكلماتك — ما يفعله وكيف يعمل</div></div></div>
+    <div class="li-item"><div class="li-num">٢</div><div><div class="li-title">ما الذي عدّلته أو أضفته؟</div><div class="li-sub">ما اللمسة الخاصة التي جعلت المشروع مشروعك أنت؟</div></div></div>
+    <div class="li-item"><div class="li-num">٣</div><div><div class="li-title">ما الذي تعلمته؟</div><div class="li-sub">شيء واحد لم تكن تعرفه قبل الكورس — الآن أصبح طبيعياً</div></div></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="stag">واجب الأسبوع</div>
+  <div class="stitle">🏠 مهمتك هذا الأسبوع</div>
+  <div class="ssub">آخر واجب قبل العرض النهائي</div>
+  <div class="list">
+    <div class="li-item"><div class="li-num">📱</div><div><div class="li-title">شارك الرابط مع أحد أفراد أسرتك</div><div class="li-sub">اشرح له ما يراه — احصل على رأيه — سجّل ردّ فعله</div></div></div>
+    <div class="li-item"><div class="li-num">📝</div><div><div class="li-title">حضّر ٣ نقاط لعرضك النهائي</div><div class="li-sub">ما الذي فعلته؟ ما الذي تعلمته؟ ما الذي يُثير فخرك؟</div></div></div>
+    <div class="li-item"><div class="li-num">💭</div><div><div class="li-title">فكّر: ماذا تريد أن تتعلم بعد؟</div><div class="li-sub">برمجة؟ إلكترونيات؟ تصميم؟ IoT؟ — كن مستعداً للإجابة</div></div></div>
+  </div>
+</div>
+
+<div class="slide">
+  <div class="big-e">🎓</div>
+  <div class="stitle">الجلسة القادمة — العرض النهائي!</div>
+  <div class="ssub" style="margin-bottom:32px;">الاحتفال بـ ١٦ جلسة من التعلم والبناء والاكتشاف — أنت جاهز!</div>
+  <div class="tag-row">
+    <div class="badge teal">🎤 عروض</div>
+    <div class="badge blue">🏆 إنجاز</div>
+    <div class="badge amber">🚀 المستقبل</div>
+  </div>
+  <div class="box" style="margin-top:36px;">تذكّر: المشروع الذي بنيته اليوم — مهندسون محترفون يبنون مثله في وظائفهم 💪</div>
+</div>
+
+</div>
+<div id="nav-dots"></div>
+<script>
+const total=10;let current=0;const slides=document.querySelectorAll('.slide');const dotsEl=document.getElementById('nav-dots');const counter=document.getElementById('counter');const bar=document.getElementById('progress-bar');
+slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
+function goTo(n){slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),600);current=(n+total)%total;slides[current].classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');bar.style.width=((current+1)/total*100)+'%';}
+function navigate(dir){goTo(current+dir);}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.key==='ArrowRight')navigate(-1);});
+let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
+bar.style.width=(1/total*100)+'%';
+</script>
+</body>
+</html>

@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رصد (Rasd) — أجندة الكورس الكاملة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #080c14;
+  --bg2: #0e1520;
+  --bg3: #141d2e;
+  --accent: #00e5c0;
+  --accent2: #5b7fff;
+  --accent3: #ff6b6b;
+  --amber: #ffb347;
+  --purple: #b97fff;
+  --text: #e8f0fe;
+  --muted: #6b7fa3;
+  --border: rgba(0,229,192,0.15);
+  --card: rgba(14,21,32,0.9);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  font-family: 'Cairo', sans-serif;
+  color: var(--text);
+  min-height: 100vh;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,229,192,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,229,192,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none; z-index: 0;
+}
+
+.orb {
+  position: fixed; border-radius: 50%;
+  filter: blur(120px); pointer-events: none; z-index: 0; opacity: 0.12;
+}
+.orb1 { width: 600px; height: 600px; background: #00e5c0; top: -200px; right: -200px; }
+.orb2 { width: 500px; height: 500px; background: #5b7fff; bottom: -150px; left: -150px; }
+
+/* ===== HEADER ===== */
+.hero {
+  position: relative; z-index: 1;
+  text-align: center;
+  padding: 80px 40px 60px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 4px;
+  color: var(--accent); font-family: 'Space Mono', monospace;
+  text-transform: uppercase; margin-bottom: 20px;
+}
+.hero-title {
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 900; line-height: 1.1;
+  background: linear-gradient(135deg, #fff 0%, var(--accent) 50%, var(--accent2) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; margin-bottom: 16px;
+}
+.hero-sub {
+  font-size: 15px; color: var(--muted); max-width: 600px; margin: 0 auto 36px; line-height: 1.8;
+}
+.hero-stats {
+  display: flex; gap: 20px; justify-content: center; flex-wrap: wrap;
+}
+.stat-chip {
+  padding: 8px 20px; border-radius: 30px; font-size: 13px; font-weight: 700;
+  border: 1px solid; display: flex; align-items: center; gap: 7px;
+}
+.stat-chip.teal { border-color: var(--accent); color: var(--accent); background: rgba(0,229,192,0.07); }
+.stat-chip.blue { border-color: var(--accent2); color: var(--accent2); background: rgba(91,127,255,0.07); }
+.stat-chip.red  { border-color: var(--accent3); color: var(--accent3); background: rgba(255,107,107,0.07); }
+.stat-chip.amber{ border-color: var(--amber); color: var(--amber); background: rgba(255,179,71,0.07); }
+
+/* ===== PHASE TABS ===== */
+.phases-nav {
+  position: sticky; top: 0; z-index: 50;
+  background: rgba(8,12,20,0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--border);
+  padding: 0 40px;
+  display: flex; gap: 0; overflow-x: auto;
+}
+.phase-tab {
+  padding: 18px 20px; font-size: 13px; font-weight: 700;
+  color: var(--muted); cursor: pointer; white-space: nowrap;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease; background: none; border-top: none;
+  border-left: none; border-right: none;
+  font-family: 'Cairo', sans-serif;
+}
+.phase-tab:hover { color: var(--text); }
+.phase-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ===== MAIN CONTENT ===== */
+.content {
+  position: relative; z-index: 1;
+  max-width: 1100px; margin: 0 auto;
+  padding: 48px 40px 80px;
+}
+
+/* ===== PHASE SECTION ===== */
+.phase-section { margin-bottom: 60px; }
+.phase-header {
+  display: flex; align-items: center; gap: 16px;
+  margin-bottom: 28px; padding-bottom: 20px;
+  border-bottom: 1px solid var(--border);
+}
+.phase-number {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; font-weight: 900;
+  font-family: 'Space Mono', monospace; flex-shrink: 0;
+}
+.phase-info { flex: 1; }
+.phase-label {
+  font-size: 11px; font-weight: 600; letter-spacing: 3px;
+  text-transform: uppercase; font-family: 'Space Mono', monospace;
+  margin-bottom: 4px;
+}
+.phase-name { font-size: 22px; font-weight: 900; }
+.phase-weeks {
+  font-size: 12px; color: var(--muted); margin-top: 2px;
+}
+
+/* Phase color variants */
+.phase-1 .phase-number { background: rgba(0,229,192,0.1); border: 1px solid rgba(0,229,192,0.3); color: var(--accent); }
+.phase-1 .phase-label { color: var(--accent); }
+.phase-2 .phase-number { background: rgba(255,107,107,0.1); border: 1px solid rgba(255,107,107,0.3); color: var(--accent3); }
+.phase-2 .phase-label { color: var(--accent3); }
+.phase-3 .phase-number { background: rgba(91,127,255,0.1); border: 1px solid rgba(91,127,255,0.3); color: var(--accent2); }
+.phase-3 .phase-label { color: var(--accent2); }
+.phase-4 .phase-number { background: rgba(255,179,71,0.1); border: 1px solid rgba(255,179,71,0.3); color: var(--amber); }
+.phase-4 .phase-label { color: var(--amber); }
+.phase-5 .phase-number { background: rgba(185,127,255,0.1); border: 1px solid rgba(185,127,255,0.3); color: var(--purple); }
+.phase-5 .phase-label { color: var(--purple); }
+.phase-6 .phase-number { background: rgba(0,229,192,0.1); border: 1px solid rgba(0,229,192,0.3); color: var(--accent); }
+.phase-6 .phase-label { color: var(--accent); }
+
+/* ===== SESSION CARD ===== */
+.session-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px; margin-bottom: 16px;
+  overflow: hidden;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+.session-card:hover { border-color: rgba(0,229,192,0.3); }
+.session-card.open { border-color: rgba(0,229,192,0.4); box-shadow: 0 8px 40px rgba(0,229,192,0.06); }
+
+.session-header {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px 24px; cursor: pointer;
+  user-select: none;
+}
+.session-week {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px; font-weight: 800;
+  font-family: 'Space Mono', monospace; flex-shrink: 0;
+  background: rgba(0,229,192,0.08); border: 1px solid rgba(0,229,192,0.2);
+  color: var(--accent);
+}
+.session-meta { flex: 1; }
+.session-title { font-size: 16px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
+.session-tags { display: flex; gap: 8px; flex-wrap: wrap; }
+.tag {
+  font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 20px;
+  border: 1px solid;
+}
+.tag.soft  { border-color: rgba(91,127,255,0.4); color: var(--accent2); background: rgba(91,127,255,0.08); }
+.tag.hard  { border-color: rgba(255,179,71,0.4); color: var(--amber); background: rgba(255,179,71,0.08); }
+.tag.build { border-color: rgba(185,127,255,0.4); color: var(--purple); background: rgba(185,127,255,0.08); }
+.tag.show  { border-color: rgba(0,229,192,0.4); color: var(--accent); background: rgba(0,229,192,0.08); }
+.tag.both  { border-color: rgba(255,107,107,0.4); color: var(--accent3); background: rgba(255,107,107,0.08); }
+
+.session-chevron {
+  font-size: 18px; color: var(--muted);
+  transition: transform 0.3s ease; flex-shrink: 0;
+}
+.session-card.open .session-chevron { transform: rotate(180deg); }
+
+/* ===== SESSION BODY ===== */
+.session-body {
+  max-height: 0; overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.session-body-inner {
+  padding: 0 24px 24px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+@media (max-width: 700px) {
+  .session-body-inner { grid-template-columns: 1fr; }
+  .content { padding: 32px 20px 60px; }
+  .phases-nav { padding: 0 20px; }
+  .hero { padding: 60px 20px 40px; }
+}
+
+.session-panel {
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px; padding: 18px 20px;
+}
+.panel-header {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 12px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; font-family: 'Space Mono', monospace;
+  margin-bottom: 14px;
+}
+.panel-icon { font-size: 16px; }
+.session-panel ul {
+  list-style: none; display: flex; flex-direction: column; gap: 8px;
+}
+.session-panel ul li {
+  font-size: 13px; color: var(--muted); line-height: 1.7;
+  display: flex; gap: 8px; align-items: flex-start;
+}
+.session-panel ul li::before {
+  content: '›'; color: var(--accent); font-weight: 700;
+  flex-shrink: 0; margin-top: 1px;
+}
+
+.panel-objectives .panel-header { color: var(--accent); }
+.panel-activities .panel-header { color: var(--accent2); }
+.panel-home .panel-header { color: var(--amber); }
+.panel-trainer .panel-header { color: var(--accent3); }
+
+/* Trainer note specific */
+.trainer-note {
+  background: rgba(255,107,107,0.04);
+  border: 1px solid rgba(255,107,107,0.12);
+  border-radius: 12px; padding: 18px 20px;
+  grid-column: 1 / -1;
+}
+.trainer-note .session-panel { background: none; border: none; padding: 0; }
+
+/* Duration bar */
+.session-timing {
+  grid-column: 1 / -1;
+  display: flex; gap: 10px; flex-wrap: wrap; align-items: center;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 10px; font-size: 12px;
+}
+.timing-block {
+  display: flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 20px;
+  font-weight: 600; border: 1px solid;
+}
+.timing-block.t1 { border-color: rgba(0,229,192,0.3); color: var(--accent); background: rgba(0,229,192,0.06); }
+.timing-block.t2 { border-color: rgba(91,127,255,0.3); color: var(--accent2); background: rgba(91,127,255,0.06); }
+.timing-block.t3 { border-color: rgba(255,179,71,0.3); color: var(--amber); background: rgba(255,179,71,0.06); }
+.timing-block.t4 { border-color: rgba(255,107,107,0.3); color: var(--accent3); background: rgba(255,107,107,0.06); }
+
+/* ===== FOOTER ===== */
+.footer {
+  position: relative; z-index: 1;
+  text-align: center; padding: 40px;
+  border-top: 1px solid var(--border);
+  font-size: 12px; color: var(--muted); font-family: 'Space Mono', monospace;
+}
+</style>
+</head>
+<body>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Rakaez · إسطنبول · ٢٠٢٥</div>
+  <div class="hero-title">أجندة كورس رصد (Rasd)</div>
+  <div class="hero-sub">خطة كاملة للـ ١٦ جلسة — أهداف كل جلسة، أنشطة الفصل، الواجبات المنزلية، وملاحظات المدرب</div>
+  <div class="hero-stats">
+    <div class="stat-chip teal">🗓 ١٦ جلسة</div>
+    <div class="stat-chip blue">⏱ ٤ ساعات / جلسة</div>
+    <div class="stat-chip red">👥 ١١ طلاب</div>
+    <div class="stat-chip amber">🎯 ٦ مراحل</div>
+  </div>
+</div>
+
+<!-- PHASE TABS -->
+<nav class="phases-nav" id="phases-nav">
+  <button class="phase-tab active" onclick="scrollToPhase(1,this)">المرحلة ١ — الأساسيات</button>
+  <button class="phase-tab" onclick="scrollToPhase(2,this)">المرحلة ٢ — Scratch</button>
+  <button class="phase-tab" onclick="scrollToPhase(3,this)">المرحلة ٣ — Python</button>
+  <button class="phase-tab" onclick="scrollToPhase(4,this)">المرحلة ٤ — الإلكترونيات</button>
+  <button class="phase-tab" onclick="scrollToPhase(5,this)">المرحلة ٥ — رصد (Rasd)</button>
+  <button class="phase-tab" onclick="scrollToPhase(6,this)">المرحلة ٦ — العرض النهائي</button>
+</nav>
+
+<!-- CONTENT -->
+<div class="content">
+
+<!-- ===== PHASE 1 ===== -->
+<div class="phase-section phase-1" id="phase-1">
+  <div class="phase-header">
+    <div class="phase-number">١</div>
+    <div class="phase-info">
+      <div class="phase-label">المرحلة الأولى</div>
+      <div class="phase-name">الاستكشاف والأساسيات</div>
+      <div class="phase-weeks">الجلسات ١–٢ · أسبوعان</div>
+    </div>
+  </div>
+
+  <!-- Session 1 -->
+  <div class="session-card" id="s1">
+    <div class="session-header" onclick="toggleSession('s1')">
+      <div class="session-week">W1</div>
+      <div class="session-meta">
+        <div class="session-title">مرحباً بعالم التكنولوجيا 🌍</div>
+        <div class="session-tags">
+          <span class="tag show">استكشاف</span>
+          <span class="tag soft">برمجة نظري</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🎯 تعارف ٣٠د</span>
+          <span class="timing-block t2">💡 محاضرة ٦٠د</span>
+          <span class="timing-block t3">🛠 نشاط ٩٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٦٠د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>التعرف على المشاركين وكسر الجليد</li>
+            <li>فهم ما هي التكنولوجيا وأثرها على حياتنا</li>
+            <li>التعرف على مسارات العمل في التقنية (برمجة، إلكترونيات، ميكانيكا)</li>
+            <li>الاطلاع على مشروع رصد (Rasd) كهدف الكورس</li>
+            <li>فهم هيكل الكورس الـ ١٦ جلسة والتوقعات</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>نشاط التعارف: كل طالب يقدّم نفسه ويذكر تقنية يستخدمها يومياً</li>
+            <li>خريطة ذهنية جماعية: ما التكنولوجيا الموجودة في غرفتنا؟</li>
+            <li>عرض Demo حي لـ رصد (Rasd) (بالـ demo mode)</li>
+            <li>نقاش: ما الذي يثير فضولك أكثر — البرمجة أم الإلكترونيات؟</li>
+            <li>توزيع دفاتر الملاحظات وشرح طريقة توثيق التعلم</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>شاهد: فيديو ما هو إنترنت الأشياء (IoT)</li>
+            <li>شاهد: فيديو ما هي البرمجة وكيف تتعلمها</li>
+            <li>اكتب في الدفتر: ٣ أشياء تعلمتها + سؤال واحد عندك</li>
+            <li>تحدي: صوّر أو ارسم جهازاً تكنولوجياً في بيتك وفكّر كيف يعمل</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>الجلسة الأولى أهم جلسة — ركّز على بناء الثقة والفضول، وليس المحتوى التقني</li>
+              <li>استخدم demo mode لإظهار رصد (Rasd) بدون أجهزة حقيقية</li>
+              <li>شجّع الطلاب على طرح أسئلة مفتوحة، لا تُقيّد النقاش</li>
+              <li>وزّع الأدوار: Zeyad يشرح البرمجة والنظام، المدرب المشارك يشرح الإلكترونيات والهاردوير</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session 2 -->
+  <div class="session-card" id="s2">
+    <div class="session-header" onclick="toggleSession('s2')">
+      <div class="session-week">W2</div>
+      <div class="session-meta">
+        <div class="session-title">كيف يفكر الحاسوب؟ 🧠</div>
+        <div class="session-tags">
+          <span class="tag soft">تفكير حسابي</span>
+          <span class="tag soft">خوارزميات</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ٢٠د</span>
+          <span class="timing-block t2">💡 شرح ٦٠د</span>
+          <span class="timing-block t3">🛠 رسم مخططات ٩٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٧٠د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>فهم مفهوم التفكير الحسابي (Computational Thinking)</li>
+            <li>تعلّم رموز المخطط الانسيابي (Flowchart): بداية، عملية، قرار، نهاية</li>
+            <li>تحويل مشكلة يومية إلى خطوات منطقية</li>
+            <li>فهم الفرق بين الخوارزمية والكود</li>
+            <li>ربط مفهوم المخطط بكيفية عمل رصد (Rasd)</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>ارسم خوارزمية: "كيف تصنع فنجان قهوة؟" — على السبورة جماعياً</li>
+            <li>تطبيق فردي: كل طالب يرسم خوارزمية لشيء من اختياره</li>
+            <li>نشاط القرار: ارسم مخطط "هل تفتح المشروع إذا تجاوزت الحرارة 30 درجة؟"</li>
+            <li>مراجعة مخططات رصد (Rasd) — ما الذي يحدث عند استلام بيانات الحساس؟</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>شاهد: فيديو شرح المخطط الانسيابي بالعربي</li>
+            <li>ارسم مخططاً كاملاً لروتينك الصباحي (بداية، قرارات، نهاية)</li>
+            <li>شاهد: فيديوهات لغات البرمجة (cs2, cs3) وسجّل ٣ مصطلحات جديدة</li>
+            <li>تحدي: فكّر في رصد (Rasd) — ارسم مخططاً لما يحدث حين ترتفع الحرارة</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>استخدم الشاشة التفاعلية من session-presentation.html (الشرائح الأولى)</li>
+              <li>ركّز على أن الخوارزمية هي التفكير قبل الكتابة — الكود يأتي لاحقاً</li>
+              <li>الطلاب في هذا العمر يجدون رسم المخططات ممتعاً — خصّص وقتاً كافياً</li>
+              <li>اربط دائماً بمشروع رصد (Rasd): "لماذا نحتاج هذا في مشروعنا؟"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PHASE 2 ===== -->
+<div class="phase-section phase-2" id="phase-2">
+  <div class="phase-header">
+    <div class="phase-number">٢</div>
+    <div class="phase-info">
+      <div class="phase-label">المرحلة الثانية</div>
+      <div class="phase-name">البرمجة المرئية — Scratch</div>
+      <div class="phase-weeks">الجلسات ٣–٤ · أسبوعان</div>
+    </div>
+  </div>
+
+  <!-- Session 3 -->
+  <div class="session-card" id="s3">
+    <div class="session-header" onclick="toggleSession('s3')">
+      <div class="session-week">W3</div>
+      <div class="session-meta">
+        <div class="session-title">Scratch — البرمجة بالكتل 🐱</div>
+        <div class="session-tags">
+          <span class="tag soft">برمجة مرئية</span>
+          <span class="tag soft">Scratch</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ٢٠د</span>
+          <span class="timing-block t2">💡 مقدمة Scratch ٤٥د</span>
+          <span class="timing-block t3">🛠 تطبيق ١٠٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٣٥د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>التعرف على واجهة Scratch وأجزائها الأساسية</li>
+            <li>فهم مفاهيم: الـ Sprite، الـ Stage، الأحداث (Events)</li>
+            <li>تطبيق مفاهيم الأوامر: الحركة، المظهر، الصوت</li>
+            <li>فهم تسلسل الأوامر (Sequence) كأساس البرمجة</li>
+            <li>إنشاء أول مشروع متحرك بسيط</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>جولة موجّهة في واجهة Scratch — ما هذا الزر؟ ما هذه المنطقة؟</li>
+            <li>تطبيق ١: حرّك الـ Sprite يميناً ويساراً بالضغط على مفتاح</li>
+            <li>تطبيق ٢: اجعل الـ Sprite يقول جملة عند النقر عليه</li>
+            <li>تطبيق ٣: ابدأ أنيميشن بسيط (القطة تمشي وتُصدر صوتاً)</li>
+            <li>مشاركة: كل طالب يعرض مشروعه الأول أمام المجموعة</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>شاهد: فيديو تصميم لعبة Cat Flying بـ Scratch (كامل)</li>
+            <li>طبّق: أنشئ مشروع Scratch جديد من اختيارك (ليس نفس الفيديو)</li>
+            <li>فكّر: كيف تُضيف حركة الشخصية إذا ضغطت على أسهم لوحة المفاتيح؟</li>
+            <li>اكتب في الدفتر: الفرق بين البرمجة بالكتل والبرمجة النصية</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>استخدم موقع scratch.mit.edu — يعمل في المتصفح بدون تثبيت</li>
+              <li>الهدف ليس الإتقان، بل اكتشاف أن البرمجة ممتعة وبسيطة</li>
+              <li>شجّع التجربة الحرة — دع الطلاب يكتشفون بأنفسهم</li>
+              <li>ربط بالمنطق: "هذا الـ if في Scratch هو نفس شرط رصد (Rasd)"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session 4 -->
+  <div class="session-card" id="s4">
+    <div class="session-header" onclick="toggleSession('s4')">
+      <div class="session-week">W4</div>
+      <div class="session-meta">
+        <div class="session-title">Scratch — نبني لعبتنا الأولى 🎮</div>
+        <div class="session-tags">
+          <span class="tag soft">Scratch</span>
+          <span class="tag build">مشروع</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ٢٠د</span>
+          <span class="timing-block t2">💡 شرح الشروط ٤٠د</span>
+          <span class="timing-block t3">🛠 بناء اللعبة ١١٠د</span>
+          <span class="timing-block t4">🎉 عروض ٧٠د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>تطبيق الشروط (if/else) والحلقات (repeat/forever) في Scratch</li>
+            <li>إضافة نظام النقاط (Score) وانتهاء اللعبة</li>
+            <li>استخدام الاصطدام (Collision Detection) بين الـ Sprites</li>
+            <li>إتمام لعبة كاملة ذات منطق برمجي واضح</li>
+            <li>تجربة العرض والتغذية الراجعة من الزملاء</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>إتمام لعبة Cat Flying من الواجب — مراجعة جماعية للكتل</li>
+            <li>إضافة: نقاط تزيد عند الاصطدام بشيء معين</li>
+            <li>إضافة: شرط Game Over عند الاصطدام بعقبة</li>
+            <li>وقت حر: كل طالب يُخصّص لعبته — يغيّر الشخصية والخلفية والصوت</li>
+            <li>جلسة عروض: كل طالب يُجرّب لعبة زميله ويعطي رأيه</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>أضف مستوى ثانياً للعبتك (تزداد السرعة أو الصعوبة)</li>
+            <li>اكتب: ما الذي أعجبك في Scratch؟ وما الذي تريد عمله بالكود الحقيقي؟</li>
+            <li>ابحث: ما الفرق بين Python وJavaScript؟ (١٠ دقائق بحث)</li>
+            <li>تحضير: ثبّت Trinket على متصفحك وأنشئ حساباً مجانياً</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>جلسة العروض مهمة جداً — تبني الثقة والقدرة على التواصل التقني</li>
+              <li>لا تُقيّم اللعبة تقنياً — قيّم الإبداع والمنطق والتجربة</li>
+              <li>في نهاية هذه الجلسة، يجب أن يشعر كل طالب أنه "برمج شيئاً"</li>
+              <li>ابدأ التحضير للانتقال إلى Python: "الآن سنكتب بدل أن نسحب"</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PHASE 3 ===== -->
+<div class="phase-section phase-3" id="phase-3">
+  <div class="phase-header">
+    <div class="phase-number">٣</div>
+    <div class="phase-info">
+      <div class="phase-label">المرحلة الثالثة</div>
+      <div class="phase-name">البرمجة النصية — Python</div>
+      <div class="phase-weeks">الجلسات ٥–٧ · ثلاثة أسابيع</div>
+    </div>
+  </div>
+
+  <!-- Session 5 -->
+  <div class="session-card" id="s5">
+    <div class="session-header" onclick="toggleSession('s5')">
+      <div class="session-week">W5</div>
+      <div class="session-meta">
+        <div class="session-title">Python — أول سطر كود 🐍</div>
+        <div class="session-tags">
+          <span class="tag soft">Python</span>
+          <span class="tag soft">متغيرات</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ١٥د</span>
+          <span class="timing-block t2">💡 مقدمة Python ٥٠د</span>
+          <span class="timing-block t3">🛠 Trinket تطبيق ١٠٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٣٥د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>فهم ما هي Python ولماذا تُستخدم في رصد (Rasd)</li>
+            <li>إعداد بيئة العمل: Trinket (متصفح، لا تثبيت)</li>
+            <li>تعلّم: print()، input()، المتغيرات، أنواع البيانات (str, int, float)</li>
+            <li>كتابة أول برنامج تفاعلي: "أهلاً بـ [اسمك]"</li>
+            <li>فهم مفهوم الـ Syntax والأخطاء الشائعة</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>Hello World — أول سطر كود Python في Trinket</li>
+            <li>تطبيق المتغيرات: name = "زياد" ثم print("أهلاً " + name)</li>
+            <li>نشاط الحاسبة: برنامج يجمع عددين يُدخلهما المستخدم</li>
+            <li>مسابقة: من يكتب أطول برنامج صحيح في ٥ دقائق؟</li>
+            <li>خطأ مقصود: المدرب يكتب كود خاطئ — الطلاب يجدون الخطأ</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>على Trinket: اكتب برنامجاً يسأل عن اسمك وعمرك ثم يطبع: "مرحباً [اسم]، عمرك [عمر] سنة"</li>
+            <li>مسألة: اكتب برنامجاً يحول درجات الحرارة من مئوي إلى فهرنهايت</li>
+            <li>اكتب في الدفتر: الفرق بين int وstr وmفloat بمثال من حياتك</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>Trinket يعمل في المتصفح — لا حاجة لتثبيت Python على الجهاز</li>
+              <li>أخطاء الـ Syntax طبيعية — علّم الطلاب قراءة رسائل الخطأ بدون خوف</li>
+              <li>ربط بـ رصد (Rasd): "هذه المتغيرات ستُخزّن درجة الحرارة من الحساس"</li>
+              <li>اجعل الجو خفيفاً — البرمجة النصية قد تبدو مُخيفة في البداية</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session 6 -->
+  <div class="session-card" id="s6">
+    <div class="session-header" onclick="toggleSession('s6')">
+      <div class="session-week">W6</div>
+      <div class="session-meta">
+        <div class="session-title">Python — الشروط والحلقات 🔁</div>
+        <div class="session-tags">
+          <span class="tag soft">Python</span>
+          <span class="tag soft">if/else</span>
+          <span class="tag soft">loops</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ٢٠د</span>
+          <span class="timing-block t2">💡 شرح ٦٠د</span>
+          <span class="timing-block t3">🛠 تحديات Trinket ١٠٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٦٠د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>تعلّم جمل الشرط: if / elif / else</li>
+            <li>تعلّم حلقة for وحلقة while</li>
+            <li>فهم متى تستخدم كل نوع من الحلقات</li>
+            <li>بناء لعبة "تخمين الرقم" كاملة</li>
+            <li>ربط الشروط بمنطق التنبيهات في رصد (Rasd)</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>تطبيق الشرط: برنامج يقول "حار" أو "بارد" حسب درجة الحرارة المُدخلة</li>
+            <li>تطبيق الحلقة: اطبع أرقام ١ إلى ١٠، ثم الأرقام الزوجية فقط</li>
+            <li>مشروع صغير: لعبة تخمين الرقم (الحاسوب يختار، أنت تخمّن)</li>
+            <li>نقاش: كيف يستخدم رصد (Rasd) الشروط للتنبيه؟</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>أكمل لعبة التخمين: أضف عداداً للمحاولات وأخبر المستخدم إذا انتهت</li>
+            <li>مسألة: اكتب برنامجاً يطبع جدول الضرب لأي رقم يُدخله المستخدم</li>
+            <li>تحدي: اكتب برنامجاً يتحقق إذا كانت درجة الحرارة "مثالية" (18–25 درجة) أو "شديدة"</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>الشروط هي نفس مفهوم "القرار" في المخطط الانسيابي — ذكّر الطلاب بذلك</li>
+              <li>لعبة التخمين ممتعة جداً وتُعلّم while loop بشكل طبيعي</li>
+              <li>ابدأ بـ for ثم while — for أبسط مفهوماً للمبتدئين</li>
+              <li>درس التنبيهات في رصد (Rasd) يُجسّد هذه المفاهيم — استخدمه</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session 7 -->
+  <div class="session-card" id="s7">
+    <div class="session-header" onclick="toggleSession('s7')">
+      <div class="session-week">W7</div>
+      <div class="session-meta">
+        <div class="session-title">Python — الدوال وبرامج حقيقية ⚙️</div>
+        <div class="session-tags">
+          <span class="tag soft">Python</span>
+          <span class="tag soft">functions</span>
+          <span class="tag build">مشروع</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ٢٠د</span>
+          <span class="timing-block t2">💡 الدوال ٥٠د</span>
+          <span class="timing-block t3">🛠 مشروع محول الحرارة ١١٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٦٠د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>تعلّم تعريف الدوال (def) والمعاملات (parameters) والإرجاع (return)</li>
+            <li>فهم لماذا الدوال تجعل الكود أفضل (لا تكرار، سهل التعديل)</li>
+            <li>بناء مشروع كامل: محوّل درجات الحرارة متعدد الوحدات</li>
+            <li>قراءة جزء من كود رصد (Rasd) وفهم دوره</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>مقارنة كود بدون دوال وكود بدوال — أيهما أوضح؟</li>
+            <li>تطبيق: اكتب دالة celsius_to_fahrenheit(temp)</li>
+            <li>توسيع: أضف دالة fahrenheit_to_kelvin(temp)</li>
+            <li>مشروع: برنامج محوّل يسأل المستخدم الوحدة ويحوّل</li>
+            <li>استعراض: افتح sensor_reader.py من رصد (Rasd) وافهم دوال قراءة الحساس</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>أكمل المشروع: أضف دالة تتحقق من نطاق درجة الحرارة وتُرجع "آمن" أو "تحذير"</li>
+            <li>اقرأ: config.py وdemo_data.py من كود رصد (Rasd) — ماذا تفعل هذه الملفات؟</li>
+            <li>اكتب في الدفتر: ٣ دوال في رصد (Rasd) وماذا تفعل كل منها</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>هذه الجلسة تُحوّل الطلاب من "متعلمي Python" إلى "مبرمجين يقرأون كوداً حقيقياً"</li>
+              <li>قراءة كود رصد (Rasd) تُحفّز الطلاب وتربط كل ما تعلموه بهدف حقيقي</li>
+              <li>لا تتوقع أن يفهموا كل الكود — الهدف هو الراحة مع قراءة الكود</li>
+              <li>في نهاية المرحلة ٣ يجب أن يكون كل طالب قادراً على كتابة برامج Python بسيطة</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PHASE 4 ===== -->
+<div class="phase-section phase-4" id="phase-4">
+  <div class="phase-header">
+    <div class="phase-number">٤</div>
+    <div class="phase-info">
+      <div class="phase-label">المرحلة الرابعة</div>
+      <div class="phase-name">الإلكترونيات والأجهزة</div>
+      <div class="phase-weeks">الجلسات ٨–١٠ · ثلاثة أسابيع</div>
+    </div>
+  </div>
+
+  <!-- Session 8 -->
+  <div class="session-card" id="s8">
+    <div class="session-header" onclick="toggleSession('s8')">
+      <div class="session-week">W8</div>
+      <div class="session-meta">
+        <div class="session-title">أساسيات الإلكترونيات ⚡</div>
+        <div class="session-tags">
+          <span class="tag hard">إلكترونيات</span>
+          <span class="tag hard">دوائر</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ١٥د</span>
+          <span class="timing-block t2">💡 شرح الإلكترونيات ٦٠د</span>
+          <span class="timing-block t3">🛠 تجارب عملية ١١٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٥٥د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>فهم المفاهيم الأساسية: الجهد (Voltage)، التيار (Current)، المقاومة (Resistance)</li>
+            <li>التعرف على المكونات: LED، مقاومة، بطارية، لوح التجارب (Breadboard)</li>
+            <li>بناء أول دائرة بسيطة: LED + مقاومة + بطارية</li>
+            <li>فهم الفرق بين الدائرة المفتوحة والمغلقة</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>المدرب المشارك (Mechatronics): عرض المكونات الإلكترونية</li>
+            <li>تجربة ١: أضئ LED بدون Breadboard (مباشر على البطارية)</li>
+            <li>تجربة ٢: أضئ LED على Breadboard باستخدام مقاومة</li>
+            <li>تجربة ٣: توصيل LED-ين معاً (دائرة متسلسلة)</li>
+            <li>نقاش: لماذا نحتاج مقاومة قبل LED؟ ماذا يحدث بدونها؟</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>ابحث: ما هو قانون أوم وكيف يُساعد في اختيار المقاومة الصحيحة؟</li>
+            <li>ارسم: دائرة توصيل LED مع مصدر ٥ فولت — ما قيمة المقاومة الصحيحة؟</li>
+            <li>اكتب: الفرق بين الإلكترونيات الرقمية والتناظرية بمثال من الواقع</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>هذه الجلسة يقودها المدرب المشارك (Mechatronics) — Zeyad داعم ومُيسّر</li>
+              <li>اجعل الطلاب يلمسون المكونات ويبنون الدوائر بأيديهم</li>
+              <li>اللحظة التي يُضيء فيها LED في يد الطالب لأول مرة — لا تفوّتها</li>
+              <li>ابدأ بالبطارية والـ LED بدون Breadboard لتبسيط المفهوم</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session 9 -->
+  <div class="session-card" id="s9">
+    <div class="session-header" onclick="toggleSession('s9')">
+      <div class="session-week">W9</div>
+      <div class="session-meta">
+        <div class="session-title">Arduino — قلب المشروع 🤖</div>
+        <div class="session-tags">
+          <span class="tag hard">Arduino</span>
+          <span class="tag both">برمجة + هاردوير</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ١٥د</span>
+          <span class="timing-block t2">💡 شرح Arduino ٥٠د</span>
+          <span class="timing-block t3">🛠 تطبيق ١١٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٦٥د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>التعرف على لوحة Arduino Uno ومكوناتها الأساسية</li>
+            <li>فهم دورة البرنامج: setup() و loop()</li>
+            <li>تحكّم في LED عبر Arduino (الوميض — Blink)</li>
+            <li>قراءة مدخل رقمي: زر يتحكم في LED</li>
+            <li>فهم كيف يستخدم رصد (Rasd) Arduino لقراءة الحساسات</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>جولة في لوحة Arduino: Pins، Power، USB، Reset</li>
+            <li>مثال Blink: LED يومض كل ثانية — تعديل التوقيت</li>
+            <li>تطبيق الزر: اضغط الزر → يضيء LED، اتركه → يطفئ</li>
+            <li>تعديل: اجعل الـ LED يومض ٣ مرات عند الضغط</li>
+            <li>عرض: كيف يُرسل Arduino بيانات عبر Serial Monitor إلى Python</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>إذا توفّر Arduino: جرّب تعديل كود Blink — سرّع أو بطّئ الوميض</li>
+            <li>إذا لم يتوفّر: استخدم Tinkercad (محاكاة مجانية) وجرّب نفس الكود</li>
+            <li>اقرأ: arduino_sketch.ino من كود رصد (Rasd) — ما الذي يفعله؟</li>
+            <li>ارسم: مخطط توصيل DHT22 بـ Arduino (من ورقة البيانات)</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>جلسة مشتركة: المدرب المشارك يشرح التوصيل، Zeyad يشرح الكود</li>
+              <li>Tinkercad.com يُتيح المحاكاة مجاناً — بديل ممتاز إذا كانت الأجهزة غير كافية</li>
+              <li>اربط بـ رصد (Rasd): "هذا بالضبط ما يفعله Arduino في مشروعنا"</li>
+              <li>الطلاب الذين يُحبون هذه الجلسة هم المرشحون لمسار الإلكترونيات والميكاترونيكس</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session 10 -->
+  <div class="session-card" id="s10">
+    <div class="session-header" onclick="toggleSession('s10')">
+      <div class="session-week">W10</div>
+      <div class="session-meta">
+        <div class="session-title">الحساسات وإنترنت الأشياء 🌡</div>
+        <div class="session-tags">
+          <span class="tag hard">حساسات</span>
+          <span class="tag soft">IoT</span>
+          <span class="tag build">رصد (Rasd)</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ١٥د</span>
+          <span class="timing-block t2">💡 الحساسات وIoT ٥٠د</span>
+          <span class="timing-block t3">🛠 توصيل DHT22 ١١٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٦٥د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>فهم ما هي الحساسات وأنواعها (رقمي، تناظري)</li>
+            <li>توصيل حساس DHT22 بـ Arduino وقراءة البيانات</li>
+            <li>تجربة حساس الاهتزاز (Vibration Sensor)</li>
+            <li>فهم كيف تُرسَل البيانات من Arduino إلى Python</li>
+            <li>تجربة رصد (Rasd) بأجهزة حقيقية للمرة الأولى</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>توصيل DHT22 بـ Arduino وعرض قراءات الحرارة والرطوبة على Serial Monitor</li>
+            <li>توصيل حساس الاهتزاز وتشغيل LED عند الاكتشاف</li>
+            <li>تشغيل رصد (Rasd) كاملاً بالأجهزة الحقيقية</li>
+            <li>مقارنة: بيانات حقيقية vs demo mode — ما الفرق؟</li>
+            <li>نقاش: ما الحساسات الأخرى التي يمكن إضافتها للمشروع؟</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>ابحث: أمثلة على منتجات IoT في السوق (Nest, Ring, Smart Bulbs) — كيف تعمل؟</li>
+            <li>اكتب: ما الحساس الذي تودّ إضافته لـ رصد (Rasd) ولماذا؟</li>
+            <li>تحضير للمرحلة القادمة: اقرأ README.md من كود رصد (Rasd)</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>هذه الجلسة "الوصل" بين الهاردوير والسوفتوير — لحظة إدراك مهمة</li>
+              <li>استخدم demo mode إذا لم تعمل الأجهزة — لا تترك الطلاب بدون تجربة</li>
+              <li>في نهاية هذه الجلسة، يجب أن يرى الطلاب رصد (Rasd) يعمل كاملاً</li>
+              <li>لاحظ اهتمامات الطلاب: من ينجذب للكود؟ ومن ينجذب للتوصيلات؟</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PHASE 5 ===== -->
+<div class="phase-section phase-5" id="phase-5">
+  <div class="phase-header">
+    <div class="phase-number">٥</div>
+    <div class="phase-info">
+      <div class="phase-label">المرحلة الخامسة</div>
+      <div class="phase-name">بناء رصد (Rasd)</div>
+      <div class="phase-weeks">الجلسات ١١–١٤ · أربعة أسابيع</div>
+    </div>
+  </div>
+
+  <!-- Session 11 -->
+  <div class="session-card" id="s11">
+    <div class="session-header" onclick="toggleSession('s11')">
+      <div class="session-week">W11</div>
+      <div class="session-meta">
+        <div class="session-title">تصميم النظام والمعمارية 🗺</div>
+        <div class="session-tags">
+          <span class="tag build">هندسة</span>
+          <span class="tag soft">system design</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ٢٠د</span>
+          <span class="timing-block t2">💡 معمارية النظام ٧٠د</span>
+          <span class="timing-block t3">🛠 رسم المخططات ٩٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٦٠د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>فهم معمارية رصد (Rasd) من الألف إلى الياء</li>
+            <li>تعلّم مفاهيم: Frontend، Backend، Database، API</li>
+            <li>رؤية كيف تتكامل جميع الأجزاء معاً</li>
+            <li>قراءة هيكل الملفات وفهم دور كل ملف</li>
+            <li>رسم مخطط النظام بأسلوب المهندسين</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>شرح معمارية رصد (Rasd) بمخطط على السبورة</li>
+            <li>كل طالب يرسم مخطط النظام بنفسه في الدفتر</li>
+            <li>جولة في هيكل الملفات: لماذا هذا التقسيم؟</li>
+            <li>نشاط: ارسم رحلة البيانات من الحساس إلى الشاشة — خطوة بخطوة</li>
+            <li>نقاش: ما الذي يحدث إذا توقف الـ Backend؟ وإذا قُطع الإنترنت؟</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>اقرأ: app.py (Flask backend) — ما الـ routes الموجودة وماذا تفعل؟</li>
+            <li>اكتب في الدفتر: شرح بكلامك لكيفية عمل API بمثال من الحياة اليومية</li>
+            <li>بحث: ما هو HTTP وما الفرق بين GET و POST؟</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>هذه الجلسة "تكبير الصورة" — الطلاب يرون المشروع كاملاً لأول مرة كمهندسين</li>
+              <li>استخدم تشبيهات: الـ API كالنادل في المطعم، الـ Database كالخزانة</li>
+              <li>لا تغرق في التفاصيل التقنية — الهدف هو الفهم الكلي وليس التفاصيل</li>
+              <li>الطلاب الذين يُحبون هذه الجلسة هم المرشحون لمسار هندسة البرمجيات</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session 12 -->
+  <div class="session-card" id="s12">
+    <div class="session-header" onclick="toggleSession('s12')">
+      <div class="session-week">W12</div>
+      <div class="session-meta">
+        <div class="session-title">Backend — Python & Flask 🖥</div>
+        <div class="session-tags">
+          <span class="tag soft">Flask</span>
+          <span class="tag soft">API</span>
+          <span class="tag build">رصد (Rasd)</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ٢٠د</span>
+          <span class="timing-block t2">💡 Flask وAPI ٦٠د</span>
+          <span class="timing-block t3">🛠 تشغيل واختبار Backend ١٠٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٦٠د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>فهم ما هو Flask وكيف يُنشئ API بسيط</li>
+            <li>تشغيل الـ Backend محلياً وفهم رسائل السيرفر</li>
+            <li>اختبار endpoints بالمتصفح: /api/readings, /api/alerts</li>
+            <li>قراءة وتعديل route بسيط في app.py</li>
+            <li>فهم كيف يتلقى الـ Backend بيانات من Arduino</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>تشغيل رصد (Rasd) Backend: python app.py</li>
+            <li>افتح المتصفح على localhost:5000 — ماذا ترى؟</li>
+            <li>اختبر: /api/readings في المتصفح — افهم الـ JSON الراجع</li>
+            <li>تعديل: أضف endpoint جديداً /api/hello يُرجع {"msg": "مرحبا"}</li>
+            <li>نقاش: لماذا JSON؟ كيف يقرأها الـ Frontend؟</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>اقرأ: database.py وافهم كيف يُخزَّن كل قراءة في SQLite</li>
+            <li>تجربة: عدّل حد التنبيه (alert threshold) في config.py وشاهد ما يتغير</li>
+            <li>اكتب: ماذا يُرجع /api/status وما معنى كل حقل في الـ JSON؟</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>استخدم demo mode دائماً في بيئة الفصل لضمان وجود بيانات</li>
+              <li>رؤية JSON في المتصفح لأول مرة مُثيرة للطلاب — استثمر هذه اللحظة</li>
+              <li>إضافة endpoint جديد تُعطي الطلاب شعور القدرة على التعديل</li>
+              <li>تجنب الغوص في تفاصيل Flask المتقدمة — ركّز على فهم التدفق</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session 13 -->
+  <div class="session-card" id="s13">
+    <div class="session-header" onclick="toggleSession('s13')">
+      <div class="session-week">W13</div>
+      <div class="session-meta">
+        <div class="session-title">قاعدة البيانات — SQLite 🗄</div>
+        <div class="session-tags">
+          <span class="tag soft">Database</span>
+          <span class="tag soft">SQLite</span>
+          <span class="tag build">رصد (Rasd)</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ٢٠د</span>
+          <span class="timing-block t2">💡 قواعد البيانات ٦٠د</span>
+          <span class="timing-block t3">🛠 استعراض SQLite ١٠٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٦٠د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>فهم ما هي قاعدة البيانات ولماذا نحتاجها</li>
+            <li>التعرف على SQLite وكيف تُستخدم في رصد (Rasd)</li>
+            <li>قراءة أوامر SQL الأساسية: SELECT, INSERT, WHERE</li>
+            <li>استعراض البيانات المُخزَّنة في رصد (Rasd) مباشرة</li>
+            <li>فهم جدول الـ readings وجدول الـ alerts</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>افتح room_guardian.db باستخدام DB Browser for SQLite</li>
+            <li>استعرض الجداول: ما الحقول؟ ما أنواع البيانات؟</li>
+            <li>نفّذ: SELECT * FROM readings LIMIT 10</li>
+            <li>نفّذ: SELECT * FROM readings WHERE temperature > 25</li>
+            <li>نقاش: لماذا نُخزّن التاريخ (timestamp)؟ ما الفائدة؟</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>اكتب استعلاماً SQL يُظهر آخر ٢٠ قراءة فقط</li>
+            <li>اكتب استعلاماً يُحسب متوسط درجة الحرارة (AVG)</li>
+            <li>اكتب في الدفتر: لماذا لا نُخزّن كل شيء في ملف .txt بدل قاعدة بيانات؟</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>DB Browser for SQLite مجاني وبسيط — ثبّته مسبقاً على الأجهزة</li>
+              <li>رؤية بياناتهم الحقيقية في جدول هو أكثر تجربة مُلموسة يمكن تقديمها</li>
+              <li>SQL يبدو مُخيفاً لكنه بسيط — أسلوب الحياة اليومية يُبسّطه كثيراً</li>
+              <li>في نهاية هذه الجلسة، يجب أن يفهم كل طالب أين تذهب البيانات</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session 14 -->
+  <div class="session-card" id="s14">
+    <div class="session-header" onclick="toggleSession('s14')">
+      <div class="session-week">W14</div>
+      <div class="session-meta">
+        <div class="session-title">Frontend — لوحة التحكم 📊</div>
+        <div class="session-tags">
+          <span class="tag soft">HTML/CSS/JS</span>
+          <span class="tag build">Dashboard</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ٢٠د</span>
+          <span class="timing-block t2">💡 Frontend وHTML ٥٠د</span>
+          <span class="timing-block t3">🛠 تخصيص Dashboard ١١٠د</span>
+          <span class="timing-block t4">📝 تلخيص ٦٠د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>فهم أدوار HTML وCSS وJavaScript في الـ Dashboard</li>
+            <li>قراءة كود الـ Frontend وفهم كيف يجلب البيانات من الـ API</li>
+            <li>تعديل الـ Dashboard: تغيير الألوان، النصوص، حدود التنبيه</li>
+            <li>فهم مفهوم Fetch API وكيف يتصل الـ Frontend بالـ Backend</li>
+            <li>إضافة عنصر بسيط للـ Dashboard (رسالة ترحيب مخصصة)</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>افتح dashboard.html باستخدام VS Code Live Server</li>
+            <li>غيّر لون الخلفية واسم الغرفة في الـ CSS و HTML</li>
+            <li>اعثر على fetch() في الـ JavaScript — ماذا يفعل؟</li>
+            <li>أضف رسالة ترحيب مخصصة تظهر في أعلى الـ Dashboard</li>
+            <li>مسابقة: من يُضيف أجمل تعديل للـ Dashboard في ١٥ دقيقة؟</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>أضف قسماً جديداً في الـ Dashboard يعرض معلوماتك (اسمك، اسم الغرفة)</li>
+            <li>غيّر ألوان التنبيه وخصّص الرسائل بالعربية</li>
+            <li>تحضير لجلسة ngrok: حمّل ngrok وسجّل حساباً مجانياً</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>VS Code Live Server plugin يجعل التغييرات تظهر فوراً — مُحفّز جداً</li>
+              <li>الطلاب الذين يُحبون تغيير الألوان والتصميم هم مرشحون لمسار الـ Frontend</li>
+              <li>اشرح fetch() بتشبيه: "كالنادل الذي يذهب للمطبخ ويعود بالطلب"</li>
+              <li>هذه آخر جلسة قبل التكامل — تأكد أن الجميع يفهم أجزاء المشروع</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== PHASE 6 ===== -->
+<div class="phase-section phase-6" id="phase-6">
+  <div class="phase-header">
+    <div class="phase-number">٦</div>
+    <div class="phase-info">
+      <div class="phase-label">المرحلة السادسة</div>
+      <div class="phase-name">التكامل والعرض النهائي</div>
+      <div class="phase-weeks">الجلسات ١٥–١٦ · أسبوعان</div>
+    </div>
+  </div>
+
+  <!-- Session 15 -->
+  <div class="session-card" id="s15">
+    <div class="session-header" onclick="toggleSession('s15')">
+      <div class="session-week">W15</div>
+      <div class="session-meta">
+        <div class="session-title">التكامل والاختبار الكامل 🔗</div>
+        <div class="session-tags">
+          <span class="tag build">تكامل</span>
+          <span class="tag soft">ngrok</span>
+          <span class="tag both">testing</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🔄 مراجعة ١٥د</span>
+          <span class="timing-block t2">💡 ngrok والمشاركة ٤٠د</span>
+          <span class="timing-block t3">🛠 تكامل واختبار ١٣٠د</span>
+          <span class="timing-block t4">🎯 تحضير للعرض ٥٥د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>تشغيل رصد (Rasd) كاملاً من A إلى Z بدون توقف</li>
+            <li>استخدام ngrok لمشاركة الـ Dashboard عبر الإنترنت</li>
+            <li>تخصيص رصد (Rasd): كل طالب يُضيف لمسته الشخصية</li>
+            <li>اختبار جميع المميزات وإصلاح أي مشاكل</li>
+            <li>تحضير ما سيُقدَّم في العرض النهائي</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>تشغيل كامل: Arduino → Python → Flask → SQLite → Dashboard</li>
+            <li>تشغيل ngrok ومشاركة الرابط مع بقية الطلاب</li>
+            <li>اختبر الرابط من الهاتف — هل يعمل؟</li>
+            <li>وقت التخصيص: كل طالب يختار شيئاً يُعدّله (threshold، رسالة، لون)</li>
+            <li>تحضير: ما الذي ستقوله في عرضك النهائي؟ (٣–٥ دقائق)</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> الواجب المنزلي</div>
+          <ul>
+            <li>شارك رابط رصد (Rasd) مع أحد أفراد أسرتك واحصل على رأيه</li>
+            <li>حضّر: ٣ نقاط ستقولها في عرضك — ما الذي تعلمته؟ ما الذي فعلته؟</li>
+            <li>حضّر: سؤال واحد تودّ طرحه على الفريق أو جواباً تودّ مشاركته</li>
+            <li>فكّر: ماذا تريد أن تتعلم بعد؟ برمجة؟ إلكترونيات؟ تصميم؟</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>ngrok مُذهل للطلاب — لحظة "مشاركة رابطي مع العالم" لا تُنسى</li>
+              <li>اترك وقتاً كافياً للتخصيص — هذا ما يجعل المشروع "ملكهم"</li>
+              <li>التحضير للعرض مهم: ساعد كل طالب يصياغة ما سيقوله</li>
+              <li>تأكد أن كل طالب لديه شيء يُعرضه ويفخر به في الجلسة الأخيرة</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session 16 -->
+  <div class="session-card" id="s16">
+    <div class="session-header" onclick="toggleSession('s16')">
+      <div class="session-week">W16</div>
+      <div class="session-meta">
+        <div class="session-title">العرض النهائي والاحتفال 🎓</div>
+        <div class="session-tags">
+          <span class="tag show">عرض</span>
+          <span class="tag show">احتفال</span>
+          <span class="tag show">مستقبل</span>
+        </div>
+      </div>
+      <div class="session-chevron">▾</div>
+    </div>
+    <div class="session-body">
+      <div class="session-body-inner">
+        <div class="session-timing">
+          <span class="timing-block t1">🎤 عروض الطلاب ١٢٠د</span>
+          <span class="timing-block t2">💬 نقاش المستقبل ٦٠د</span>
+          <span class="timing-block t3">🎉 احتفال ٥٠د</span>
+          <span class="timing-block t4">🎓 ختام ١٠د</span>
+        </div>
+        <div class="session-panel panel-objectives">
+          <div class="panel-header"><span class="panel-icon">🎯</span> أهداف الجلسة</div>
+          <ul>
+            <li>عرض رصد (Rasd) المُخصَّص أمام المجموعة بثقة</li>
+            <li>التأمل في رحلة التعلم: ما الذي تغيّر منذ الجلسة الأولى؟</li>
+            <li>تحديد المجال الذي أثار فضول كل طالب أكثر (برمجة / إلكترونيات / تصميم)</li>
+            <li>اقتراح خطوات ملموسة للمتابعة في كل مسار</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-activities">
+          <div class="panel-header"><span class="panel-icon">🛠</span> أنشطة الفصل</div>
+          <ul>
+            <li>عروض الطلاب: كل طالب يُشغّل رصد (Rasd) ويشرح ما عدّله (٣–٥ دقائق)</li>
+            <li>جلسة الأسئلة: الزملاء يسألون بعضهم كالمهندسين الحقيقيين</li>
+            <li>نشاط التأمل: اكتب في الدفتر — "قبل الكورس كنت أظن... الآن أعرف أن..."</li>
+            <li>نقاش: ماذا تريد أن تُبني بعد؟ (كل طالب يشارك حلمه التقني)</li>
+            <li>توزيع خريطة المسارات: ماذا تدرس/تتعلم بعد؟</li>
+          </ul>
+        </div>
+        <div class="session-panel panel-home">
+          <div class="panel-header"><span class="panel-icon">🏠</span> ما بعد الكورس</div>
+          <ul>
+            <li>مسار البرمجة: CS50 (edX/Harvard)، Python على freeCodeCamp، مشاريع Trinket</li>
+            <li>مسار الإلكترونيات: كورسات Arduino على YouTube، كتاب "Make: Electronics"</li>
+            <li>مسار التصميم/الـ Frontend: HTML/CSS على freeCodeCamp، Figma للمبتدئين</li>
+            <li>للجميع: GitHub لحفظ مشاريعك، YouTube للتعلم، المجتمعات التقنية المحلية</li>
+          </ul>
+        </div>
+        <div class="trainer-note">
+          <div class="session-panel panel-trainer">
+            <div class="panel-header"><span class="panel-icon">👨‍🏫</span> ملاحظات المدرب</div>
+            <ul>
+              <li>هذه أهم جلسة عاطفياً — استثمر كل لحظة فيها</li>
+              <li>احرص أن كل طالب يغادر بثلاثة أشياء: فخر، وضوح، وخطوة تالية</li>
+              <li>نشاط "قبل وبعد" في الدفتر مُؤثّر جداً — يُظهر للطلاب تطورهم الحقيقي</li>
+              <li>لا تُقيّم — احتفل فقط. هذه الجلسة هدفها الإلهام وليس التقييم</li>
+              <li>خذ صوراً للمجموعة مع عروض رصد (Rasd) — ذكرى تستحق</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- end content -->
+
+<div class="footer">
+  رصد (Rasd) Course · Rakaez Foundation · Istanbul · 16 Sessions · 64 Hours Total
+</div>
+
+<script>
+function toggleSession(id) {
+  const card = document.getElementById(id);
+  const body = card.querySelector('.session-body');
+  const isOpen = card.classList.contains('open');
+  card.classList.toggle('open', !isOpen);
+  if (!isOpen) {
+    body.style.maxHeight = body.scrollHeight + 'px';
+  } else {
+    body.style.maxHeight = '0';
+  }
+}
+
+function scrollToPhase(num, btn) {
+  document.querySelectorAll('.phase-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const el = document.getElementById('phase-' + num);
+  if (el) {
+    const offset = document.getElementById('phases-nav').offsetHeight;
+    const top = el.getBoundingClientRect().top + window.scrollY - offset - 20;
+    window.scrollTo({ top, behavior: 'smooth' });
+  }
+}
+
+// Update active tab on scroll
+const sections = document.querySelectorAll('.phase-section');
+const tabs = document.querySelectorAll('.phase-tab');
+const navH = document.getElementById('phases-nav').offsetHeight;
+
+window.addEventListener('scroll', () => {
+  let current = 0;
+  sections.forEach((s, i) => {
+    if (s.getBoundingClientRect().top <= navH + 40) current = i;
+  });
+  tabs.forEach((t, i) => t.classList.toggle('active', i === current));
+});
+
+// Open first session on load as a hint
+window.addEventListener('load', () => {
+  const first = document.getElementById('s1');
+  const body = first.querySelector('.session-body');
+  first.classList.add('open');
+  body.style.maxHeight = body.scrollHeight + 'px';
+});
+</script>
+</body>
+</html>

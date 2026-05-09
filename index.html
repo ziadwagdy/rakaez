@@ -197,6 +197,25 @@
     color: var(--phase-color);
   }
   .card:hover .open-icon { opacity: 1; }
+
+  /* Runbook card */
+  .card-runbook {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    background: rgba(255,179,71,0.05);
+    border: 1px dashed rgba(255,179,71,0.35);
+    border-radius: 14px;
+    padding: 1rem 1.1rem;
+    text-decoration: none;
+    color: #ffb347;
+    font-size: .88rem;
+    font-weight: 700;
+    transition: background .2s, border-color .2s;
+  }
+  .card-runbook:hover { background: rgba(255,179,71,0.1); border-color: #ffb347; }
+  .card-runbook .rb-icon { font-size: 1.3rem; flex-shrink: 0; }
+  .card-runbook .rb-sub { font-size: .72rem; font-weight: 400; color: #888; margin-top: .15rem; }
 </style>
 </head>
 <body>
@@ -233,64 +252,71 @@
       <span class="open-icon">↗</span>
       <div class="card-week">الأسبوع ٢</div>
       <div class="card-num">02</div>
-      <div class="card-title">كيف يفكر الحاسوب؟ 🧠</div>
-      <div class="card-tags"><span class="tag">خوارزميات</span><span class="tag">مخططات انسيابية</span></div>
+      <div class="card-title">جلسة الانطلاق — عبر الإنترنت 🌐</div>
+      <div class="card-tags"><span class="tag">أونلاين</span><span class="tag">واجب الإجازة</span></div>
+    </a>
+    <a class="card-runbook" href="session-2-runbook.html">
+      <span class="rb-icon">📋</span>
+      <div>
+        دليل المدرب — الجلسة ٢
+        <div class="rb-sub">خطوة بخطوة · ديموهات · روابط سريعة</div>
+      </div>
     </a>
   </div>
 </div>
 
 <!-- Phase 2 -->
 <div class="phase" style="--phase-color: var(--p2)">
-  <div class="phase-label">المرحلة ٢ — البرمجة المرئية بـ Scratch</div>
+  <div class="phase-label">المرحلة ٢ — الجسر: Scratch ← Python</div>
   <div class="grid">
     <a class="card" href="sessions/s03-scratch-intro.html" style="--phase-color: var(--p2)">
       <span class="open-icon">↗</span>
       <div class="card-week">الأسبوع ٣</div>
       <div class="card-num">03</div>
-      <div class="card-title">مقدمة في Scratch 🐱</div>
-      <div class="card-tags"><span class="tag">Scratch</span><span class="tag">الأحداث والحركة</span></div>
-    </a>
-    <a class="card" href="sessions/s04-scratch-game.html" style="--phase-color: var(--p2)">
-      <span class="open-icon">↗</span>
-      <div class="card-week">الأسبوع ٤</div>
-      <div class="card-num">04</div>
-      <div class="card-title">نبني لعبة بـ Scratch 🎮</div>
-      <div class="card-tags"><span class="tag">شروط</span><span class="tag">حلقات</span><span class="tag">لعبة</span></div>
+      <div class="card-title">الجسر — Scratch إلى Python 🌉</div>
+      <div class="card-tags"><span class="tag">مقارنة</span><span class="tag">أول كود Python</span></div>
     </a>
   </div>
 </div>
 
 <!-- Phase 3 -->
 <div class="phase" style="--phase-color: var(--p3)">
-  <div class="phase-label">المرحلة ٣ — Python للمبتدئين</div>
+  <div class="phase-label">المرحلة ٣ — Python للـ IoT</div>
   <div class="grid">
+    <a class="card" href="sessions/s04-scratch-game.html" style="--phase-color: var(--p3)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ٤</div>
+      <div class="card-num">04</div>
+      <div class="card-title">Python ١ — المتغيرات والإدخال 🐍</div>
+      <div class="card-tags"><span class="tag">Trinket</span><span class="tag">variables</span><span class="tag">input()</span></div>
+    </a>
     <a class="card" href="sessions/s05-python-intro.html" style="--phase-color: var(--p3)">
       <span class="open-icon">↗</span>
       <div class="card-week">الأسبوع ٥</div>
       <div class="card-num">05</div>
-      <div class="card-title">مقدمة في Python 🐍</div>
-      <div class="card-tags"><span class="tag">Trinket</span><span class="tag">المتغيرات</span><span class="tag">الإدخال</span></div>
+      <div class="card-title">Python ٢ — المنطق والشروط 🔀</div>
+      <div class="card-tags"><span class="tag">if/else</span><span class="tag">تنبيهات الحساسات</span></div>
     </a>
     <a class="card" href="sessions/s06-python-logic.html" style="--phase-color: var(--p3)">
       <span class="open-icon">↗</span>
       <div class="card-week">الأسبوع ٦</div>
       <div class="card-num">06</div>
-      <div class="card-title">المنطق والحلقات 🔁</div>
-      <div class="card-tags"><span class="tag">if/else</span><span class="tag">for/while</span></div>
+      <div class="card-title">Python ٣ — الحلقات والدوال 🔁</div>
+      <div class="card-tags"><span class="tag">for/while</span><span class="tag">def</span><span class="tag">return</span></div>
     </a>
     <a class="card" href="sessions/s07-python-functions.html" style="--phase-color: var(--p3)">
       <span class="open-icon">↗</span>
       <div class="card-week">الأسبوع ٧</div>
       <div class="card-num">07</div>
-      <div class="card-title">الدوال والوحدات 🔧</div>
-      <div class="card-tags"><span class="tag">def</span><span class="tag">parameters</span><span class="tag">return</span></div>
+      <div class="card-title">Python ٤ — القوائم والـ JSON 📦</div>
+      <div class="card-tags"><span class="tag">lists</span><span class="tag">dicts</span><span class="tag">JSON للـ IoT</span></div>
     </a>
   </div>
 </div>
 
 <!-- Phase 4 -->
 <div class="phase" style="--phase-color: var(--p4)">
-  <div class="phase-label">المرحلة ٤ — إلكترونيات وأردوينو</div>
+  <div class="phase-label">المرحلة ٤ — الإلكترونيات والـ Pico W</div>
   <div class="grid">
     <a class="card" href="sessions/s08-electronics.html" style="--phase-color: var(--p4)">
       <span class="open-icon">↗</span>
@@ -303,15 +329,15 @@
       <span class="open-icon">↗</span>
       <div class="card-week">الأسبوع ٩</div>
       <div class="card-num">09</div>
-      <div class="card-title">مقدمة في Arduino 🤖</div>
-      <div class="card-tags"><span class="tag">setup/loop</span><span class="tag">Blink</span><span class="tag">Serial</span></div>
+      <div class="card-title">Raspberry Pi Pico W 🤖</div>
+      <div class="card-tags"><span class="tag">MicroPython</span><span class="tag">Thonny</span><span class="tag">WiFi</span></div>
     </a>
     <a class="card" href="sessions/s10-sensors-iot.html" style="--phase-color: var(--p4)">
       <span class="open-icon">↗</span>
       <div class="card-week">الأسبوع ١٠</div>
       <div class="card-num">10</div>
       <div class="card-title">الحساسات وإنترنت الأشياء 🌡</div>
-      <div class="card-tags"><span class="tag">DHT22</span><span class="tag">IoT</span><span class="tag">بيانات</span></div>
+      <div class="card-tags"><span class="tag">DHT11</span><span class="tag">IoT</span><span class="tag">HTTP POST</span></div>
     </a>
   </div>
 </div>
@@ -348,20 +374,20 @@
       <div class="card-title">Frontend — لوحة التحكم 📊</div>
       <div class="card-tags"><span class="tag">HTML/CSS</span><span class="tag">fetch()</span><span class="tag">charts</span></div>
     </a>
+    <a class="card" href="sessions/s15-integration.html" style="--phase-color: var(--p5)">
+      <span class="open-icon">↗</span>
+      <div class="card-week">الأسبوع ١٥</div>
+      <div class="card-num">15</div>
+      <div class="card-title">اختبار وتكامل رصد 🔧</div>
+      <div class="card-tags"><span class="tag">debugging</span><span class="tag">تكامل كامل</span></div>
+    </a>
   </div>
 </div>
 
 <!-- Phase 6 -->
 <div class="phase" style="--phase-color: var(--p6)">
-  <div class="phase-label">المرحلة ٦ — التكامل والعرض النهائي</div>
+  <div class="phase-label">المرحلة ٦ — العرض النهائي</div>
   <div class="grid">
-    <a class="card" href="sessions/s15-integration.html" style="--phase-color: var(--p6)">
-      <span class="open-icon">↗</span>
-      <div class="card-week">الأسبوع ١٥</div>
-      <div class="card-num">15</div>
-      <div class="card-title">التكامل والاختبار الكامل 🔗</div>
-      <div class="card-tags"><span class="tag">ngrok</span><span class="tag">debugging</span><span class="tag">checklist</span></div>
-    </a>
     <a class="card" href="sessions/s16-showcase.html" style="--phase-color: var(--p6)">
       <span class="open-icon">↗</span>
       <div class="card-week">الأسبوع ١٦</div>

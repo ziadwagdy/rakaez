@@ -40,6 +40,24 @@
       "url": "https://www.youtube.com/watch?v=NU_IdBZq1qc&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&index=4"
     }
   ],
+  "python": [
+    {
+      "id": "py1",
+      "title": "Python #007 — المتغيرات (Elzero Web School)",
+      "description": "شرح المتغيرات وأنواع البيانات — للتمرين الأول على Trinket",
+      "url": "https://www.youtube.com/watch?v=hQnZxqp3Q0Y",
+      "platform": "YouTube",
+      "covers": "تمرين ١ — متغيرات وطباعة"
+    },
+    {
+      "id": "py2",
+      "title": "Mastering Python بالعربي — الكورس الكامل (Elzero Web School)",
+      "description": "حلقات #010–#020 للشروط وinput() · حلقات #040+ لحلقة for — شاهد الحلقة المناسبة قبل كل تمرين",
+      "url": "https://www.youtube.com/playlist?list=PLDoPjvoNmBAyE_gei5d18qkfIe-Z8mocs",
+      "platform": "YouTube",
+      "covers": "تمارين ٢ و٣ و٤ — if/else و input() و for loop"
+    }
+  ],
   "scratch": [
     {
       "id": "scratch1",

@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دليل المدرب — الجلسة ٢</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#080c14;--bg2:#0e1520;--bg3:#141d2e;
+  --accent:#00e5c0;--blue:#5b7fff;--red:#ff6b6b;--amber:#ffb347;--purple:#c084fc;
+  --text:#e8f0fe;--muted:#6b7fa3;
+  --say:#1a2e1e;--say-b:rgba(0,229,192,0.3);
+  --do:#1a1a2e;--do-b:rgba(91,127,255,0.35);
+  --show:#2a1f0e;--show-b:rgba(255,179,71,0.35);
+  --warn:#2a0e0e;--warn-b:rgba(255,107,107,0.35);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);line-height:1.7;padding-bottom:80px;}
+body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.025) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
+
+/* STICKY HEADER */
+.sticky-bar{position:sticky;top:0;z-index:100;background:rgba(8,12,20,0.96);backdrop-filter:blur(12px);border-bottom:1px solid rgba(0,229,192,0.15);padding:12px 32px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;}
+.sticky-title{font-size:14px;font-weight:700;color:var(--accent);font-family:'Space Mono',monospace;letter-spacing:2px;}
+.timer-row{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.time-chip{background:var(--bg3);border:1px solid rgba(255,179,71,0.25);color:var(--amber);font-family:'Space Mono',monospace;font-size:11px;padding:4px 10px;border-radius:20px;cursor:pointer;transition:all .2s;text-decoration:none;}
+.time-chip:hover{background:rgba(255,179,71,0.1);border-color:var(--amber);}
+#live-clock{font-family:'Space Mono',monospace;font-size:13px;color:var(--muted);letter-spacing:1px;}
+
+/* MAIN LAYOUT */
+.page{position:relative;z-index:1;max-width:900px;margin:0 auto;padding:40px 24px 0;}
+
+/* SECTION HEADER */
+.sec-header{display:flex;align-items:center;gap:16px;margin:40px 0 20px;}
+.sec-time{font-family:'Space Mono',monospace;font-size:12px;background:var(--bg3);border:1px solid rgba(255,179,71,0.3);color:var(--amber);padding:5px 14px;border-radius:20px;white-space:nowrap;flex-shrink:0;}
+.sec-title{font-size:22px;font-weight:900;}
+.sec-sub{font-size:13px;color:var(--muted);margin-top:4px;}
+.divider{height:1px;background:linear-gradient(90deg,rgba(0,229,192,0.2),transparent);margin:8px 0 0;}
+
+/* BLOCKS */
+.block{border-radius:14px;padding:18px 22px;margin-bottom:12px;position:relative;}
+.block-label{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;font-family:'Space Mono',monospace;margin-bottom:8px;display:flex;align-items:center;gap:6px;}
+.block.say{background:var(--say);border:1px solid var(--say-b);}
+.block.say .block-label{color:var(--accent);}
+.block.do{background:var(--do);border:1px solid var(--do-b);}
+.block.do .block-label{color:var(--blue);}
+.block.show{background:var(--show);border:1px solid var(--show-b);}
+.block.show .block-label{color:var(--amber);}
+.block.warn{background:var(--warn);border:1px solid var(--warn-b);}
+.block.warn .block-label{color:var(--red);}
+.block p{font-size:14px;color:var(--text);line-height:1.8;}
+.block p + p{margin-top:6px;}
+.block strong{color:inherit;}
+
+/* CHECKLIST */
+.checklist{list-style:none;display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+.checklist li{display:flex;align-items:flex-start;gap:12px;font-size:14px;cursor:pointer;padding:6px 10px;border-radius:8px;transition:background .15s;}
+.checklist li:hover{background:rgba(255,255,255,0.03);}
+.checklist li input[type=checkbox]{width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:var(--accent);cursor:pointer;}
+.checklist li.done{opacity:0.45;text-decoration:line-through;}
+.check-lbl{line-height:1.5;}
+.check-sub{font-size:12px;color:var(--muted);margin-top:2px;}
+
+/* CODE */
+.code-block{background:#060b12;border:1px solid rgba(0,229,192,0.18);border-radius:10px;padding:16px 20px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.9;direction:ltr;text-align:left;margin:10px 0;overflow-x:auto;}
+.cc{color:var(--muted);}
+.ck{color:var(--blue);}
+.cs{color:var(--amber);}
+.cf{color:var(--accent);}
+
+/* STEPS */
+.steps{display:flex;flex-direction:column;gap:10px;}
+.step{display:flex;gap:14px;align-items:flex-start;}
+.step-num{width:30px;height:30px;border-radius:50%;background:rgba(0,229,192,0.1);border:1px solid rgba(0,229,192,0.25);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+.step-body{flex:1;}
+.step-title{font-size:14px;font-weight:700;margin-bottom:3px;}
+.step-desc{font-size:13px;color:var(--muted);line-height:1.6;}
+
+/* LINK PILL */
+.link-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(91,127,255,0.1);border:1px solid rgba(91,127,255,0.3);color:var(--blue);font-size:13px;font-weight:600;padding:5px 14px;border-radius:20px;text-decoration:none;transition:all .2s;margin:2px 4px 2px 0;}
+.link-pill:hover{background:rgba(91,127,255,0.2);border-color:var(--blue);}
+.link-pill.teal{background:rgba(0,229,192,0.08);border-color:rgba(0,229,192,0.3);color:var(--accent);}
+.link-pill.teal:hover{background:rgba(0,229,192,0.15);}
+
+/* RESOURCE TABLE */
+.res-row{display:flex;gap:12px;align-items:flex-start;background:var(--bg2);border:1px solid rgba(255,179,71,0.15);border-radius:12px;padding:14px 18px;margin-bottom:10px;}
+.res-icon{font-size:22px;flex-shrink:0;}
+.res-title{font-size:14px;font-weight:700;margin-bottom:3px;}
+.res-meta{font-size:12px;color:var(--muted);}
+
+/* MINUTE BADGE in section title */
+.min-badge{display:inline-block;font-size:11px;font-family:'Space Mono',monospace;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);color:var(--accent);padding:3px 10px;border-radius:20px;margin-right:10px;vertical-align:middle;}
+
+/* DELIVERY BOX */
+.deliver-box{background:rgba(192,132,252,0.07);border:1px solid rgba(192,132,252,0.3);border-radius:14px;padding:18px 22px;margin-bottom:12px;}
+.deliver-box h4{font-size:14px;font-weight:700;color:var(--purple);margin-bottom:10px;}
+
+/* PROGRESS DOTS */
+.prog-bar{height:4px;background:linear-gradient(90deg,var(--accent),var(--amber));border-radius:2px;margin-bottom:32px;}
+
+@media(max-width:600px){.sticky-bar{padding:10px 16px;}.page{padding:24px 16px 0;}.sec-title{font-size:18px;}}
+</style>
+</head>
+<body>
+
+<!-- STICKY NAV -->
+<div class="sticky-bar">
+  <div class="sticky-title">📋 دليل المدرب · الجلسة ٢</div>
+  <div class="timer-row">
+    <a class="time-chip" href="#sec0">٠:٠٠</a>
+    <a class="time-chip" href="#sec1">٠:١٠</a>
+    <a class="time-chip" href="#sec2">٠:٢٠</a>
+    <a class="time-chip" href="#sec3">٠:٣٠</a>
+    <a class="time-chip" href="#sec4">٠:٥٠</a>
+    <a class="time-chip" href="#sec5">١:١٥</a>
+    <a class="time-chip" href="#sec6">١:٢٥</a>
+    <div id="live-clock">--:--</div>
+  </div>
+</div>
+
+<div class="page">
+
+<!-- OVERVIEW -->
+<div id="sec0">
+  <div style="text-align:center;padding:32px 0 20px;">
+    <div style="font-size:11px;font-family:'Space Mono',monospace;letter-spacing:3px;color:var(--amber);margin-bottom:10px;">W2 · أونلاين · ١:٣٠ ساعة</div>
+    <div style="font-size:32px;font-weight:900;margin-bottom:8px;">جلسة الانطلاق 🚀</div>
+    <div style="font-size:15px;color:var(--muted);max-width:580px;margin:0 auto;">دليل المدرب — اقرأ منه مباشرة أثناء الجلسة. الهدف: الطلاب يعرفون بالضبط ماذا يفعلون وكيف يسلّمون خلال أسبوعين.</div>
+  </div>
+  <div class="prog-bar"></div>
+
+  <!-- SESSION MAP -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:36px;">
+    <div style="background:var(--bg2);border:1px solid rgba(255,179,71,0.2);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:20px;margin-bottom:4px;">👋</div>
+      <div style="font-size:12px;font-weight:700;color:var(--amber);">٠:٠٠–٠:١٠</div>
+      <div style="font-size:12px;color:var(--muted);">الافتتاح والمراجعة</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid rgba(255,179,71,0.2);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:20px;margin-bottom:4px;">📅</div>
+      <div style="font-size:12px;font-weight:700;color:var(--amber);">٠:١٠–٠:٢٠</div>
+      <div style="font-size:12px;color:var(--muted);">خطة الأسبوعين</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid rgba(255,179,71,0.2);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:20px;margin-bottom:4px;">🎮</div>
+      <div style="font-size:12px;font-weight:700;color:var(--amber);">٠:٢٠–٠:٤٠</div>
+      <div style="font-size:12px;color:var(--muted);">عرض Scratch</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid rgba(255,179,71,0.2);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:20px;margin-bottom:4px;">🐍</div>
+      <div style="font-size:12px;font-weight:700;color:var(--amber);">٠:٤٠–١:١٠</div>
+      <div style="font-size:12px;color:var(--muted);">عرض Trinket</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid rgba(255,179,71,0.2);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:20px;margin-bottom:4px;">📦</div>
+      <div style="font-size:12px;font-weight:700;color:var(--amber);">١:١٠–١:٢٥</div>
+      <div style="font-size:12px;color:var(--muted);">التسليم والروابط</div>
+    </div>
+    <div style="background:var(--bg2);border:1px solid rgba(255,179,71,0.2);border-radius:12px;padding:14px;text-align:center;">
+      <div style="font-size:20px;margin-bottom:4px;">👋</div>
+      <div style="font-size:12px;font-weight:700;color:var(--amber);">١:٢٥–١:٣٠</div>
+      <div style="font-size:12px;color:var(--muted);">الوداع</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 1 ═══ -->
+<div id="sec1">
+  <div class="sec-header">
+    <div class="sec-time">٠:٠٠ — ٠:١٠</div>
+    <div>
+      <div class="sec-title">👋 الافتتاح والمراجعة <span style="font-size:14px;font-weight:400;color:var(--muted);">١٠ دقائق</span></div>
+      <div class="sec-sub">افتح s02 slides وشارك شاشتك — لا تبدأ بدون التأكد أن الجميع يسمع</div>
+    </div>
+  </div>
+  <div class="divider" style="margin-bottom:16px;"></div>
+
+  <div class="block do">
+    <div class="block-label">⚙️ افعل هذا أولاً</div>
+    <ul class="checklist">
+      <li><input type="checkbox"><span class="check-lbl">افتح <a href="sessions/s02-algorithms.html" target="_blank" class="link-pill teal">📊 Slide S02</a> وشارك الشاشة</span></li>
+      <li><input type="checkbox"><span class="check-lbl">افتح <a href="https://classroom.google.com" target="_blank" class="link-pill">📋 Google Classroom</a> في تبويب ثانٍ</span></li>
+      <li><input type="checkbox"><span class="check-lbl">افتح <a href="https://scratch.mit.edu" target="_blank" class="link-pill">🎮 Scratch</a> في تبويب ثالث</span></li>
+      <li><input type="checkbox"><span class="check-lbl">افتح <a href="https://trinket.io/python3" target="_blank" class="link-pill">🐍 Trinket</a> في تبويب رابع</span></li>
+      <li><input type="checkbox"><span class="check-lbl">تأكد أن الميكروفون يعمل وأن الجميع حاضر</span></li>
+    </ul>
+  </div>
+
+  <div class="block say">
+    <div class="block-label">💬 قل هذا</div>
+    <p>«أهلاً بالجميع! كيف حالكم؟ قبل ما نبدأ — في أي مكان الآن كل واحد؟ اكتبوا في الشات 😄»</p>
+    <p style="margin-top:8px;">«اليوم الجلسة قصيرة — ساعة ونص — وهدفنا الرئيسي أنكم تخرجوا من هنا عارفين بالضبط ماذا ستفعلون في الأسبوعين القادمين، وكيف تسلّمون.»</p>
+  </div>
+
+  <div class="block say">
+    <div class="block-label">💬 مراجعة سريعة — اسأل الطلاب</div>
+    <p>«قبل ما نكمل — من يتذكر: ماذا فعلنا في الجلسة الأولى؟ ثلاثة أشياء على الأقل.» <span style="color:var(--muted);font-size:13px;">(انتظر إجابات)</span></p>
+    <p style="margin-top:8px;color:var(--muted);font-size:13px;">المتوقع: رصد (Rasd) · المخططات الانسيابية · خريطة المهن التقنية · اختيار المسارات</p>
+    <p style="margin-top:8px;">«ممتاز! وهل أحد جرّب رصد (Rasd) في البيت؟» <span style="color:var(--muted);font-size:13px;">(إذا أحد جرّب — أرِهم يتحدثون ٣٠ ثانية)</span></p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 2 ═══ -->
+<div id="sec2">
+  <div class="sec-header">
+    <div class="sec-time">٠:١٠ — ٠:٢٠</div>
+    <div>
+      <div class="sec-title">📅 خطة الأسبوعين <span style="font-size:14px;font-weight:400;color:var(--muted);">١٠ دقائق</span></div>
+      <div class="sec-sub">وضح الصورة الكاملة — ماذا يفعلون، ولماذا مهم</div>
+    </div>
+  </div>
+  <div class="divider" style="margin-bottom:16px;"></div>
+
+  <div class="block show">
+    <div class="block-label">🖥️ أرِهم هذا — Slide 3</div>
+    <p>انتقل إلى Slide 3 (الخطة الأسبوعية) في عرض S02</p>
+  </div>
+
+  <div class="block say">
+    <div class="block-label">💬 قل هذا</div>
+    <p>«عندنا أسبوعان — وكل أسبوع له هدف واضح:»</p>
+    <p style="margin-top:8px;"><strong style="color:var(--blue);">الأسبوع الأول:</strong> «نكمل مشروع Scratch — ونبدأ أول ٤ تمارين على Trinket. هذه خطواتكم الأولى في Python الحقيقية.»</p>
+    <p style="margin-top:8px;"><strong style="color:var(--accent);">الأسبوع الثاني:</strong> «تجمعون كل ما تعلمتموه في برنامج واحد اسمه "حارس الغرفة النصي" — وهو في الحقيقة رصد (Rasd) المصغّر!»</p>
+    <p style="margin-top:10px;">«لماذا نبدأ Python الآن وليس بعد الإجازة؟ لأن الجلسة الثالثة ستكون الجسر من Scratch إلى Python — ومن يكون جاهزاً سيفهم مباشرة!»</p>
+  </div>
+
+  <div class="block warn">
+    <div class="block-label">⚠️ مهم</div>
+    <p>«الواجبات مش اختبار — ما فيه درجات. المطلوب أنكم تحاولوا وتتعلموا. حتى لو ما اشتغل الكود معكم — ارفعوا ما عندكم وسنكمل معاً في الجلسة القادمة.»</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 3 ═══ -->
+<div id="sec3">
+  <div class="sec-header">
+    <div class="sec-time">٠:٢٠ — ٠:٤٠</div>
+    <div>
+      <div class="sec-title">🎮 عرض مشروع Scratch <span style="font-size:14px;font-weight:400;color:var(--muted);">٢٠ دقيقة</span></div>
+      <div class="sec-sub">ابنِه أمامهم خطوة بخطوة — لا تعطِهم الحل الجاهز</div>
+    </div>
+  </div>
+  <div class="divider" style="margin-bottom:16px;"></div>
+
+  <div class="block show">
+    <div class="block-label">🖥️ افتح Scratch — Slide 4</div>
+    <p>انتقل إلى Slide 4 في S02، ثم افتح <a href="https://scratch.mit.edu" target="_blank" class="link-pill">scratch.mit.edu</a> وابدأ مشروعاً جديداً</p>
+  </div>
+
+  <div class="block say">
+    <div class="block-label">💬 قل هذا</div>
+    <p>«انتم عارفون Scratch — سأبني المشروع أمامكم وتشوفون الفكرة. بعدين تبنونها بطريقتكم الخاصة وتضيفون عليها.»</p>
+  </div>
+
+  <div class="block do">
+    <div class="block-label">⚙️ ابنِ هذا أمامهم — خطوة بخطوة</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">١</div>
+        <div class="step-body">
+          <div class="step-title">ابدأ بمشروع فارغ — احذف القطة</div>
+          <div class="step-desc">افتح مشروع جديد، احذف الـ sprite الافتراضي، أضف أي شخصية تختارها</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٢</div>
+        <div class="step-body">
+          <div class="step-title">اسأل المستخدم عن درجة الحرارة</div>
+          <div class="step-desc">Sensing → ask "ما درجة الحرارة الآن؟" and wait</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٣</div>
+        <div class="step-body">
+          <div class="step-title">أضف شرط if/else</div>
+          <div class="step-desc">Control → if answer &gt; 35 → say "🔴 حار جداً!" for 2 secs. else → say "✅ الجو طبيعي"</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٤</div>
+        <div class="step-body">
+          <div class="step-title">غيّر لون الخلفية</div>
+          <div class="step-desc">أضف backdrop أحمر للحالة الخطيرة وأخضر للحالة الطبيعية — Looks → switch backdrop</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٥</div>
+        <div class="step-body">
+          <div class="step-title">شغّله وأرِهم النتيجة</div>
+          <div class="step-desc">اضغط ▶ — أدخل 38 ثم أدخل 22 وأرِهم الفرق</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block say">
+    <div class="block-label">💬 قل هذا بعد الديمو</div>
+    <p>«الآن مهمتكم أنتم — نفس الفكرة بطريقتكم. اللي يضيف حساس الرطوبة يحصل على نجمة ⭐ — إذا تجاوزت ٨٠٪ أظهر رسالة تحذير.»</p>
+    <p style="margin-top:8px;">«وتذكّروا — ما الهدف؟ أن تفهموا المنطق: سؤال ← شرط ← نتيجة. هذا بالضبط ما يفعله رصد (Rasd) لكن بـ Python!»</p>
+  </div>
+
+  <div class="block do" style="background:rgba(26,46,30,0.6);border-color:rgba(0,229,192,0.2);">
+    <div class="block-label" style="color:var(--accent);">📋 ما يحتاجه الطالب بالضبط</div>
+    <div class="steps">
+      <div class="step"><div class="step-num">١</div><div class="step-body"><div class="step-title">شخصية واحدة — أي sprite</div><div class="step-desc">تقول "أهلاً! أنا حارس الغرفة 🛡️" عند الضغط على ▶</div></div></div>
+      <div class="step"><div class="step-num">٢</div><div class="step-body"><div class="step-title">Ask and Wait — "ما درجة الحرارة الآن؟"</div><div class="step-desc">من Sensing — الإجابة تُحفظ تلقائياً في متغير answer</div></div></div>
+      <div class="step"><div class="step-num">٣</div><div class="step-body"><div class="step-title">If answer > 35 → Switch Backdrop (أحمر) + Say "🔴 تحذير! ساخنة جداً"</div><div class="step-desc">If answer &lt; 10 → أزرق + "🔵 تحذير! باردة جداً" — else → أخضر + "✅ بخير"</div></div></div>
+      <div class="step"><div class="step-num">٤</div><div class="step-body"><div class="step-title">٣ خلفيات: حمراء · زرقاء · خضراء</div><div class="step-desc">Backdrops → Paint → اختر لون وارسم مستطيلاً — سمّها red/blue/green</div></div></div>
+    </div>
+  </div>
+
+  <div class="block do">
+    <div class="block-label">⚙️ أرِهم كيف يشاركون المشروع</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">١</div>
+        <div class="step-body">
+          <div class="step-title">أحفظ المشروع أولاً</div>
+          <div class="step-desc">File → Save now (يجب أن يكون عندهم حساب Scratch)</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٢</div>
+        <div class="step-body">
+          <div class="step-title">Share</div>
+          <div class="step-desc">اضغط زر "Share" في أعلى الصفحة — المشروع يصبح عاماً</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٣</div>
+        <div class="step-body">
+          <div class="step-title">انسخ الرابط</div>
+          <div class="step-desc">من شريط المتصفح — انسخ الرابط (مثال: scratch.mit.edu/projects/12345)</div>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step-num">٤</div>
+        <div class="step-body">
+          <div class="step-title">الصقه في Google Classroom</div>
+          <div class="step-desc">افتح Classroom → الواجب → Add or create → Link → الصق → Submit</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="block warn">
+    <div class="block-label">⚠️ مشكلة شائعة</div>
+    <p>إذا ما عند الطالب حساب Scratch — قل له: «خذ screenshot للمشروع وهو شغّال وارفعه على Classroom عوضاً عن الرابط.»</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 4 ═══ -->
+<div id="sec4">
+  <div class="sec-header">
+    <div class="sec-time">٠:٤٠ — ١:١٠</div>
+    <div>
+      <div class="sec-title">🐍 عرض Trinket + حارس الغرفة <span style="font-size:14px;font-weight:400;color:var(--muted);">٣٠ دقيقة</span></div>
+      <div class="sec-sub">أكتب الكود أمامهم — مش تعلّمهم Python، تعرّفهم على الشكل</div>
+    </div>
+  </div>
+  <div class="divider" style="margin-bottom:16px;"></div>
+
+  <div class="block show">
+    <div class="block-label">🖥️ Slide 5 + افتح Trinket</div>
+    <p>انتقل لـ Slide 5، ثم افتح <a href="https://trinket.io/python3" target="_blank" class="link-pill">trinket.io/python3</a> وشارك هذه النافذة</p>
+  </div>
+
+  <div class="block say">
+    <div class="block-label">💬 قل هذا قبل ما تبدأ</div>
+    <p>«Trinket هو المكان اللي ستكتبون فيه Python خلال الإجازة. ما يحتاج تثبيت — افتح المتصفح وابدأ. سأكتب أمامكم التمارين الأربعة، وانتم تراقبون وتسألون.»</p>
+    <p style="margin-top:8px;">«لا تقلقوا إذا ما فهمتم كل شيء الآن — هذا طبيعي. المهم تحاولوا وترفعوا ما عملتموه.»</p>
+  </div>
+
+  <!-- EXERCISE 1 -->
+  <div style="background:var(--bg2);border:1px solid rgba(0,229,192,0.15);border-radius:14px;padding:18px 22px;margin-bottom:12px;">
+    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:10px;font-family:'Space Mono',monospace;">تمرين ١ — المتغيرات والطباعة <span style="font-size:11px;color:var(--muted);">٥ دقائق</span></div>
+    <div class="block say" style="margin-bottom:10px;">
+      <div class="block-label">💬 قل هذا</div>
+      <p>«المتغير هو صندوق لحفظ قيمة. هنا عندنا صندوق اسمه temp يحفظ درجة الحرارة.»</p>
+    </div>
+    <div class="code-block">
+<span class="cc"># تمرين ١: متغيرات وطباعة</span>
+temp  = <span class="ck">34.5</span>   <span class="cc"># درجة الحرارة</span>
+humid = <span class="ck">65</span>     <span class="cc"># الرطوبة</span>
+
+<span class="cf">print</span>(<span class="cs">"درجة الحرارة:"</span>, temp, <span class="cs">"°C"</span>)
+<span class="cf">print</span>(<span class="cs">"الرطوبة:"</span>, humid, <span class="cs">"%"</span>)
+<span class="cf">print</span>(<span class="cs">f"التقرير: الحرارة {temp}°C والرطوبة {humid}%"</span>)
+    </div>
+    <div class="block do" style="margin-top:8px;margin-bottom:0;">
+      <div class="block-label">⚙️ بعد الكتابة</div>
+      <p>اضغط Run ▶ وأرِهم الناتج. «غيّروا الأرقام — ماذا يحدث؟»</p>
+    </div>
+  </div>
+
+  <!-- EXERCISE 2 -->
+  <div style="background:var(--bg2);border:1px solid rgba(0,229,192,0.15);border-radius:14px;padding:18px 22px;margin-bottom:12px;">
+    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:10px;font-family:'Space Mono',monospace;">تمرين ٢ — الشروط if/elif/else <span style="font-size:11px;color:var(--muted);">٧ دقائق</span></div>
+    <div class="block say" style="margin-bottom:10px;">
+      <div class="block-label">💬 قل هذا</div>
+      <p>«if تعني "إذا" — البرنامج يقرر ماذا يفعل بناءً على القيمة. هذا بالضبط ما رسمناه في المخطط الانسيابي!»</p>
+    </div>
+    <div class="code-block">
+<span class="cc"># تمرين ٢: الشروط</span>
+temp = <span class="ck">38</span>
+
+<span class="ck">if</span> temp > <span class="ck">35</span>:
+    <span class="cf">print</span>(<span class="cs">"🔴 تحذير: حرارة عالية جداً!"</span>)
+<span class="ck">elif</span> temp &lt; <span class="ck">10</span>:
+    <span class="cf">print</span>(<span class="cs">"🔵 تحذير: برودة شديدة!"</span>)
+<span class="ck">else</span>:
+    <span class="cf">print</span>(<span class="cs">"✅ الحرارة طبيعية"</span>)
+    </div>
+    <div class="block warn" style="margin-top:8px;margin-bottom:0;">
+      <div class="block-label">⚠️ انتبه هنا</div>
+      <p>«المسافة قبل print مهمة جداً — Python تغضب إذا ما كانت موجودة! هذا يسمى indentation — ٤ مسافات.» — أرِهم الخطأ عمداً ثم صحّحه.</p>
+    </div>
+  </div>
+
+  <!-- EXERCISE 3 -->
+  <div style="background:var(--bg2);border:1px solid rgba(0,229,192,0.15);border-radius:14px;padding:18px 22px;margin-bottom:12px;">
+    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:10px;font-family:'Space Mono',monospace;">تمرين ٣ — الإدخال input() <span style="font-size:11px;color:var(--muted);">٥ دقائق</span></div>
+    <div class="block say" style="margin-bottom:10px;">
+      <div class="block-label">💬 قل هذا</div>
+      <p>«هذا التمرين يجعل البرنامج يسألكم — مثل Scratch كان يسأل المستخدم.»</p>
+    </div>
+    <div class="code-block">
+<span class="cc"># تمرين ٣: الإدخال من المستخدم</span>
+temp = <span class="cf">float</span>(<span class="cf">input</span>(<span class="cs">"أدخل درجة الحرارة: "</span>))
+
+<span class="ck">if</span> temp > <span class="ck">35</span>:
+    <span class="cf">print</span>(<span class="cs">"🔴 حرارة عالية!"</span>)
+<span class="ck">else</span>:
+    <span class="cf">print</span>(<span class="cs">"✅ طبيعي"</span>)
+    </div>
+    <div class="block do" style="margin-top:8px;margin-bottom:0;">
+      <div class="block-label">⚙️ بعد الكتابة</div>
+      <p>اطلب من طالب أن يقترح رقماً — أدخله وأرِهم النتيجة. «جربوا رقماً كبيراً ورقماً صغيراً.»</p>
+    </div>
+  </div>
+
+  <!-- EXERCISE 4 -->
+  <div style="background:var(--bg2);border:1px solid rgba(0,229,192,0.15);border-radius:14px;padding:18px 22px;margin-bottom:12px;">
+    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:10px;font-family:'Space Mono',monospace;">تمرين ٤ — الحلقة for <span style="font-size:11px;color:var(--muted);">٥ دقائق</span></div>
+    <div class="block say" style="margin-bottom:10px;">
+      <div class="block-label">💬 قل هذا</div>
+      <p>«for تعني: كرّر هذا الكود عدة مرات تلقائياً. رصد (Rasd) يستخدمها لقراءة الحساس كل ٣ ثوانٍ!»</p>
+    </div>
+    <div class="code-block">
+<span class="cc"># تمرين ٤: الحلقة for</span>
+<span class="ck">for</span> i <span class="ck">in</span> <span class="cf">range</span>(<span class="ck">5</span>):
+    <span class="cf">print</span>(<span class="cs">f"قراءة رقم {i+1}: البرنامج يعمل!"</span>)
+
+<span class="cf">print</span>(<span class="cs">"اكتملت القراءات ✓"</span>)
+    </div>
+  </div>
+
+  <!-- MINI PROJECT -->
+  <div style="background:rgba(0,229,192,0.05);border:2px solid rgba(0,229,192,0.25);border-radius:14px;padding:20px 22px;margin-bottom:12px;">
+    <div style="font-size:13px;font-weight:700;color:var(--accent);margin-bottom:12px;font-family:'Space Mono',monospace;">🛡️ حارس الغرفة النصي — المشروع المصغّر <span style="font-size:11px;color:var(--muted);">٨ دقائق</span></div>
+    <div class="block say" style="margin-bottom:10px;">
+      <div class="block-label">💬 قل هذا</div>
+      <p>«هذا البرنامج هو نتيجة التمارين الأربعة مجتمعةً. انظروا — input()، if/else، وطباعة النتائج. هذا رصد (Rasd) بشكل نصي بسيط!»</p>
+      <p style="margin-top:6px;">«في الأسبوع الثاني — ستكتبون هذا بأنفسكم في Trinket. الآن أنا أريكم فقط كيف يبدو النهائي.»</p>
+    </div>
+    <div class="code-block">
+<span class="cc"># حارس الغرفة النصي 🛡️</span>
+<span class="cc"># مشروعك الأول بـ Python الحقيقية</span>
+
+temp  = <span class="cf">float</span>(<span class="cf">input</span>(<span class="cs">"أدخل درجة الحرارة (°C): "</span>))
+humid = <span class="cf">float</span>(<span class="cf">input</span>(<span class="cs">"أدخل نسبة الرطوبة (%): "</span>))
+
+<span class="cf">print</span>(<span class="cs">"--- تقرير الغرفة ---"</span>)
+
+<span class="ck">if</span> temp > <span class="ck">35</span>:
+    <span class="cf">print</span>(<span class="cs">"🔴 تنبيه: حرارة عالية جداً!"</span>)
+<span class="ck">elif</span> temp &lt; <span class="ck">10</span>:
+    <span class="cf">print</span>(<span class="cs">"🔵 تنبيه: برودة شديدة!"</span>)
+<span class="ck">else</span>:
+    <span class="cf">print</span>(<span class="cs">"✅ الحرارة طبيعية"</span>)
+
+<span class="ck">if</span> humid > <span class="ck">80</span>:
+    <span class="cf">print</span>(<span class="cs">"💧 تنبيه: رطوبة مرتفعة جداً!"</span>)
+<span class="ck">elif</span> humid &lt; <span class="ck">20</span>:
+    <span class="cf">print</span>(<span class="cs">"🏜️ تنبيه: الهواء جاف جداً!"</span>)
+<span class="ck">else</span>:
+    <span class="cf">print</span>(<span class="cs">"✅ الرطوبة طبيعية"</span>)
+
+<span class="cf">print</span>(<span class="cs">"--- انتهى التقرير ---"</span>)
+    </div>
+    <div class="block do" style="margin-top:10px;margin-bottom:0;">
+      <div class="block-label">⚙️ أرِهم كيف يأخذون screenshot</div>
+      <p>Windows: اضغط <kbd style="background:var(--bg3);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 6px;font-family:'Space Mono';font-size:12px;">Win + Shift + S</kbd> — Mac: <kbd style="background:var(--bg3);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 6px;font-family:'Space Mono';font-size:12px;">Cmd + Shift + 4</kbd> — حدّد نافذة Trinket بالكامل</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SECTION 5 ═══ -->
+<div id="sec5">
+  <div class="sec-header">
+    <div class="sec-time">١:١٠ — ١:٢٥</div>
+    <div>
+      <div class="sec-title">📦 التسليم والموارد <span style="font-size:14px;font-weight:400;color:var(--muted);">١٥ دقيقة</span></div>
+      <div class="sec-sub">افتح Classroom أمامهم وأرِهم مكان كل واجب</div>
+    </div>
+  </div>
+  <div class="divider" style="margin-bottom:16px;"></div>
+
+  <div class="block show">
+    <div class="block-label">🖥️ افتح Google Classroom</div>
+    <p>انتقل إلى تبويب Classroom — أرِهم الواجبات المنشورة وأكد أنهم يرون نفس ما تراه</p>
+  </div>
+
+  <!-- DELIVERY BOXES -->
+  <div class="deliver-box">
+    <h4>📤 الواجب الأول — مشروع Scratch</h4>
+    <ul class="checklist">
+      <li><input type="checkbox"><span class="check-lbl">أكمل المحاكي الذكي على scratch.mit.edu<div class="check-sub">يسأل عن الحرارة ويغير الخلفية + رسالة وصفية</div></span></li>
+      <li><input type="checkbox"><span class="check-lbl">اضغط Share لجعل المشروع عاماً</span></li>
+      <li><input type="checkbox"><span class="check-lbl">انسخ الرابط من المتصفح والصقه في Classroom<div class="check-sub">الواجب: "مشروع Scratch — المحاكي الذكي"</div></span></li>
+      <li><input type="checkbox"><span class="check-lbl">الموعد: <strong style="color:var(--purple);">نهاية الأسبوع الأول</strong></span></li>
+    </ul>
+  </div>
+
+  <div class="deliver-box">
+    <h4>📤 الواجب الثاني — تمارين Trinket</h4>
+    <ul class="checklist">
+      <li><input type="checkbox"><span class="check-lbl">نفّذ التمارين ١–٤ على trinket.io/python3</span></li>
+      <li><input type="checkbox"><span class="check-lbl">خذ screenshot لكل تمرين وهو يعمل</span></li>
+      <li><input type="checkbox"><span class="check-lbl">ارفع الصور على Classroom في واجب "تمارين Python"</span></li>
+      <li><input type="checkbox"><span class="check-lbl">الموعد: <strong style="color:var(--purple);">نهاية الأسبوع الأول</strong></span></li>
+    </ul>
+  </div>
+
+  <div class="deliver-box">
+    <h4>📤 الواجب الثالث — حارس الغرفة النصي</h4>
+    <ul class="checklist">
+      <li><input type="checkbox"><span class="check-lbl">اكتب البرنامج كاملاً على Trinket في الأسبوع الثاني</span></li>
+      <li><input type="checkbox"><span class="check-lbl">screenshot للكود وللناتج (بعد إدخال قيم)</span></li>
+      <li><input type="checkbox"><span class="check-lbl">ارفع على Classroom مع جملة: "هذا البرنامج يفعل..."</span></li>
+      <li><input type="checkbox"><span class="check-lbl">الموعد: <strong style="color:var(--purple);">قبل الجلسة الثالثة مباشرة</strong></span></li>
+    </ul>
+  </div>
+
+  <!-- RESOURCES -->
+  <div style="margin-top:24px;margin-bottom:8px;font-size:13px;font-weight:700;color:var(--amber);font-family:'Space Mono',monospace;letter-spacing:2px;">▶ الفيديوهات — أرِهم كيف يجدونها في Classroom</div>
+
+  <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:1px;margin-bottom:8px;">قبل مشروع Scratch:</div>
+  <div class="res-row">
+    <div class="res-icon">🌐</div>
+    <div>
+      <div class="res-title">ما هو إنترنت الأشياء؟ — شرح بالعربي</div>
+      <div class="res-meta">١٥ دقيقة · <a href="https://www.youtube.com/watch?v=lFdaJPl249g&t=36s" target="_blank" class="link-pill" style="font-size:11px;padding:2px 8px;">فتح يوتيوب ↗</a></div>
+      <div class="res-meta" style="margin-top:4px;color:var(--muted);">بعده: اكتب في الدفتر ٣ أجهزة IoT تستخدمها يومياً</div>
+    </div>
+  </div>
+
+  <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:1px;margin:12px 0 8px;">قبل تمارين Trinket:</div>
+  <div class="res-row">
+    <div class="res-icon">🐍</div>
+    <div>
+      <div class="res-title">ما هي البرمجة وكيف تتعلمها؟ — قبل ما تفتح Trinket</div>
+      <div class="res-meta">١٥ دقيقة · <a href="https://www.youtube.com/watch?v=9ndH9Qo05F4&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN" target="_blank" class="link-pill" style="font-size:11px;padding:2px 8px;">فتح يوتيوب ↗</a></div>
+    </div>
+  </div>
+  <div class="res-row">
+    <div class="res-icon">📗</div>
+    <div>
+      <div class="res-title">Python #007 — المتغيرات (Elzero) — للتمرين الأول</div>
+      <div class="res-meta"><a href="https://www.youtube.com/watch?v=hQnZxqp3Q0Y" target="_blank" class="link-pill" style="font-size:11px;padding:2px 8px;">فتح يوتيوب ↗</a></div>
+    </div>
+  </div>
+  <div class="res-row">
+    <div class="res-icon">📗</div>
+    <div>
+      <div class="res-title">Mastering Python بالعربي — Elzero — للتمارين ٢ و٣ و٤</div>
+      <div class="res-meta">حلقات #010–#020 للشروط و input() · حلقات #040+ لحلقة for · <a href="https://www.youtube.com/playlist?list=PLDoPjvoNmBAyE_gei5d18qkfIe-Z8mocs" target="_blank" class="link-pill" style="font-size:11px;padding:2px 8px;">فتح البلايلست ↗</a></div>
+    </div>
+  </div>
+
+  <div style="font-size:11px;color:var(--muted);font-family:'Space Mono',monospace;letter-spacing:1px;margin:12px 0 8px;">الأسبوع الثاني:</div>
+  <div class="res-row">
+    <div class="res-icon">🏠</div>
+    <div>
+      <div class="res-title">المنزل الذكي وإنترنت الأشياء</div>
+      <div class="res-meta">بعده: ارسم في الدفتر مخطط منزل ذكي وحساساته</div>
+      <div class="res-meta" style="margin-top:4px;color:var(--amber);">⚠️ أضف الرابط على Classroom — ابحث عن "المنزل الذكي IoT بالعربي"</div>
+    </div>
+  </div>
+
+  <div class="block say" style="margin-top:16px;">
+    <div class="block-label">💬 قل هذا عن الفيديوهات</div>
+    <p>«ما الهدف من الفيديوهات؟ ليس الحفظ — المطلوب أنكم بعد كل فيديو تكتبوا في الدفتر شيئاً واحداً تعلمتموه أو سؤالاً عندكم. هذا الدفتر سيكون ذاكرتكم للدورة.»</p>
+  </div>
+</div>
+
+<!-- ═══ SECTION 6 ═══ -->
+<div id="sec6">
+  <div class="sec-header">
+    <div class="sec-time">١:٢٥ — ١:٣٠</div>
+    <div>
+      <div class="sec-title">👋 الوداع والتشجيع <span style="font-size:14px;font-weight:400;color:var(--muted);">٥ دقائق</span></div>
+    </div>
+  </div>
+  <div class="divider" style="margin-bottom:16px;"></div>
+
+  <div class="block say">
+    <div class="block-label">💬 قل هذا</div>
+    <p>«قبل ما نغلق — هل عند أحد سؤال الآن؟» <span style="font-size:13px;color:var(--muted);">(انتظر ٣٠ ثانية)</span></p>
+    <p style="margin-top:10px;">«إذا واجهتكم أي مشكلة في أي وقت خلال الإجازة — Classroom أو WhatsApp وأنا أجاوب. ما فيه سؤال غلط.»</p>
+    <p style="margin-top:10px;">«الجلسة الثالثة ستكون حضورية — وسنبني فيها الجسر من Scratch إلى Python. اللي يأتي وعنده تجربة مع Trinket سيفهم مباشرة — هذه ميزتكم!»</p>
+    <p style="margin-top:10px;">«استمتعوا بالإجازة، خذوا راحتكم — لكن ١٠ دقائق يومياً على Trinket تصنع فرقاً. أراكم بعد الإجازة! 👋»</p>
+  </div>
+
+  <div class="block do">
+    <div class="block-label">⚙️ قبل الإغلاق — تأكد من هذا</div>
+    <ul class="checklist">
+      <li><input type="checkbox"><span class="check-lbl">كل الطلاب يعرفون رابط Trinket</span></li>
+      <li><input type="checkbox"><span class="check-lbl">كل الطلاب يعرفون أين الواجبات في Classroom</span></li>
+      <li><input type="checkbox"><span class="check-lbl">المواعيد واضحة: Scratch + تمارين = الأسبوع الأول | حارس الغرفة = قبل S03</span></li>
+      <li><input type="checkbox"><span class="check-lbl">أي سؤال طارئ → Classroom comments أو WhatsApp</span></li>
+    </ul>
+  </div>
+
+  <!-- QUICK LINKS -->
+  <div style="background:var(--bg2);border:1px solid rgba(0,229,192,0.15);border-radius:14px;padding:18px 22px;margin-top:8px;">
+    <div style="font-size:12px;font-weight:700;color:var(--muted);letter-spacing:2px;font-family:'Space Mono',monospace;margin-bottom:12px;">🔗 روابط سريعة — كل ما تحتاجه أثناء الجلسة</div>
+    <div style="display:flex;flex-wrap:wrap;gap:8px;">
+      <a href="sessions/s02-algorithms.html" target="_blank" class="link-pill teal">📊 Slide S02</a>
+      <a href="https://scratch.mit.edu" target="_blank" class="link-pill">🎮 Scratch</a>
+      <a href="https://trinket.io/python3" target="_blank" class="link-pill">🐍 Trinket</a>
+      <a href="https://classroom.google.com" target="_blank" class="link-pill">📋 Classroom</a>
+      <a href="https://www.youtube.com/watch?v=lFdaJPl249g&t=36s" target="_blank" class="link-pill">▶ فيديو IoT</a>
+      <a href="https://www.youtube.com/watch?v=9ndH9Qo05F4&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN" target="_blank" class="link-pill">▶ فيديو البرمجة</a>
+    </div>
+  </div>
+</div>
+
+</div><!-- end .page -->
+
+<script>
+// Live clock
+function tick(){
+  const now=new Date();
+  const h=String(now.getHours()).padStart(2,'0');
+  const m=String(now.getMinutes()).padStart(2,'0');
+  const s=String(now.getSeconds()).padStart(2,'0');
+  document.getElementById('live-clock').textContent=h+':'+m+':'+s;
+}
+tick();setInterval(tick,1000);
+
+// Checkbox persistence
+document.querySelectorAll('.checklist input[type=checkbox]').forEach((cb,i)=>{
+  const key='cb_s2_'+i;
+  cb.checked=localStorage.getItem(key)==='1';
+  cb.closest('li').classList.toggle('done',cb.checked);
+  cb.addEventListener('change',()=>{
+    localStorage.setItem(key,cb.checked?'1':'0');
+    cb.closest('li').classList.toggle('done',cb.checked);
+  });
+});
+</script>
+</body>
+</html>

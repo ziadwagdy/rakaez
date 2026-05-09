@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الجلسة ٧ — Python: الدوال وبرامج حقيقية</title>
+<title>الجلسة ٧ — Python ٤: القوائم والـ JSON للـ IoT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -52,13 +52,18 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
 .box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
 .big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
-.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:18px 22px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.8;max-width:680px;width:100%;text-align:left;direction:ltr;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.8;max-width:700px;width:100%;text-align:left;direction:ltr;}
 .code-comment{color:var(--muted);}
 .code-keyword{color:var(--accent2);}
 .code-string{color:var(--amber);}
 .code-func{color:var(--accent);}
-.two-col{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:860px;}
-@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}.two-col{grid-template-columns:1fr;}}
+.flow-row{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin:16px 0;}
+.flow-box{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:10px 16px;font-size:13px;font-family:'Space Mono',monospace;color:var(--text);text-align:center;}
+.flow-box.accent{border-color:var(--accent);color:var(--accent);}
+.flow-box.blue{border-color:var(--accent2);color:var(--accent2);}
+.flow-box.amber{border-color:var(--amber);color:var(--amber);}
+.flow-arr{color:var(--muted);font-size:20px;}
+@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}.flow-row{gap:4px;}.flow-arr{font-size:14px;}}
 </style>
 </head>
 <body>
@@ -66,236 +71,247 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <div class="orb orb2"></div>
 <div id="progress-bar"></div>
 <div id="counter">01 / 10</div>
-<div id="session-badge">W7 · المرحلة ٣</div>
+<div id="session-badge">W7 · Python ٤</div>
 <button class="nav-btn" id="btn-prev" onclick="navigate(-1)">&#8250;</button>
 <button class="nav-btn" id="btn-next" onclick="navigate(1)">&#8249;</button>
 <div id="nav-dots"></div>
 
 <div id="slides">
 
-  <!-- Slide 1 -->
+  <!-- Slide 1: Title -->
   <div class="slide active">
     <div class="eyebrow">الجلسة السابعة · رصد (Rasd)</div>
-    <div class="title-main">Python: الدوال وبرامج حقيقية ⚙️</div>
-    <div class="subtitle">اليوم نتعلم كيف ننظم كودنا في دوال — ونقرأ كود رصد (Rasd) الحقيقي!</div>
+    <div class="title-main">Python ٤ — القوائم والـ JSON 📊</div>
+    <div class="subtitle">اليوم نتعلم كيف يحزم رصد (Rasd) بيانات الحساسات ويرسلها — هذا هو قلب كل نظام IoT في العالم!</div>
     <div class="tag-row">
-      <span class="badge teal">⚙️ دوال</span>
-      <span class="badge blue">🔧 functions</span>
-      <span class="badge amber">🛡 رصد (Rasd) code</span>
+      <span class="badge teal">📋 Lists</span>
+      <span class="badge blue">📖 Dicts</span>
+      <span class="badge amber">📦 JSON</span>
     </div>
   </div>
 
   <!-- Slide 2: Review -->
   <div class="slide">
-    <div class="stag">مراجعة</div>
-    <div class="stitle">شروط وحلقات — هل تتذكرون؟ 🧠</div>
-    <div class="ssub">أسئلة سريعة قبل موضوع اليوم</div>
-    <div class="list">
-      <div class="li-item">
-        <div class="li-num">١</div>
-        <div>
-          <div class="li-title">ما الفرق بين if وwhile؟</div>
-          <div class="li-sub">if: ينفذ مرة واحدة إذا تحقق الشرط — while: يكرر طالما الشرط صحيح</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">٢</div>
-        <div>
-          <div class="li-title">ما الفرق بين for وwhile؟</div>
-          <div class="li-sub">for: عدد محدد من التكرارات — while: يكرر حتى يتغير الشرط</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">٣</div>
-        <div>
-          <div class="li-title">كيف تولّد رقماً عشوائياً بين 1 و10 في Python؟</div>
-          <div class="li-sub"><code style="color:var(--accent);font-size:12px;">import random &nbsp;→&nbsp; random.randint(1, 10)</code></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Slide 3: Why Functions -->
-  <div class="slide">
-    <div class="stag">لماذا الدوال؟</div>
-    <div class="stitle">كود بدون دوال vs كود منظم ⚖️</div>
-    <div class="ssub">انظر الفرق — أيهما أسهل في القراءة والتعديل؟</div>
-    <div class="two-col">
-      <div class="code-block" style="border-color:rgba(255,107,107,0.3);">
-<span class="code-comment">❌ بدون دوال (مكرر)</span>
-c1 = 25
-f1 = c1 * 9/5 + 32
-<span class="code-func">print</span>(f1)
-
-c2 = 30
-f2 = c2 * 9/5 + 32
-<span class="code-func">print</span>(f2)
-
-c3 = 15
-f3 = c3 * 9/5 + 32
-<span class="code-func">print</span>(f3)
-      </div>
-      <div class="code-block" style="border-color:rgba(0,229,192,0.4);">
-<span class="code-comment">✅ مع دوال (نظيف)</span>
-<span class="code-keyword">def</span> <span class="code-func">to_f</span>(c):
-    <span class="code-keyword">return</span> c * 9/5 + 32
-
-<span class="code-func">print</span>(<span class="code-func">to_f</span>(25))
-<span class="code-func">print</span>(<span class="code-func">to_f</span>(30))
-<span class="code-func">print</span>(<span class="code-func">to_f</span>(15))
-      </div>
-    </div>
-    <div class="box" style="margin-top:16px;">🎯 الدالة: اكتبها مرة واحدة، استخدمها آلاف المرات — هذا هو سر المبرمجين المحترفين!</div>
-  </div>
-
-  <!-- Slide 4: def -->
-  <div class="slide">
-    <div class="stag">تعريف الدالة</div>
-    <div class="stitle">كيف تكتب دالة؟ 📐</div>
-    <div class="ssub">البنية الأساسية لكل دالة في Python</div>
+    <div class="stag">مراجعة سريعة</div>
+    <div class="stitle">Python ٣ — الحلقات والدوال 🔁</div>
+    <div class="ssub">هيا نراجع الأسبوع الماضي!</div>
     <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># تعريف دالة تحويل الحرارة</span>
-<span class="code-keyword">def</span> <span class="code-func">celsius_to_fahrenheit</span>(c):
-    result = c * <span class="code-keyword">9</span>/<span class="code-keyword">5</span> + <span class="code-keyword">32</span>
-    <span class="code-keyword">return</span> result
-
-<span class="code-comment"># استخدام الدالة</span>
-temp_f = <span class="code-func">celsius_to_fahrenheit</span>(<span class="code-keyword">25</span>)
-<span class="code-func">print</span>(<span class="code-string">"25°C ="</span>, temp_f, <span class="code-string">"°F"</span>)
-
-<span class="code-func">print</span>(<span class="code-func">celsius_to_fahrenheit</span>(<span class="code-keyword">0</span>))    <span class="code-comment"># 32.0</span>
-<span class="code-func">print</span>(<span class="code-func">celsius_to_fahrenheit</span>(<span class="code-keyword">100</span>))  <span class="code-comment"># 212.0</span>
-    </div>
-    <div class="box">🔑 <strong style="color:var(--accent);">def</strong> = تعريف الدالة | <strong style="color:var(--accent);">اسم</strong> + (معاملات) | <strong style="color:var(--accent);">return</strong> = النتيجة المُرجعة</div>
-  </div>
-
-  <!-- Slide 5: Parameters and Return -->
-  <div class="slide">
-    <div class="stag">دالة متقدمة</div>
-    <div class="stitle">دالة التحقق من الحرارة 🌡️</div>
-    <div class="ssub">دالة ترجع نصاً مختلفاً حسب درجة الحرارة — مثل رصد (Rasd) تماماً!</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-keyword">def</span> <span class="code-func">check_temperature</span>(t):
-    <span class="code-string">"""تفحص درجة الحرارة وترجع حالة الغرفة"""</span>
-    <span class="code-keyword">if</span> t > <span class="code-keyword">40</span>:
-        <span class="code-keyword">return</span> <span class="code-string">"خطر شديد 🔴"</span>
-    <span class="code-keyword">elif</span> t > <span class="code-keyword">30</span>:
-        <span class="code-keyword">return</span> <span class="code-string">"تحذير — مرتفع 🟡"</span>
-    <span class="code-keyword">elif</span> t > <span class="code-keyword">15</span>:
-        <span class="code-keyword">return</span> <span class="code-string">"آمن وطبيعي 🟢"</span>
+<span class="code-keyword">def</span> <span class="code-func">check_sensor</span>(value, min_val, max_val):
+    <span class="code-keyword">if</span> value > max_val:
+        <span class="code-keyword">return</span> <span class="code-string">"HIGH"</span>
+    <span class="code-keyword">elif</span> value < min_val:
+        <span class="code-keyword">return</span> <span class="code-string">"LOW"</span>
     <span class="code-keyword">else</span>:
-        <span class="code-keyword">return</span> <span class="code-string">"بارد جداً 🔵"</span>
+        <span class="code-keyword">return</span> <span class="code-string">"OK"</span>
 
-<span class="code-func">print</span>(<span class="code-func">check_temperature</span>(<span class="code-keyword">45</span>))  <span class="code-comment"># خطر شديد 🔴</span>
-<span class="code-func">print</span>(<span class="code-func">check_temperature</span>(<span class="code-keyword">22</span>))  <span class="code-comment"># آمن وطبيعي 🟢</span>
+<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-func">range</span>(<span class="code-keyword">3</span>):
+    result = <span class="code-func">check_sensor</span>(<span class="code-keyword">38</span>, <span class="code-keyword">10</span>, <span class="code-keyword">35</span>)
+    <span class="code-func">print</span>(<span class="code-string">f"القراءة {i+1}: {result}"</span>)
     </div>
+    <div class="box">💡 اليوم نضيف <strong style="color:var(--accent);">القوائم والقواميس والـ JSON</strong> — وهذا ما يجعل رصد (Rasd) يرسل البيانات فعلاً عبر الشبكة!</div>
   </div>
 
-  <!-- Slide 6: Temperature Converter Project -->
+  <!-- Slide 3: Lists -->
   <div class="slide">
-    <div class="stag">مشروع</div>
-    <div class="stitle">محوّل الحرارة الكامل 🌡️↔️</div>
-    <div class="ssub">نبني برنامجاً بثلاث دوال — كل دالة مسؤولة عن تحويل واحد</div>
-    <div class="code-block">
-<span class="code-keyword">def</span> <span class="code-func">c_to_f</span>(c):
-    <span class="code-keyword">return</span> c * <span class="code-keyword">9</span>/<span class="code-keyword">5</span> + <span class="code-keyword">32</span>
-
-<span class="code-keyword">def</span> <span class="code-func">c_to_k</span>(c):
-    <span class="code-keyword">return</span> c + <span class="code-keyword">273.15</span>
-
-<span class="code-keyword">def</span> <span class="code-func">f_to_c</span>(f):
-    <span class="code-keyword">return</span> (f - <span class="code-keyword">32</span>) * <span class="code-keyword">5</span>/<span class="code-keyword">9</span>
-
-<span class="code-comment"># البرنامج الرئيسي</span>
-c = <span class="code-func">float</span>(<span class="code-func">input</span>(<span class="code-string">"درجة مئوية: "</span>))
-<span class="code-func">print</span>(<span class="code-string">f"فهرنهايت: {c_to_f(c):.1f}°F"</span>)
-<span class="code-func">print</span>(<span class="code-string">f"كلفن:     {c_to_k(c):.1f} K"</span>)
-    </div>
-  </div>
-
-  <!-- Slide 7: Read رصد (Rasd) Code -->
-  <div class="slide">
-    <div class="stag">كود حقيقي</div>
-    <div class="stitle">نقرأ sensor_reader.py معاً 📖</div>
-    <div class="ssub">هذا ملف حقيقي من مشروع رصد (Rasd) — ما الدوال الموجودة؟</div>
+    <div class="stag">القوائم</div>
+    <div class="stitle">List — تخزين أكثر من قيمة 📋</div>
+    <div class="ssub">بدلاً من متغير واحد لكل قراءة — نجمعها كلها في قائمة واحدة</div>
     <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># sensor_reader.py — رصد (Rasd)</span>
-<span class="code-keyword">import</span> time, board, adafruit_dht
+<span class="code-comment"># قائمة بسيطة</span>
+readings = [<span class="code-keyword">32.1</span>, <span class="code-keyword">33.4</span>, <span class="code-keyword">31.8</span>, <span class="code-keyword">35.2</span>, <span class="code-keyword">29.9</span>]
 
-sensor = adafruit_dht.DHT22(board.D4)
+<span class="code-comment"># الوصول بالرقم (يبدأ من 0)</span>
+<span class="code-func">print</span>(readings[<span class="code-keyword">0</span>])   <span class="code-comment"># → 32.1 (الأول)</span>
+<span class="code-func">print</span>(readings[-<span class="code-keyword">1</span>])  <span class="code-comment"># → 29.9 (الأخير)</span>
 
-<span class="code-keyword">def</span> <span class="code-func">read_temperature</span>():
-    <span class="code-string">"""يقرأ درجة الحرارة من الحساس"""</span>
-    <span class="code-keyword">return</span> sensor.temperature
+<span class="code-comment"># عمليات مفيدة</span>
+<span class="code-func">print</span>(<span class="code-func">len</span>(readings))    <span class="code-comment"># → 5 (الطول)</span>
+<span class="code-func">print</span>(<span class="code-func">max</span>(readings))    <span class="code-comment"># → 35.2 (الأعلى)</span>
+<span class="code-func">print</span>(<span class="code-func">min</span>(readings))    <span class="code-comment"># → 29.9 (الأدنى)</span>
+<span class="code-func">print</span>(<span class="code-func">sum</span>(readings)/<span class="code-func">len</span>(readings))  <span class="code-comment"># المتوسط</span>
 
-<span class="code-keyword">def</span> <span class="code-func">read_humidity</span>():
-    <span class="code-string">"""يقرأ نسبة الرطوبة من الحساس"""</span>
-    <span class="code-keyword">return</span> sensor.humidity
-
-<span class="code-keyword">def</span> <span class="code-func">get_status</span>(temp, hum):
-    <span class="code-string">"""يعطي حالة الغرفة بناءً على القراءات"""</span>
-    <span class="code-keyword">if</span> temp > <span class="code-keyword">35</span> <span class="code-keyword">or</span> hum > <span class="code-keyword">80</span>:
-        <span class="code-keyword">return</span> <span class="code-string">"danger"</span>
-    <span class="code-keyword">return</span> <span class="code-string">"normal"</span>
+<span class="code-comment"># إضافة قراءة جديدة</span>
+readings.<span class="code-func">append</span>(<span class="code-keyword">34.0</span>)
+<span class="code-func">print</span>(<span class="code-string">f"عدد القراءات الآن: {len(readings)}"</span>)
     </div>
-    <div class="box">👁️ لاحظوا: كل دالة مسؤولة عن مهمة واحدة فقط — هذا المبدأ اسمه <strong style="color:var(--accent);">Single Responsibility</strong></div>
+    <div class="box">🔢 الفهرسة تبدأ من <strong style="color:var(--accent);">0</strong> — القائمة [a, b, c]: a هو [0]، b هو [1]، c هو [2]</div>
+  </div>
+
+  <!-- Slide 4: Dicts -->
+  <div class="slide">
+    <div class="stag">القواميس</div>
+    <div class="stitle">Dict — بيانات بأسماء 📖</div>
+    <div class="ssub">القاموس يربط مفتاحاً بقيمة — مثالي لتنظيم بيانات الحساسات!</div>
+    <div class="code-block" style="margin-bottom:16px;">
+<span class="code-comment"># قاموس بيانات حساس واحد</span>
+reading = {
+    <span class="code-string">"temperature"</span>: <span class="code-keyword">34.2</span>,
+    <span class="code-string">"humidity"</span>:    <span class="code-keyword">65</span>,
+    <span class="code-string">"water_level"</span>: <span class="code-keyword">45000</span>,
+    <span class="code-string">"soil_moisture"</span>: <span class="code-keyword">38000</span>,
+    <span class="code-string">"location"</span>:    <span class="code-string">"الغرفة أ"</span>
+}
+
+<span class="code-comment"># الوصول بالمفتاح</span>
+<span class="code-func">print</span>(reading[<span class="code-string">"temperature"</span>])  <span class="code-comment"># → 34.2</span>
+<span class="code-func">print</span>(reading[<span class="code-string">"humidity"</span>])     <span class="code-comment"># → 65</span>
+
+<span class="code-comment"># التعديل</span>
+reading[<span class="code-string">"temperature"</span>] = <span class="code-keyword">35.1</span>
+
+<span class="code-comment"># التكرار على المفاتيح</span>
+<span class="code-keyword">for</span> key, value <span class="code-keyword">in</span> reading.<span class="code-func">items</span>():
+    <span class="code-func">print</span>(<span class="code-string">f"{key}: {value}"</span>)
+    </div>
+    <div class="box">💡 هذا القاموس <strong style="color:var(--accent);">هو بالضبط</strong> ما يرسله الـ Pico W لـ Flask في رصد (Rasd)!</div>
+  </div>
+
+  <!-- Slide 5: JSON -->
+  <div class="slide">
+    <div class="stag">لغة الإنترنت</div>
+    <div class="stitle">ما هو الـ JSON؟ 📦</div>
+    <div class="ssub">JSON = JavaScript Object Notation — اللغة العالمية لإرسال البيانات بين الأجهزة</div>
+    <div class="flow-row" style="margin-bottom:20px;">
+      <div class="flow-box accent">Pico W<br>🌡️ حساس</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box amber">JSON<br>📦 {data}</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box blue">Flask<br>🖥️ خادم</div>
+      <div class="flow-arr">→</div>
+      <div class="flow-box" style="border-color:var(--accent3);color:var(--accent3);">Dashboard<br>📊 واجهة</div>
+    </div>
+    <div class="code-block" style="margin-bottom:16px;">
+<span class="code-keyword">import</span> json
+
+<span class="code-comment"># من Python dict إلى نص JSON</span>
+data = {<span class="code-string">"temperature"</span>: <span class="code-keyword">34.2</span>, <span class="code-string">"humidity"</span>: <span class="code-keyword">65</span>}
+json_text = json.<span class="code-func">dumps</span>(data)
+<span class="code-func">print</span>(json_text)
+<span class="code-comment"># → '{"temperature": 34.2, "humidity": 65}'</span>
+
+<span class="code-comment"># من نص JSON إلى Python dict</span>
+received = <span class="code-string">'{"temp": 36.5, "humid": 70}'</span>
+parsed = json.<span class="code-func">loads</span>(received)
+<span class="code-func">print</span>(parsed[<span class="code-string">"temp"</span>])   <span class="code-comment"># → 36.5</span>
+    </div>
+    <div class="box">🌍 <strong style="color:var(--accent);">json.dumps()</strong> يحوّل dict لنص | <strong style="color:var(--accent);">json.loads()</strong> يحوّل نص لـ dict</div>
+  </div>
+
+  <!-- Slide 6: Rasd Data Flow -->
+  <div class="slide">
+    <div class="stag">ربط بالمشروع</div>
+    <div class="stitle">هكذا يعمل رصد (Rasd) فعلاً 🛡️</div>
+    <div class="ssub">الكود التالي هو نسخة مبسطة من <code style="color:var(--accent);">app.py</code> الموجود في مجلد room-guardian!</div>
+    <div class="code-block">
+<span class="code-keyword">import</span> json
+
+<span class="code-comment"># ١. الـ Pico W يرسل هذا الـ JSON</span>
+incoming_json = <span class="code-string">'''
+{
+    "temperature": 34.2,
+    "humidity": 75,
+    "water_level": 15000,
+    "soil_moisture": 42000
+}
+'''</span>
+
+<span class="code-comment"># ٢. Flask يحوله لـ dict</span>
+data = json.<span class="code-func">loads</span>(incoming_json)
+
+<span class="code-comment"># ٣. نفحص كل قيمة</span>
+<span class="code-keyword">if</span> data[<span class="code-string">"temperature"</span>] > <span class="code-keyword">35</span>:
+    <span class="code-func">print</span>(<span class="code-string">"🔴 تنبيه حرارة!"</span>)
+
+<span class="code-keyword">if</span> data[<span class="code-string">"water_level"</span>] < <span class="code-keyword">20000</span>:
+    <span class="code-func">print</span>(<span class="code-string">"🌧️ تنبيه مطر!"</span>)
+
+<span class="code-func">print</span>(<span class="code-string">f"الحرارة: {data['temperature']}°C"</span>)
+<span class="code-func">print</span>(<span class="code-string">f"الرطوبة: {data['humidity']}%"</span>)
+    </div>
+  </div>
+
+  <!-- Slide 7: Lists of Readings -->
+  <div class="slide">
+    <div class="stag">القوائم المتقدمة</div>
+    <div class="stitle">قائمة من القواميس 📋📖</div>
+    <div class="ssub">هكذا تخزن رصد (Rasd) قراءات متعددة في قاعدة البيانات</div>
+    <div class="code-block" style="margin-bottom:16px;">
+<span class="code-comment"># قائمة من القراءات</span>
+history = [
+    {<span class="code-string">"time"</span>: <span class="code-string">"10:00"</span>, <span class="code-string">"temp"</span>: <span class="code-keyword">32.1</span>, <span class="code-string">"humid"</span>: <span class="code-keyword">60</span>},
+    {<span class="code-string">"time"</span>: <span class="code-string">"10:10"</span>, <span class="code-string">"temp"</span>: <span class="code-keyword">33.5</span>, <span class="code-string">"humid"</span>: <span class="code-keyword">62</span>},
+    {<span class="code-string">"time"</span>: <span class="code-string">"10:20"</span>, <span class="code-string">"temp"</span>: <span class="code-keyword">36.0</span>, <span class="code-string">"humid"</span>: <span class="code-keyword">78</span>},
+    {<span class="code-string">"time"</span>: <span class="code-string">"10:30"</span>, <span class="code-string">"temp"</span>: <span class="code-keyword">34.2</span>, <span class="code-string">"humid"</span>: <span class="code-keyword">70</span>},
+]
+
+<span class="code-comment"># تحليل القراءات</span>
+<span class="code-keyword">for</span> r <span class="code-keyword">in</span> history:
+    <span class="code-keyword">if</span> r[<span class="code-string">"temp"</span>] > <span class="code-keyword">35</span>:
+        <span class="code-func">print</span>(<span class="code-string">f"⚠️ {r['time']}: حرارة عالية {r['temp']}°C"</span>)
+
+<span class="code-comment"># المتوسط</span>
+avg = <span class="code-func">sum</span>(r[<span class="code-string">"temp"</span>] <span class="code-keyword">for</span> r <span class="code-keyword">in</span> history) / <span class="code-func">len</span>(history)
+<span class="code-func">print</span>(<span class="code-string">f"متوسط الحرارة: {avg:.1f}°C"</span>)
+    </div>
+    <div class="box">🗄️ <strong style="color:var(--accent);">data.db</strong> في رصد (Rasd) يخزن بالضبط قائمة من هذه القواميس — لكن في SQLite!</div>
   </div>
 
   <!-- Slide 8: Activity -->
   <div class="slide">
     <div class="stag">نشاط</div>
-    <div class="stitle">أضف دالة الرطوبة! 💧</div>
-    <div class="ssub">طبّق ما تعلمته — أضف دالة جديدة لملف sensor_reader.py</div>
-    <div class="list" style="max-width:700px;">
+    <div class="stitle">محلل البيانات الكامل 📊</div>
+    <div class="ssub">ابنِ برنامجاً يجمع القوائم والقواميس والدوال معاً — ٣٠ دقيقة</div>
+    <div class="list" style="max-width:720px;">
       <div class="li-item">
         <div class="li-num">١</div>
         <div>
-          <div class="li-title">دالة check_humidity(h)</div>
-          <div class="li-sub">ترجع: "جاف جداً" (<30%) | "مثالي" (30-60%) | "رطب" (60-80%) | "خطر" (>80%)</div>
+          <div class="li-title">اجمع ٥ قراءات من المستخدم</div>
+          <div class="li-sub">حلقة for — في كل دورة اسأل عن (الحرارة والرطوبة) واحفظها في قائمة من القواميس</div>
         </div>
       </div>
       <div class="li-item">
         <div class="li-num">٢</div>
         <div>
-          <div class="li-title">دالة get_full_report(temp, humidity)</div>
-          <div class="li-sub">تجمع check_temperature وcheck_humidity وتطبع تقريراً كاملاً</div>
+          <div class="li-title">اطبع تقرير التحليل</div>
+          <div class="li-sub">أعلى حرارة | أدنى حرارة | المتوسط | عدد القراءات التي تجاوزت ٣٥°C</div>
         </div>
       </div>
       <div class="li-item">
         <div class="li-num">٣</div>
         <div>
-          <div class="li-title">اختبر بأرقام مختلفة</div>
-          <div class="li-sub">جرب: temp=45, hum=90 — ثم temp=22, hum=50 — وشاهد الفرق</div>
+          <div class="li-title">حوّل البيانات لـ JSON</div>
+          <div class="li-sub">استخدم json.dumps() وprint() لترى شكل الـ JSON — هذا ما يرسله الـ Pico W!</div>
         </div>
       </div>
     </div>
+    <div class="box" style="margin-top:12px;">🏆 <strong style="color:var(--accent);">تحدي:</strong> استخدم json.loads() لقراءة JSON من نص وتحليله بنفس البرنامج!</div>
   </div>
 
   <!-- Slide 9: Homework -->
   <div class="slide">
     <div class="stag">واجب البيت</div>
     <div class="stitle">مهامك للأسبوع القادم 📚</div>
-    <div class="ssub">استعد للانتقال إلى عالم الإلكترونيات الأسبوع القادم!</div>
+    <div class="ssub">ثلاث مهام — ارفعها على Trinket وأرسل الرابط على Classroom</div>
     <div class="list">
       <div class="li-item">
         <div class="li-num">١</div>
         <div>
-          <div class="li-title">أكمل محوّل الحرارة مع دالة التحقق</div>
-          <div class="li-sub">يحتوي على: c_to_f، c_to_k، f_to_c، check_temperature — مع قائمة خيارات للمستخدم</div>
+          <div class="li-title">محلل القراءات الكامل</div>
+          <div class="li-sub">أكمل نشاط الجلسة — ٥ قراءات، تقرير تحليل، تحويل JSON. كلما كان أكمل كلما كان أفضل!</div>
         </div>
       </div>
       <div class="li-item">
         <div class="li-num">٢</div>
         <div>
-          <div class="li-title">اقرأ ملف config.py في رصد (Rasd)</div>
-          <div class="li-sub">ابحث في كود المشروع — ما المتغيرات الموجودة؟ ما الإعدادات؟</div>
+          <div class="li-title">محاكي الـ Pico W</div>
+          <div class="li-sub">برنامج يولّد ١٠ قراءات عشوائية (random)، يخزنها في قائمة قواميس، يطبع تنبيهاً لكل قراءة خطيرة</div>
         </div>
       </div>
       <div class="li-item">
         <div class="li-num">٣</div>
         <div>
-          <div class="li-title">اكتب ٣ دوال من رصد (Rasd) وماذا تفعل</div>
-          <div class="li-sub">بكلماتك الخاصة — ما المدخل؟ ما الخرج؟ لماذا هذه الدالة مهمة للمشروع؟</div>
+          <div class="li-title">📓 دفتر الملاحظات — List vs Dict</div>
+          <div class="li-sub">متى تستخدم List ومتى تستخدم Dict؟ اكتب مثالين من حياتك اليومية لكل نوع</div>
         </div>
       </div>
     </div>
@@ -303,17 +319,18 @@ sensor = adafruit_dht.DHT22(board.D4)
 
   <!-- Slide 10: End -->
   <div class="slide">
-    <span class="big-e">⚡</span>
+    <span class="big-e">🚀</span>
     <div class="stag">نهاية الجلسة السابعة</div>
-    <div class="stitle">أصبحتم مبرمجين حقيقيين!</div>
-    <div class="ssub">الدوال هي اللبنات الأساسية لكل برنامج في العالم — وقرأتم كوداً حقيقياً من رصد (Rasd)!</div>
+    <div class="stitle">أنتم جاهزون لبناء رصد (Rasd)!</div>
+    <div class="ssub">قوائم، قواميس، JSON — هذه هي اللبنات الأساسية لأي نظام IoT حقيقي في العالم!</div>
     <div class="box">
-      ⚡ <strong style="color:var(--accent);">الأسبوع القادم:</strong> ندخل عالم الإلكترونيات! LED، مقاومات، دوائر كهربائية — أحضر فضولك!
+      🔌 <strong style="color:var(--accent);">الأسبوع القادم:</strong> الإلكترونيات والـ Pico W — نغادر الشاشة ونلمس الأسلاك والحساسات!
     </div>
     <div class="tag-row" style="margin-top:24px;">
-      <span class="badge teal">⚙️ الدوال ✓</span>
-      <span class="badge blue">🛡 كود حقيقي ✓</span>
-      <span class="badge amber">⚡ إلكترونيات تنتظر</span>
+      <span class="badge teal">📋 Lists ✓</span>
+      <span class="badge blue">📖 Dicts ✓</span>
+      <span class="badge amber">📦 JSON ✓</span>
+      <span class="badge red">🔌 Pico W يتنظركم</span>
     </div>
   </div>
 

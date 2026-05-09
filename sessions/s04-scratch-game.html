@@ -3,355 +3,293 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الجلسة ٤ — نبني لعبتنا الأولى</title>
+<title>الجلسة ٤ — Python ١: المتغيرات والإدخال</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#080c14;--bg2:#0e1520;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
+:root{--bg:#080c14;--bg2:#0e1520;--bg3:#141d2e;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
 body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
 .orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
-.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
-.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
-#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s;z-index:100;box-shadow:0 0 12px var(--accent);}
+.orb1{width:500px;height:500px;background:#5b7fff;top:-150px;right:-150px;}
+.orb2{width:400px;height:400px;background:#00e5c0;bottom:-100px;left:-100px;}
+#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent2),var(--accent));transition:width .5s ease;z-index:100;box-shadow:0 0 12px var(--accent2);}
 #counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;letter-spacing:1px;}
-#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;z-index:100;letter-spacing:2px;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);padding:4px 12px;border-radius:20px;}
+#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent2);font-family:'Space Mono',monospace;z-index:100;letter-spacing:2px;background:rgba(91,127,255,0.08);border:1px solid rgba(91,127,255,0.25);padding:4px 12px;border-radius:20px;}
 #nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s;border:none;padding:0;}
-.dot.active{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:scale(1.4);}
-.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);}
-.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s ease;border:none;padding:0;}
+.dot.active{background:var(--accent2);box-shadow:0 0 10px var(--accent2);transform:scale(1.4);}
+.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s ease;backdrop-filter:blur(8px);}
+.nav-btn:hover{background:rgba(91,127,255,0.15);transform:translateY(-50%) scale(1.1);}
 #btn-prev{right:20px;}#btn-next{left:20px;}
 #slides{position:fixed;inset:0;z-index:1;}
-.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s,transform .6s;transform:translateY(30px);overflow-y:auto;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s ease,transform .6s ease;transform:translateY(30px);overflow-y:auto;}
 .slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
 .slide.exit{opacity:0;transform:translateY(-30px);}
-.eyebrow{font-size:13px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
-.title-main{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
-.subtitle{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;margin-bottom:32px;}
-.tag-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
-.badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
-.badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
-.badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
-.badge.red{border-color:var(--accent3);color:var(--accent3);background:rgba(255,107,107,0.08);}
-.badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
-.stag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
-.stitle{font-size:clamp(26px,4vw,44px);font-weight:900;text-align:center;margin-bottom:8px;}
+.title-eyebrow{font-size:13px;color:var(--accent2);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
+.title-main{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent2) 60%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
+.title-sub{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;}
+.title-badges{display:flex;gap:10px;margin-top:36px;flex-wrap:wrap;justify-content:center;}
+.t-badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
+.t-badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
+.t-badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
+.t-badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
+.stag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent2);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
+.stitle{font-size:clamp(26px,4vw,46px);font-weight:900;text-align:center;margin-bottom:8px;}
 .ssub{font-size:15px;color:var(--muted);text-align:center;max-width:650px;line-height:1.7;margin-bottom:28px;}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
 .card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s;}
-.card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);}
+.card:hover{border-color:rgba(91,127,255,0.4);transform:translateY(-3px);}
 .card .ico{font-size:28px;margin-bottom:10px;display:block;}
-.card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
+.card h3{font-size:15px;font-weight:700;color:var(--accent2);margin-bottom:6px;}
 .card p{font-size:13px;color:var(--muted);line-height:1.7;}
-.list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:740px;}
-.li-item{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
-.li-num{width:36px;height:36px;border-radius:50%;background:rgba(0,229,192,0.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;border:1px solid rgba(0,229,192,0.25);}
-.li-title{font-size:14px;font-weight:700;margin-bottom:4px;}
-.li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
-.box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
-.big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
-.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:14px;color:#a0f0e0;line-height:1.8;max-width:680px;width:100%;text-align:left;direction:ltr;}
+.code-block{background:#0a0f1a;border:1px solid rgba(91,127,255,0.25);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.9;max-width:700px;width:100%;text-align:left;direction:ltr;}
 .code-comment{color:var(--muted);}
 .code-keyword{color:var(--accent2);}
 .code-string{color:var(--amber);}
 .code-func{color:var(--accent);}
-@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+.code-type{color:#ff9f7f;}
+.list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:740px;}
+.li-item{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;}
+.li-num{width:34px;height:34px;border-radius:50%;background:rgba(91,127,255,0.1);color:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;border:1px solid rgba(91,127,255,0.25);}
+.li-title{font-size:14px;font-weight:700;margin-bottom:3px;}
+.li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
+.types-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;width:100%;max-width:740px;}
+.type-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;}
+.type-card h3{font-size:13px;font-weight:700;color:var(--accent2);margin-bottom:8px;font-family:'Space Mono',monospace;}
+.type-card .example{font-family:'Space Mono',monospace;font-size:12px;color:var(--amber);background:#0a0f1a;padding:6px 10px;border-radius:6px;margin-bottom:6px;}
+.type-card p{font-size:12px;color:var(--muted);}
+.box{background:rgba(91,127,255,0.06);border:1px solid rgba(91,127,255,0.2);border-radius:14px;padding:18px 24px;max-width:700px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
+.hw-list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:720px;}
+.hw-item{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;}
+.hw-icon{font-size:20px;flex-shrink:0;line-height:1;margin-top:2px;}
+.hw-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
+.hw-desc{font-size:12px;color:var(--muted);line-height:1.6;}
+.big-emoji{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
 </style>
 </head>
 <body>
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
+<div class="orb orb1"></div><div class="orb orb2"></div>
 <div id="progress-bar"></div>
 <div id="counter">01 / 10</div>
-<div id="session-badge">W4 · المرحلة ٢</div>
-<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">&#8250;</button>
-<button class="nav-btn" id="btn-next" onclick="navigate(1)">&#8249;</button>
-<div id="nav-dots"></div>
-
+<div id="session-badge">W4 · Python ١</div>
+<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">›</button>
+<button class="nav-btn" id="btn-next" onclick="navigate(1)">‹</button>
 <div id="slides">
 
-  <!-- Slide 1 -->
-  <div class="slide active">
-    <div class="eyebrow">الجلسة الرابعة · رصد (Rasd)</div>
-    <div class="title-main">نبني لعبتنا الأولى 🎮</div>
-    <div class="subtitle">اليوم نطبق كل ما تعلمناه في Scratch ونبني لعبة كاملة مع شروط ونقاط وعروض!</div>
-    <div class="tag-row">
-      <span class="badge teal">🎮 مشروع كامل</span>
-      <span class="badge blue">🔁 منطق</span>
-      <span class="badge amber">🏆 عروض</span>
-    </div>
+<!-- SLIDE 1 -->
+<div class="slide active" id="s1">
+  <div class="title-eyebrow">الجلسة الرابعة — المرحلة الثالثة</div>
+  <div class="title-main">Python ١ 🐍</div>
+  <div class="title-sub">المتغيرات · أنواع البيانات · الإدخال والإخراج — بمسائل من عالم الـ IoT</div>
+  <div class="title-badges">
+    <div class="t-badge blue">⏱ ٤ ساعات</div>
+    <div class="t-badge teal">🌡 مسائل IoT</div>
+    <div class="t-badge amber">🖥 Trinket</div>
   </div>
-
-  <!-- Slide 2: Review -->
-  <div class="slide">
-    <div class="stag">مراجعة Scratch</div>
-    <div class="stitle">أسئلة سريعة 🤔</div>
-    <div class="ssub">هيا نراجع ما تعلمناه في الجلسة الماضية!</div>
-    <div class="list">
-      <div class="li-item">
-        <div class="li-num">١</div>
-        <div>
-          <div class="li-title">ما هي كتلة الحدث الرئيسية في Scratch؟</div>
-          <div class="li-sub">الإجابة: "When Green Flag Clicked" — تشغّل الكود عند بداية اللعبة</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">٢</div>
-        <div>
-          <div class="li-title">كيف تجعل Sprite يتحرك للأمام؟</div>
-          <div class="li-sub">الإجابة: كتلة "Move 10 Steps" — يمكن تغيير الرقم لتسريع الحركة</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">٣</div>
-        <div>
-          <div class="li-title">ما الفرق بين البرمجة المرئية والنصية؟</div>
-          <div class="li-sub">المرئية: سهلة للمبتدئين، بالسحب والإفلات — النصية: أقوى، مثل Python وJavaScript</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Slide 3: Conditions -->
-  <div class="slide">
-    <div class="stag">المفهوم الأول</div>
-    <div class="stitle">الشروط في Scratch — If/Then 🔀</div>
-    <div class="ssub">الشرط يجعل اللعبة تتخذ قرارات — هل لمست العدو؟ هل وصلت للهدف؟</div>
-    <div class="code-block" style="margin-bottom:20px;">
-<span class="code-comment">// عندما تلمس القطة العقبة الحمراء</span>
-<span class="code-keyword">Forever</span>
-  <span class="code-keyword">If</span> &lt;touching [<span class="code-string">عقبة</span>]?&gt; <span class="code-keyword">Then</span>
-    <span class="code-func">Say</span> <span class="code-string">"Game Over! 💥"</span> for 2 secs
-    <span class="code-func">Stop</span> [all]
-    </div>
-    <div class="grid" style="max-width:700px;">
-      <div class="card">
-        <span class="ico">✅</span>
-        <h3>If / Then</h3>
-        <p>إذا تحقق الشرط، نفّذ الأوامر داخل الكتلة</p>
-      </div>
-      <div class="card">
-        <span class="ico">🔄</span>
-        <h3>If / Else</h3>
-        <p>إذا تحقق: نفّذ هذا — وإلا: نفّذ ذاك</p>
-      </div>
-      <div class="card">
-        <span class="ico">🔁</span>
-        <h3>Forever</h3>
-        <p>كرر الشرط باستمرار — أساس كل لعبة</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Slide 4: Loops -->
-  <div class="slide">
-    <div class="stag">المفهوم الثاني</div>
-    <div class="stitle">الحلقات في Scratch 🔁</div>
-    <div class="ssub">الحلقة تكرر الأوامر — بدونها ستتوقف اللعبة بعد ثانية!</div>
-    <div class="code-block" style="margin-bottom:20px;">
-<span class="code-comment">// حلقة اللعبة الرئيسية — تعمل إلى الأبد</span>
-<span class="code-keyword">Forever</span>
-  <span class="code-func">Move</span> 3 steps
-  <span class="code-keyword">If</span> &lt;on edge?&gt; <span class="code-keyword">Then</span>
-    <span class="code-func">Bounce</span> if on edge
-  <span class="code-keyword">If</span> &lt;touching [<span class="code-string">نجمة</span>]?&gt; <span class="code-keyword">Then</span>
-    <span class="code-func">Change</span> [score] by 1
-    </div>
-    <div class="box">
-      🔁 <strong style="color:var(--accent);">Repeat vs Forever:</strong> استخدم Repeat عندما تريد عدداً محدداً من التكرارات، وForever للأشياء التي لا تتوقف أبداً مثل حركة اللعبة
-    </div>
-  </div>
-
-  <!-- Slide 5: Score -->
-  <div class="slide">
-    <div class="stag">إضافة النقاط</div>
-    <div class="stitle">متغير Score — النقاط! 🏆</div>
-    <div class="ssub">المتغير هو "صندوق" نحفظ فيه رقم النقاط ونغيره أثناء اللعبة</div>
-    <div class="list" style="max-width:700px;">
-      <div class="li-item">
-        <div class="li-num">١</div>
-        <div>
-          <div class="li-title">أنشئ المتغير</div>
-          <div class="li-sub">Variables → Make a Variable → اكتب "score" → OK</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">٢</div>
-        <div>
-          <div class="li-title">اضبطه في البداية</div>
-          <div class="li-sub">When Green Flag Clicked → Set [score] to 0</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">٣</div>
-        <div>
-          <div class="li-title">زِد النقاط عند الاصطدام</div>
-          <div class="li-sub">If touching [نجمة] → Change [score] by 1 → Play Sound "Ding"</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">٤</div>
-        <div>
-          <div class="li-title">انتهاء اللعبة</div>
-          <div class="li-sub">If [score] = 10 → Say "فزت! 🎉" → Stop All</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Slide 6: Cat Flying Activity -->
-  <div class="slide">
-    <div class="stag">نشاط رئيسي</div>
-    <div class="stitle">Cat Flying — نكمل اللعبة معاً! 🐱✈️</div>
-    <div class="ssub">هيا نبني لعبة Cat Flying الكاملة خطوة بخطوة</div>
-    <div class="grid">
-      <div class="card">
-        <span class="ico">🐱</span>
-        <h3>الـ Sprite</h3>
-        <p>القطة تطير بالأسهم — فوق وتحت — وتتجنب العقبات</p>
-      </div>
-      <div class="card">
-        <span class="ico">🖼️</span>
-        <h3>الخلفية</h3>
-        <p>سماء أو فضاء — من مكتبة Scratch أو ارسمها بنفسك</p>
-      </div>
-      <div class="card">
-        <span class="ico">💥</span>
-        <h3>العقبات</h3>
-        <p>Sprites تتحرك من اليمين لليسار — تصطدم بها = تخسر</p>
-      </div>
-      <div class="card">
-        <span class="ico">⭐</span>
-        <h3>النقاط</h3>
-        <p>كل عقبة تتجاوزها = نقطة — اجمع ١٠ نقاط للفوز</p>
-      </div>
-    </div>
-    <div class="box" style="margin-top:16px;">⏰ لديكم ٤٠ دقيقة — المدرب يساعد كل فريق على حدة</div>
-  </div>
-
-  <!-- Slide 7: Customization -->
-  <div class="slide">
-    <div class="stag">تخصيص</div>
-    <div class="stitle">اجعل لعبتك فريدة! 🎨</div>
-    <div class="ssub">الوقت الآن لكل طالب يضع بصمته الخاصة على اللعبة</div>
-    <div class="list" style="max-width:700px;">
-      <div class="li-item">
-        <div class="li-num">🐲</div>
-        <div>
-          <div class="li-title">غيّر الـ Sprite</div>
-          <div class="li-sub">بدل القطة: اختر أي شخصية من المكتبة أو ارسم شخصيتك</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">🎨</div>
-        <div>
-          <div class="li-title">خصّص الألوان</div>
-          <div class="li-sub">غيّر لون الخلفية والعقبات — اجعل اللعبة بألوانك المفضلة</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">🎵</div>
-        <div>
-          <div class="li-title">أضف موسيقى وأصوات</div>
-          <div class="li-sub">موسيقى خلفية في حلقة Forever، وصوت عند الاصطدام والفوز</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">⚡</div>
-        <div>
-          <div class="li-title">زِد الصعوبة</div>
-          <div class="li-sub">اجعل العقبات تتسارع كلما زادت النقاط — تلميح: change speed by 0.5</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Slide 8: Presentations -->
-  <div class="slide">
-    <div class="stag">جلسة العروض</div>
-    <div class="stitle">اعرض لعبتك على الجميع! 🌟</div>
-    <div class="ssub">كل طالب يعرض لعبته لمدة دقيقتين — والمجموعة تعطي رأيها</div>
-    <div class="grid" style="max-width:800px;">
-      <div class="card">
-        <span class="ico">🎤</span>
-        <h3>اشرح فكرة لعبتك</h3>
-        <p>ما هدف اللعبة؟ كيف تفوز؟ ماذا فعلت بشكل مختلف؟</p>
-      </div>
-      <div class="card">
-        <span class="ico">🕹️</span>
-        <h3>العب أمام الجميع</h3>
-        <p>دقيقة للعب المباشر — دع زملاءك يشاهدون اللعبة</p>
-      </div>
-      <div class="card">
-        <span class="ico">💬</span>
-        <h3>اسمع التغذية الراجعة</h3>
-        <p>ماذا أعجب زملاءك؟ ماذا يقترحون لتحسين اللعبة؟</p>
-      </div>
-      <div class="card">
-        <span class="ico">⭐</span>
-        <h3>التقييم بالنجوم</h3>
-        <p>كل طالب يعطي ٣ نجوم لأحسن لعبة — بعد انتهاء الجميع</p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Slide 9: Homework -->
-  <div class="slide">
-    <div class="stag">واجب البيت</div>
-    <div class="stitle">مهامك للأسبوع القادم 📚</div>
-    <div class="ssub">استعد للانتقال إلى Python — الكود الحقيقي!</div>
-    <div class="list">
-      <div class="li-item">
-        <div class="li-num">١</div>
-        <div>
-          <div class="li-title">أضف مستوى ثانياً للعبتك</div>
-          <div class="li-sub">بعد جمع ١٠ نقاط: غيّر الخلفية وزد سرعة العقبات — اجعل اللعبة أصعب!</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">٢</div>
-        <div>
-          <div class="li-title">اكتب ما أعجبك في Scratch</div>
-          <div class="li-sub">٥ جمل: ما الذي استمتعت به؟ ما الذي كان صعباً؟ ماذا تريد تعلمه بعد ذلك؟</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">٣</div>
-        <div>
-          <div class="li-title">افتح Trinket مباشرة في المتصفح</div>
-          <div class="li-sub">افتح trinket.io/python3 — أنشئ حساباً مجانياً — ابدأ Python project جديد واكتشف الواجهة</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Slide 10: End -->
-  <div class="slide">
-    <span class="big-e">🐍</span>
-    <div class="stag">نهاية الجلسة الرابعة</div>
-    <div class="stitle">بنيتم لعبة حقيقية!</div>
-    <div class="ssub">لقد تعلمتم الشروط والحلقات والمتغيرات — والأهم: شاركتم إبداعكم مع الجميع!</div>
-    <div class="box">
-      🐍 <strong style="color:var(--accent);">الأسبوع القادم:</strong> Python! الكود الحقيقي يبدأ هنا — ستكتبون أول سطر كود بأيديكم!
-    </div>
-    <div class="tag-row" style="margin-top:24px;">
-      <span class="badge teal">🎮 لعبة كاملة ✓</span>
-      <span class="badge blue">🔁 منطق ✓</span>
-      <span class="badge amber">🐍 Python ينتظر</span>
-    </div>
-  </div>
-
 </div>
 
+<!-- SLIDE 2 -->
+<div class="slide" id="s2">
+  <div class="stag">مراجعة</div>
+  <div class="stitle">ما تعرفه من الأسبوع الماضي ✅</div>
+  <div class="ssub">بدأنا الجسر — اليوم نعبره بالكامل</div>
+  <div class="grid">
+    <div class="card"><span class="ico">🖨</span><h3>print()</h3><p>طباعة أي شيء على الشاشة — نص أو رقم أو متغير</p></div>
+    <div class="card"><span class="ico">⌨️</span><h3>input()</h3><p>طلب إدخال من المستخدم — يُرجع نصاً دائماً</p></div>
+    <div class="card"><span class="ico">🔀</span><h3>if / else</h3><p>اتخاذ قرار بناءً على شرط — مثل كتلة "if" في Scratch</p></div>
+    <div class="card"><span class="ico">🔁</span><h3>for loop</h3><p>تكرار أمر عدة مرات — مثل "repeat" في Scratch</p></div>
+  </div>
+  <div class="box" style="margin-top:16px;">اليوم: نذهب أعمق في المتغيرات وأنواع البيانات — وهي قلب كل برنامج Python</div>
+</div>
+
+<!-- SLIDE 3 -->
+<div class="slide" id="s3">
+  <div class="stag">أنواع البيانات</div>
+  <div class="stitle">أربعة أنواع تكفيك الآن 📦</div>
+  <div class="ssub">كل قيمة في Python لها نوع — والنوع يحدد ما يمكنك فعله بها</div>
+  <div class="types-grid">
+    <div class="type-card">
+      <h3>int — عدد صحيح</h3>
+      <div class="example">humidity = 65</div>
+      <p>أعداد بدون فاصلة — عدد الحساسات، عدد التنبيهات</p>
+    </div>
+    <div class="type-card">
+      <h3>float — عدد عشري</h3>
+      <div class="example">temperature = 28.5</div>
+      <p>أعداد بفاصلة — قراءات الحرارة والرطوبة الدقيقة</p>
+    </div>
+    <div class="type-card">
+      <h3>str — نص</h3>
+      <div class="example">status = "طبيعي"</div>
+      <p>أي نص بين علامتَي تنصيص — الرسائل والتسميات</p>
+    </div>
+    <div class="type-card">
+      <h3>bool — منطقي</h3>
+      <div class="example">rain = True</div>
+      <p>قيمتان فقط: True أو False — هل يمطر؟ هل هناك تنبيه؟</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 4 -->
+<div class="slide" id="s4">
+  <div class="stag">المتغيرات بعمق</div>
+  <div class="stitle">قراءات الحساسات كمتغيرات 🌡</div>
+  <div class="ssub">هكذا يُخزّن رصد (Rasd) البيانات — متغير لكل حساس</div>
+  <div class="code-block">
+<span class="code-comment"># قراءات حساسات رصد (Rasd)</span>
+temperature  = 28.5     <span class="code-comment"># float — الحرارة بالسيلزيوس</span>
+humidity     = 65       <span class="code-comment"># int   — الرطوبة بالنسبة المئوية</span>
+water_level  = 62000    <span class="code-comment"># int   — قيمة عالية = جاف</span>
+soil_moisture = 18000   <span class="code-comment"># int   — قيمة منخفضة = رطب</span>
+rain_detected = <span class="code-keyword">False</span>  <span class="code-comment"># bool  — هل يمطر؟</span>
+location     = <span class="code-string">"غرفة الصف"</span> <span class="code-comment"># str   — اسم الموقع</span>
+
+<span class="code-comment"># طباعة تقرير</span>
+<span class="code-func">print</span>(<span class="code-string">f"الموقع: {location}"</span>)
+<span class="code-func">print</span>(<span class="code-string">f"الحرارة: {temperature}°C | الرطوبة: {humidity}%"</span>)
+  </div>
+  <div class="box" style="margin-top:14px;">💡 الـ f-string يسمح لك بدمج المتغيرات مع النص بسهولة — f"النص {المتغير}"</div>
+</div>
+
+<!-- SLIDE 5 -->
+<div class="slide" id="s5">
+  <div class="stag">تحويل الأنواع</div>
+  <div class="stitle">input() دائماً يُرجع نصاً ⚠️</div>
+  <div class="ssub">هذا الخطأ الأكثر شيوعاً للمبتدئين — وسنحله الآن للأبد</div>
+  <div class="code-block">
+<span class="code-comment"># ❌ خطأ شائع</span>
+temp = <span class="code-func">input</span>(<span class="code-string">"الحرارة؟ "</span>)
+<span class="code-keyword">if</span> temp > 35:          <span class="code-comment"># TypeError: لا يمكن مقارنة نص برقم!</span>
+    <span class="code-func">print</span>(<span class="code-string">"حار"</span>)
+
+<span class="code-comment"># ✅ الصحيح — حوّل النص إلى رقم</span>
+temp = <span class="code-type">float</span>(<span class="code-func">input</span>(<span class="code-string">"الحرارة؟ "</span>))
+<span class="code-keyword">if</span> temp > 35:          <span class="code-comment"># ✓ يعمل بشكل صحيح</span>
+    <span class="code-func">print</span>(<span class="code-string">"🔴 حار جداً"</span>)
+
+<span class="code-comment"># أدوات التحويل:</span>
+<span class="code-comment"># int("42")  → 42    |  float("28.5") → 28.5</span>
+<span class="code-comment"># str(28)    → "28"  |  bool(0) → False</span>
+  </div>
+</div>
+
+<!-- SLIDE 6 -->
+<div class="slide" id="s6">
+  <div class="stag">تطبيق ١</div>
+  <div class="stitle">محاكي الحساس الكامل 🌡</div>
+  <div class="ssub">اكتب هذا البرنامج على Trinket — ثم عدّله وجرّب</div>
+  <div class="code-block">
+<span class="code-comment"># محاكي حساس رصد (Rasd)</span>
+temp  = <span class="code-type">float</span>(<span class="code-func">input</span>(<span class="code-string">"درجة الحرارة (°C): "</span>))
+humid = <span class="code-type">int</span>(<span class="code-func">input</span>(<span class="code-string">"الرطوبة (%): "</span>))
+
+<span class="code-func">print</span>(<span class="code-string">"\n====== تقرير رصد ======"</span>)
+<span class="code-func">print</span>(<span class="code-string">f"الحرارة : {temp}°C"</span>)
+<span class="code-func">print</span>(<span class="code-string">f"الرطوبة : {humid}%"</span>)
+<span class="code-func">print</span>(<span class="code-string">"========================"</span>)
+
+<span class="code-keyword">if</span> temp > 35:
+    <span class="code-func">print</span>(<span class="code-string">"🔴 تنبيه: حرارة عالية"</span>)
+<span class="code-keyword">elif</span> temp < 10:
+    <span class="code-func">print</span>(<span class="code-string">"🔵 تنبيه: برودة شديدة"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-func">print</span>(<span class="code-string">"✅ الحرارة طبيعية"</span>)
+
+<span class="code-keyword">if</span> humid > 80:
+    <span class="code-func">print</span>(<span class="code-string">"💧 تنبيه: رطوبة مرتفعة"</span>)
+<span class="code-keyword">elif</span> humid < 20:
+    <span class="code-func">print</span>(<span class="code-string">"🏜 تنبيه: جفاف"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-func">print</span>(<span class="code-string">"✅ الرطوبة طبيعية"</span>)
+  </div>
+</div>
+
+<!-- SLIDE 7 -->
+<div class="slide" id="s7">
+  <div class="stag">تطبيق ٢</div>
+  <div class="stitle">محوّل الحرارة 🌡↔️🌡</div>
+  <div class="ssub">الحساسات الأمريكية ترسل فهرنهايت — رصد (Rasd) يحتاج سيلزيوس</div>
+  <div class="code-block">
+<span class="code-comment"># محوّل درجات الحرارة</span>
+
+unit = <span class="code-func">input</span>(<span class="code-string">"أدخل الوحدة (C/F): "</span>).upper()
+temp = <span class="code-type">float</span>(<span class="code-func">input</span>(<span class="code-string">"أدخل درجة الحرارة: "</span>))
+
+<span class="code-keyword">if</span> unit == <span class="code-string">"C"</span>:
+    result = (temp * 9/5) + 32
+    <span class="code-func">print</span>(<span class="code-string">f"{temp}°C = {result:.1f}°F"</span>)
+<span class="code-keyword">elif</span> unit == <span class="code-string">"F"</span>:
+    result = (temp - 32) * 5/9
+    <span class="code-func">print</span>(<span class="code-string">f"{temp}°F = {result:.1f}°C"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-func">print</span>(<span class="code-string">"وحدة غير معروفة! استخدم C أو F"</span>)
+  </div>
+  <div class="box" style="margin-top:14px;">🔍 جديد: <span style="font-family:monospace;color:var(--amber);">.upper()</span> تحوّل الحروف لكبيرة · <span style="font-family:monospace;color:var(--amber);">:.1f</span> تُقيّد الأرقام العشرية برقم واحد</div>
+</div>
+
+<!-- SLIDE 8 -->
+<div class="slide" id="s8">
+  <div class="stag">تطبيق ٣ — جماعي</div>
+  <div class="stitle">لوحة تقرير رصد (Rasd) النصية 📊</div>
+  <div class="ssub">نكتبها معاً على السبورة — ثم كل طالب يُشغّلها على Trinket</div>
+  <div class="code-block">
+<span class="code-comment"># لوحة تقرير نصية — مثل dashboard رصد لكن في Terminal</span>
+sensors = [
+    (<span class="code-string">"الحرارة"</span>,   <span class="code-type">float</span>(<span class="code-func">input</span>(<span class="code-string">"الحرارة°C: "</span>)),   10, 35),
+    (<span class="code-string">"الرطوبة"</span>,   <span class="code-type">int</span>(<span class="code-func">input</span>(<span class="code-string">"الرطوبة%: "</span>)),    20, 80),
+]
+
+<span class="code-func">print</span>(<span class="code-string">"\n╔══════════════════════╗"</span>)
+<span class="code-func">print</span>(<span class="code-string">"║   تقرير رصد (Rasd)   ║"</span>)
+<span class="code-func">print</span>(<span class="code-string">"╚══════════════════════╝"</span>)
+
+<span class="code-keyword">for</span> name, val, mn, mx <span class="code-keyword">in</span> sensors:
+    status = <span class="code-string">"✅ طبيعي"</span> <span class="code-keyword">if</span> mn <= val <= mx <span class="code-keyword">else</span> <span class="code-string">"⚠️ تنبيه"</span>
+    <span class="code-func">print</span>(<span class="code-string">f"  {name}: {val}  →  {status}"</span>)
+  </div>
+</div>
+
+<!-- SLIDE 9 -->
+<div class="slide" id="s9">
+  <div class="stag">واجب الأسبوع</div>
+  <div class="stitle">🏠 مهمتك هذا الأسبوع</div>
+  <div class="ssub">~ساعتان على Trinket — الروابط في Google Classroom</div>
+  <div class="hw-list">
+    <div class="hw-item"><div class="hw-icon">🐍</div><div><div class="hw-title">أكمل لوحة التقرير النصية</div><div class="hw-desc">أضف حساس المطر والتربة للـ sensors list — مع تحديد قيم min/max المناسبة</div></div></div>
+    <div class="hw-item"><div class="hw-icon">✏️</div><div><div class="hw-title"><a href="https://www.youtube.com/watch?v=FMSOoWQR92I&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN&index=2" target="_blank" style="color:var(--accent2);text-decoration:none;">شاهد: لغات البرمجة والفرق بينها ← يوتيوب</a></div><div class="hw-desc">١٥ دقيقة · اكتب في الدفتر: لماذا اخترنا Python لرصد (Rasd)؟</div></div></div>
+    <div class="hw-item" style="border-color:rgba(91,127,255,0.35);"><div class="hw-icon">⭐</div><div><div class="hw-title">تحدي: عرّف دالة check_sensor()</div><div class="hw-desc">دالة تأخذ (value, min_val, max_val) وتُرجع "طبيعي" أو "تنبيه" — استخدمها بدل الكود المكرر</div></div></div>
+  </div>
+</div>
+
+<!-- SLIDE 10 -->
+<div class="slide" id="s10">
+  <span class="big-emoji">🔁</span>
+  <div class="stitle">الأسبوع القادم</div>
+  <div class="ssub" style="margin-bottom:36px;">Python ٢ — المنطق والحلقات والدوال: نبني أدوات نستخدمها في رصد (Rasd)</div>
+  <div class="title-badges">
+    <div class="t-badge blue">🔀 while loops</div>
+    <div class="t-badge teal">🔧 def functions</div>
+    <div class="t-badge amber">🏗 نبني مكتبتنا الخاصة</div>
+  </div>
+  <div class="box" style="margin-top:36px;">أنت الآن تكتب Python حقيقياً — نفس اللغة التي تعمل بها Flask وTensorFlow وNASA 🚀</div>
+</div>
+
+</div>
+<div id="nav-dots"></div>
 <script>
-const total=10;let current=0;const slides=document.querySelectorAll('.slide');const dotsEl=document.getElementById('nav-dots');const counter=document.getElementById('counter');const bar=document.getElementById('progress-bar');
+const total=10;let current=0;
+const slides=document.querySelectorAll('.slide');
+const dotsEl=document.getElementById('nav-dots');
+const counter=document.getElementById('counter');
+const bar=document.getElementById('progress-bar');
 slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
 function goTo(n){slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),600);current=(n+total)%total;slides[current].classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');bar.style.width=((current+1)/total*100)+'%';}
 function navigate(dir){goTo(current+dir);}
 document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.key==='ArrowRight')navigate(-1);});
-let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
+let startX=0;document.addEventListener('touchstart',e=>startX=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-startX;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
 bar.style.width=(1/total*100)+'%';
 </script>
 </body>

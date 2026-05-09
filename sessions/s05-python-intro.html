@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الجلسة ٥ — Python: أول سطر كود</title>
+<title>الجلسة ٥ — Python ٢: المنطق والشروط</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
@@ -52,12 +52,17 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
 .box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
 .big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
-.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:14px;color:#a0f0e0;line-height:1.8;max-width:680px;width:100%;text-align:left;direction:ltr;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.8;max-width:700px;width:100%;text-align:left;direction:ltr;}
 .code-comment{color:var(--muted);}
 .code-keyword{color:var(--accent2);}
 .code-string{color:var(--amber);}
 .code-func{color:var(--accent);}
-@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+.ops-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;width:100%;max-width:700px;}
+.op-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 16px;text-align:center;}
+.op-sym{font-size:22px;font-weight:700;color:var(--accent);font-family:'Space Mono',monospace;display:block;margin-bottom:4px;}
+.op-name{font-size:11px;color:var(--muted);}
+.op-ex{font-size:11px;color:var(--amber);font-family:'Space Mono',monospace;margin-top:4px;}
+@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}.ops-grid{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
@@ -65,229 +70,235 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 <div class="orb orb2"></div>
 <div id="progress-bar"></div>
 <div id="counter">01 / 10</div>
-<div id="session-badge">W5 · المرحلة ٣</div>
+<div id="session-badge">W5 · Python ٢</div>
 <button class="nav-btn" id="btn-prev" onclick="navigate(-1)">&#8250;</button>
 <button class="nav-btn" id="btn-next" onclick="navigate(1)">&#8249;</button>
 <div id="nav-dots"></div>
 
 <div id="slides">
 
-  <!-- Slide 1 -->
+  <!-- Slide 1: Title -->
   <div class="slide active">
     <div class="eyebrow">الجلسة الخامسة · رصد (Rasd)</div>
-    <div class="title-main">Python — أول سطر كود 🐍</div>
-    <div class="subtitle">اليوم نكتب كود حقيقي بأيدينا — من الصفر — ونتعلم لغة البرمجة الأكثر شهرة في العالم!</div>
+    <div class="title-main">Python ٢ — المنطق والشروط 🔀</div>
+    <div class="subtitle">اليوم نعلّم البرنامج كيف يفكر ويتخذ قرارات — تماماً كما يفعل رصد (Rasd) عند تلقي قراءات الحساسات!</div>
     <div class="tag-row">
-      <span class="badge teal">🐍 Python</span>
-      <span class="badge blue">💻 Trinket</span>
-      <span class="badge amber">⌨️ كتابة كود</span>
+      <span class="badge teal">🔀 if / elif / else</span>
+      <span class="badge blue">⚖️ مقارنة الأرقام</span>
+      <span class="badge amber">🔗 and / or / not</span>
     </div>
   </div>
 
   <!-- Slide 2: Review -->
   <div class="slide">
-    <div class="stag">مراجعة</div>
-    <div class="stitle">من Scratch إلى Python 🔄</div>
-    <div class="ssub">ما الفرق بين البرمجة المرئية والنصية؟ — هيا نناقش!</div>
-    <div class="grid" style="max-width:800px;">
-      <div class="card" style="border-color:rgba(91,127,255,0.3);">
-        <span class="ico">🧩</span>
-        <h3 style="color:var(--accent2);">Scratch — المرئية</h3>
-        <p>كتل جاهزة، سحب وإفلات، سهلة للمبتدئين، محدودة الإمكانيات</p>
-      </div>
+    <div class="stag">مراجعة سريعة</div>
+    <div class="stitle">Python ١ — ماذا تعلمنا؟ 🧠</div>
+    <div class="ssub">قبل أن نبدأ — هيا نراجع معاً</div>
+    <div class="grid" style="max-width:860px;">
       <div class="card" style="border-color:rgba(0,229,192,0.3);">
-        <span class="ico">⌨️</span>
-        <h3>Python — النصية</h3>
-        <p>تكتب الكود بنفسك، قدرات لا حدود لها، تُستخدم في الشركات الكبرى</p>
+        <span class="ico">📦</span>
+        <h3>المتغيرات وأنواع البيانات</h3>
+        <p><code style="color:var(--amber);font-size:12px;">temp = 36.5</code> — int، float، str، bool</p>
+      </div>
+      <div class="card" style="border-color:rgba(91,127,255,0.3);">
+        <span class="ico">🗣️</span>
+        <h3>print() و input()</h3>
+        <p>نطبع نتائج ونأخذ مدخلات من المستخدم</p>
+      </div>
+      <div class="card" style="border-color:rgba(255,179,71,0.3);">
+        <span class="ico">🔄</span>
+        <h3>تحويل الأنواع</h3>
+        <p><code style="color:var(--amber);font-size:12px;">float(input(...))</code> — تحويل النص لرقم</p>
+      </div>
+      <div class="card" style="border-color:rgba(255,107,107,0.3);">
+        <span class="ico">📝</span>
+        <h3>f-strings</h3>
+        <p><code style="color:var(--amber);font-size:12px;">f"الحرارة: {temp}°C"</code> — طباعة منسّقة</p>
       </div>
     </div>
-    <div class="box" style="margin-top:20px;">
-      🧠 <strong style="color:var(--accent);">تفكير:</strong> Scratch مثل الرسم بأقلام التلوين الجاهزة — Python مثل أن تصنع قلمك بنفسك وترسم ما تشاء!
+    <div class="box" style="margin-top:20px;">💡 اليوم نضيف الأهم: <strong style="color:var(--accent);">اتخاذ القرارات</strong> — البرنامج يقرر ماذا يفعل بناءً على القراءات!</div>
+  </div>
+
+  <!-- Slide 3: Comparison Operators -->
+  <div class="slide">
+    <div class="stag">مقارنة الأرقام</div>
+    <div class="stitle">عوامل المقارنة ⚖️</div>
+    <div class="ssub">هذه الأدوات تسمح للبرنامج بمقارنة القيم — النتيجة دائماً True أو False</div>
+    <div class="ops-grid" style="margin-bottom:18px;">
+      <div class="op-card"><span class="op-sym">></span><div class="op-name">أكبر من</div><div class="op-ex">temp > 35</div></div>
+      <div class="op-card"><span class="op-sym"><</span><div class="op-name">أصغر من</div><div class="op-ex">temp < 10</div></div>
+      <div class="op-card"><span class="op-sym">>=</span><div class="op-name">أكبر أو يساوي</div><div class="op-ex">humid >= 80</div></div>
+      <div class="op-card"><span class="op-sym"><=</span><div class="op-name">أصغر أو يساوي</div><div class="op-ex">soil <= 20</div></div>
+      <div class="op-card"><span class="op-sym">==</span><div class="op-name">يساوي تماماً</div><div class="op-ex">status == "OK"</div></div>
+      <div class="op-card"><span class="op-sym">!=</span><div class="op-name">لا يساوي</div><div class="op-ex">rain != 0</div></div>
+    </div>
+    <div class="box">⚠️ <strong style="color:var(--amber);">انتبه:</strong> <code style="color:var(--accent);">=</code> للتعيين (حفظ قيمة) — <code style="color:var(--accent);">==</code> للمقارنة (هل يساوي؟)</div>
+  </div>
+
+  <!-- Slide 4: if/elif/else -->
+  <div class="slide">
+    <div class="stag">اتخاذ القرار</div>
+    <div class="stitle">if / elif / else 🔀</div>
+    <div class="ssub">ثلاثة أجزاء لبناء أي قرار في Python</div>
+    <div class="code-block" style="margin-bottom:16px;">
+<span class="code-comment"># درجة الحرارة — مثال رصد (Rasd)</span>
+temp = <span class="code-func">float</span>(<span class="code-func">input</span>(<span class="code-string">"أدخل درجة الحرارة: "</span>))
+
+<span class="code-keyword">if</span> temp > <span class="code-keyword">35</span>:                    <span class="code-comment"># الشرط الأول</span>
+    <span class="code-func">print</span>(<span class="code-string">"🔴 خطر! حار جداً"</span>)
+<span class="code-keyword">elif</span> temp > <span class="code-keyword">25</span>:                  <span class="code-comment"># شرط بديل</span>
+    <span class="code-func">print</span>(<span class="code-string">"🟡 دافئ — طبيعي"</span>)
+<span class="code-keyword">elif</span> temp > <span class="code-keyword">10</span>:                  <span class="code-comment"># شرط بديل آخر</span>
+    <span class="code-func">print</span>(<span class="code-string">"🟢 معتدل ومريح"</span>)
+<span class="code-keyword">else</span>:                           <span class="code-comment"># كل الحالات الأخرى</span>
+    <span class="code-func">print</span>(<span class="code-string">"🔵 بارد! تنبيه حرارة منخفضة"</span>)
+    </div>
+    <div class="box">📐 <strong style="color:var(--accent);">المسافة البادئة إلزامية</strong> — 4 مسافات بعد كل if/elif/else يجب أن يكون الكود داخلها منزاحاً للأمام</div>
+  </div>
+
+  <!-- Slide 5: and / or / not -->
+  <div class="slide">
+    <div class="stag">العوامل المنطقية</div>
+    <div class="stitle">and / or / not 🔗</div>
+    <div class="ssub">ندمج أكثر من شرط في قرار واحد — رصد (Rasd) يحتاجها دائماً</div>
+    <div class="code-block" style="margin-bottom:16px;">
+<span class="code-comment"># and — الشرطان معاً يجب أن يكونا صحيحين</span>
+<span class="code-keyword">if</span> temp > <span class="code-keyword">35</span> <span class="code-keyword">and</span> humid > <span class="code-keyword">80</span>:
+    <span class="code-func">print</span>(<span class="code-string">"🔴 حر ورطب — خطر مزدوج!"</span>)
+
+<span class="code-comment"># or — يكفي شرط واحد صحيح</span>
+<span class="code-keyword">if</span> temp > <span class="code-keyword">35</span> <span class="code-keyword">or</span> temp < <span class="code-keyword">10</span>:
+    <span class="code-func">print</span>(<span class="code-string">"⚠️ درجة حرارة خارج المعدل!"</span>)
+
+<span class="code-comment"># not — يعكس النتيجة</span>
+rain_ok = <span class="code-keyword">False</span>
+<span class="code-keyword">if</span> <span class="code-keyword">not</span> rain_ok:
+    <span class="code-func">print</span>(<span class="code-string">"🌧️ هناك مطر مكتشف!"</span>)
+    </div>
+    <div class="grid" style="max-width:680px;grid-template-columns:repeat(3,1fr);">
+      <div class="card"><h3 style="color:var(--accent);">and</h3><p>صحيح فقط إذا الاثنان صحيحان</p></div>
+      <div class="card"><h3 style="color:var(--accent2);">or</h3><p>صحيح إذا واحد أو أكثر صحيح</p></div>
+      <div class="card"><h3 style="color:var(--amber);">not</h3><p>يحوّل True→False والعكس</p></div>
     </div>
   </div>
 
-  <!-- Slide 3: Why Python -->
+  <!-- Slide 6: Full Rasd Guardian -->
   <div class="slide">
-    <div class="stag">لماذا Python؟</div>
-    <div class="stitle">اختيار اللغة المثالية 🎯</div>
-    <div class="ssub">Python هي اللغة الأولى المُوصى بها للمبتدئين والمحترفين معاً</div>
-    <div class="grid">
-      <div class="card">
-        <span class="ico">📖</span>
-        <h3>بسيطة وواضحة</h3>
-        <p>قريبة من الإنجليزي العادي — print("مرحبا") واضحة بدون شرح!</p>
-      </div>
-      <div class="card">
-        <span class="ico">🤖</span>
-        <h3>الذكاء الاصطناعي</h3>
-        <p>ChatGPT، صور AI، رصد (Rasd) — كلها تعمل بـ Python!</p>
-      </div>
-      <div class="card">
-        <span class="ico">🌐</span>
-        <h3>تعمل في Trinket</h3>
-        <p>لا تثبيت ولا إعداد — افتح المتصفح وابدأ الكتابة مباشرة</p>
-      </div>
-      <div class="card">
-        <span class="ico">🌍</span>
-        <h3>مجتمع ضخم</h3>
-        <p>ملايين المبرمجين حول العالم يساعدون بالعربي والإنجليزي</p>
-      </div>
+    <div class="stag">ربط بالمشروع</div>
+    <div class="stitle">حارس الغرفة الكامل 🛡️</div>
+    <div class="ssub">نفس المنطق الموجود فعلاً في alerts.py داخل رصد (Rasd)!</div>
+    <div class="code-block">
+<span class="code-comment"># حارس الغرفة — كل الحساسات الأربعة</span>
+temp  = <span class="code-func">float</span>(<span class="code-func">input</span>(<span class="code-string">"الحرارة (°C): "</span>))
+humid = <span class="code-func">float</span>(<span class="code-func">input</span>(<span class="code-string">"الرطوبة (%): "</span>))
+water = <span class="code-func">int</span>(<span class="code-func">input</span>(<span class="code-string">"حساس المطر (0-65535): "</span>))
+soil  = <span class="code-func">int</span>(<span class="code-func">input</span>(<span class="code-string">"رطوبة التربة (0-65535): "</span>))
+
+alerts = <span class="code-keyword">0</span>
+
+<span class="code-keyword">if</span> temp > <span class="code-keyword">35</span> <span class="code-keyword">or</span> temp < <span class="code-keyword">10</span>:
+    <span class="code-func">print</span>(<span class="code-string">f"🌡️ تنبيه حرارة: {temp}°C"</span>)
+    alerts += <span class="code-keyword">1</span>
+
+<span class="code-keyword">if</span> humid > <span class="code-keyword">80</span> <span class="code-keyword">or</span> humid < <span class="code-keyword">20</span>:
+    <span class="code-func">print</span>(<span class="code-string">f"💧 تنبيه رطوبة: {humid}%"</span>)
+    alerts += <span class="code-keyword">1</span>
+
+<span class="code-keyword">if</span> water < <span class="code-keyword">20000</span>:
+    <span class="code-func">print</span>(<span class="code-string">"🌧️ تنبيه: مطر مكتشف!"</span>)
+    alerts += <span class="code-keyword">1</span>
+
+<span class="code-keyword">if</span> soil < <span class="code-keyword">20000</span>:
+    <span class="code-func">print</span>(<span class="code-string">"🌱 تنبيه: التربة جافة جداً!"</span>)
+    alerts += <span class="code-keyword">1</span>
+
+<span class="code-keyword">if</span> alerts == <span class="code-keyword">0</span>:
+    <span class="code-func">print</span>(<span class="code-string">"✅ كل شيء طبيعي — رصد (Rasd) مطمئن"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-func">print</span>(<span class="code-string">f"⚠️ عدد التنبيهات: {alerts}"</span>)
     </div>
   </div>
 
-  <!-- Slide 4: Trinket Setup -->
+  <!-- Slide 7: Activity -->
   <div class="slide">
-    <div class="stag">الإعداد</div>
-    <div class="stitle">افتح Trinket الآن! 💻</div>
-    <div class="ssub">trinket.io/python3 — بيئة برمجة كاملة في المتصفح، مجانية تماماً</div>
-    <div class="list">
+    <div class="stag">نشاط</div>
+    <div class="stitle">ابنِ محلل تقرير الطقس 🌤️</div>
+    <div class="ssub">استخدم ما تعلمته اليوم في مشروع جديد — ٢٥ دقيقة</div>
+    <div class="list" style="max-width:720px;">
       <div class="li-item">
         <div class="li-num">١</div>
         <div>
-          <div class="li-title">افتح trinket.io/python3 في المتصفح</div>
-          <div class="li-sub">لا تحتاج تنزيل أي شيء — كل شيء يعمل في المتصفح مباشرة</div>
+          <div class="li-title">اسأل عن درجة الحرارة والرطوبة والسرعة الريح</div>
+          <div class="li-sub">ثلاثة input() — تأكد من تحويلها لأرقام float</div>
         </div>
       </div>
       <div class="li-item">
         <div class="li-num">٢</div>
         <div>
-          <div class="li-title">أنشئ حساباً مجانياً</div>
-          <div class="li-sub">Sign Up → اكتب اسمك وبريدك الإلكتروني → تأكيد الإيميل</div>
+          <div class="li-title">اكتب قرار لكل قيمة</div>
+          <div class="li-sub">حرارة > 40: "حر شديد" | رطوبة > 70: "رطب" | ريح > 50 km/h: "عاصفة"</div>
         </div>
       </div>
       <div class="li-item">
         <div class="li-num">٣</div>
         <div>
-          <div class="li-title">ابدأ مشروع Python جديد</div>
-          <div class="li-sub">Create Repl → اختر Python → سمّ المشروع "hello-world" → Create</div>
-        </div>
-      </div>
-      <div class="li-item">
-        <div class="li-num">٤</div>
-        <div>
-          <div class="li-title">تعرف على الواجهة</div>
-          <div class="li-sub">يسار: الملفات | وسط: المحرر | يمين: Terminal — اضغط Run لتشغيل الكود</div>
+          <div class="li-title">اطبع تقريراً نهائياً</div>
+          <div class="li-sub">استخدم and لاكتشاف حالات مزدوجة: حر + رطب = "مؤلم جداً 🥵"</div>
         </div>
       </div>
     </div>
+    <div class="box" style="margin-top:16px;">🏆 <strong style="color:var(--accent);">تحدي:</strong> أضف توصية للمستخدم — هل يخرج من البيت أم لا؟ بناءً على ثلاثة شروط معاً!</div>
   </div>
 
-  <!-- Slide 5: First Code -->
+  <!-- Slide 8: Nested Conditions -->
   <div class="slide">
-    <div class="stag">أول كود</div>
-    <div class="stitle">مرحباً يا عالم! 🌍</div>
-    <div class="ssub">تقليد عريق في البرمجة — أول برنامج تكتبه دائماً يطبع "Hello World"</div>
+    <div class="stag">متقدم</div>
+    <div class="stitle">الشروط المتداخلة 🪆</div>
+    <div class="ssub">if داخل if — حين تحتاج قراراً داخل قرار آخر</div>
     <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># أول برنامج Python في حياتك!</span>
-<span class="code-func">print</span>(<span class="code-string">"مرحباً يا عالم! 🌍"</span>)
-<span class="code-func">print</span>(<span class="code-string">"أنا أتعلم Python في Rakaez"</span>)
-
-<span class="code-comment"># المتغيرات — صناديق لحفظ البيانات</span>
-name = <span class="code-string">"أحمد"</span>
-age = <span class="code-keyword">14</span>
-city = <span class="code-string">"إسطنبول"</span>
-
-<span class="code-func">print</span>(<span class="code-string">"اسمي:"</span>, name)
-<span class="code-func">print</span>(<span class="code-string">"عمري:"</span>, age, <span class="code-string">"سنة"</span>)
-<span class="code-func">print</span>(<span class="code-string">"مدينتي:"</span>, city)
+<span class="code-comment"># تصنيف حالة الغرفة — درجتان من الخطورة</span>
+<span class="code-keyword">if</span> temp > <span class="code-keyword">30</span>:
+    <span class="code-comment">    # دخلنا منطقة الحرارة العالية</span>
+    <span class="code-keyword">if</span> humid > <span class="code-keyword">70</span>:
+        <span class="code-func">print</span>(<span class="code-string">"🔴 خطر حريق محتمل! أغلق الحساسات!"</span>)
+    <span class="code-keyword">else</span>:
+        <span class="code-func">print</span>(<span class="code-string">"🟠 حار لكن رطوبة معقولة — راقب الوضع"</span>)
+<span class="code-keyword">elif</span> temp < <span class="code-keyword">5</span>:
+    <span class="code-keyword">if</span> humid > <span class="code-keyword">60</span>:
+        <span class="code-func">print</span>(<span class="code-string">"❄️ بارد ورطب — خطر تكثف وصدأ!"</span>)
+    <span class="code-keyword">else</span>:
+        <span class="code-func">print</span>(<span class="code-string">"🔵 بارد فقط — تنبيه عادي"</span>)
+<span class="code-keyword">else</span>:
+    <span class="code-func">print</span>(<span class="code-string">"✅ الغرفة في الحدود الآمنة"</span>)
     </div>
-    <div class="box">▶️ اضغط <strong style="color:var(--accent);">Run</strong> وشاهد الكلمات تظهر في Terminal — هذا هو أول كود Python لك!</div>
-  </div>
-
-  <!-- Slide 6: Data Types -->
-  <div class="slide">
-    <div class="stag">أنواع البيانات</div>
-    <div class="stitle">أنواع البيانات في Python 📦</div>
-    <div class="ssub">كل متغير له "نوع" يحدد ما يمكن تخزينه</div>
-    <div class="grid">
-      <div class="card" style="border-color:rgba(0,229,192,0.3);">
-        <span class="ico">📝</span>
-        <h3>str — نص</h3>
-        <p>أي نص بين علامات تنصيص<br><code style="color:var(--amber);font-size:12px;">name = "زياد"</code></p>
-      </div>
-      <div class="card" style="border-color:rgba(91,127,255,0.3);">
-        <span class="ico">🔢</span>
-        <h3>int — عدد صحيح</h3>
-        <p>أرقام بدون فاصلة<br><code style="color:var(--amber);font-size:12px;">age = 14</code></p>
-      </div>
-      <div class="card" style="border-color:rgba(255,179,71,0.3);">
-        <span class="ico">🔣</span>
-        <h3>float — عدد عشري</h3>
-        <p>أرقام بفاصلة عشرية<br><code style="color:var(--amber);font-size:12px;">temp = 36.6</code></p>
-      </div>
-      <div class="card" style="border-color:rgba(255,107,107,0.3);">
-        <span class="ico">✅</span>
-        <h3>bool — صح/خطأ</h3>
-        <p>قيمتان فقط: True أو False<br><code style="color:var(--amber);font-size:12px;">active = True</code></p>
-      </div>
-    </div>
-  </div>
-
-  <!-- Slide 7: Input -->
-  <div class="slide">
-    <div class="stag">المدخلات</div>
-    <div class="stitle">اجعل البرنامج يتحدث معك! 🗣️</div>
-    <div class="ssub">دالة input() تأخذ مدخلات من المستخدم أثناء تشغيل البرنامج</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># برنامج يسألك أسئلة</span>
-name = <span class="code-func">input</span>(<span class="code-string">"ما اسمك؟ "</span>)
-age = <span class="code-func">int</span>(<span class="code-func">input</span>(<span class="code-string">"كم عمرك؟ "</span>))
-
-<span class="code-comment"># نطبع ترحيباً مخصصاً</span>
-<span class="code-func">print</span>(<span class="code-string">"أهلاً وسهلاً يا"</span>, name, <span class="code-string">"! 👋"</span>)
-<span class="code-func">print</span>(<span class="code-string">"عمرك"</span>, age, <span class="code-string">"سنة — رائع!"</span>)
-
-next_year = age + <span class="code-keyword">1</span>
-<span class="code-func">print</span>(<span class="code-string">"في السنة القادمة ستكون عمرك:"</span>, next_year)
-    </div>
-    <div class="box">⚠️ <strong style="color:var(--amber);">مهم:</strong> input() يعطيك دائماً نصاً (str) — استخدم int() لتحويله لرقم إذا أردت حساباً رياضياً</div>
-  </div>
-
-  <!-- Slide 8: Calculator Activity -->
-  <div class="slide">
-    <div class="stag">نشاط</div>
-    <div class="stitle">ابنِ حاسبة بسيطة! 🧮</div>
-    <div class="ssub">نطبق ما تعلمناه في مشروع صغير كامل</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># الحاسبة البسيطة</span>
-<span class="code-func">print</span>(<span class="code-string">"=== حاسبة رصد (Rasd) ==="</span>)
-
-a = <span class="code-func">int</span>(<span class="code-func">input</span>(<span class="code-string">"أدخل الرقم الأول: "</span>))
-b = <span class="code-func">int</span>(<span class="code-func">input</span>(<span class="code-string">"أدخل الرقم الثاني: "</span>))
-
-<span class="code-func">print</span>(<span class="code-string">"الجمع:"</span>,      a + b)
-<span class="code-func">print</span>(<span class="code-string">"الطرح:"</span>,      a - b)
-<span class="code-func">print</span>(<span class="code-string">"الضرب:"</span>,      a * b)
-<span class="code-func">print</span>(<span class="code-string">"القسمة:"</span>,     a / b)
-    </div>
-    <div class="box">🎯 <strong style="color:var(--accent);">تحدي إضافي:</strong> أضف القسمة الصحيحة (//) والباقي (%) — وماذا يحدث إذا قسمت على صفر؟</div>
+    <div class="box">📏 كل مستوى تداخل يحتاج <strong style="color:var(--accent);">4 مسافات إضافية</strong> — لا تنسَ الترتيب وإلا ستخطئ Python!</div>
   </div>
 
   <!-- Slide 9: Homework -->
   <div class="slide">
     <div class="stag">واجب البيت</div>
     <div class="stitle">مهامك للأسبوع القادم 📚</div>
-    <div class="ssub">ثلاث برامج Python تكتبها بنفسك في Trinket</div>
+    <div class="ssub">ثلاث مهام Python — ارفعها على Trinket وأرسل الرابط على Classroom</div>
     <div class="list">
       <div class="li-item">
         <div class="li-num">١</div>
         <div>
-          <div class="li-title">برنامج الترحيب الشخصي</div>
-          <div class="li-sub">يسأل: الاسم، العمر، المدينة — ثم يطبع جملة ترحيب مخصصة لكل طالب</div>
+          <div class="li-title">محلل القراءات الكاملة</div>
+          <div class="li-sub">أكمل حارس الغرفة من الجلسة — اختبر جميع الحالات (حرارة عالية، منخفضة، رطوبة، مطر، تربة)</div>
         </div>
       </div>
       <div class="li-item">
         <div class="li-num">٢</div>
         <div>
-          <div class="li-title">محوّل الدرجات: مئوي → فهرنهايت</div>
-          <div class="li-sub">القانون: F = (C × 9/5) + 32 — اسأل المستخدم الدرجة المئوية واطبع الفهرنهايت</div>
+          <div class="li-title">آلة تصنيف الطلاب</div>
+          <div class="li-sub">أدخل الدرجة (0-100) → "ممتاز" (90+) | "جيد جداً" (75+) | "جيد" (60+) | "راسب" (أقل من 60)</div>
         </div>
       </div>
       <div class="li-item">
         <div class="li-num">٣</div>
         <div>
-          <div class="li-title">اكتب الفرق: int وstr وfloat</div>
-          <div class="li-sub">مع مثال لكل نوع من حياتك اليومية وكيف يستخدمه رصد (Rasd)</div>
+          <div class="li-title">📓 دفتر الملاحظات — ما الفرق بين and و or؟</div>
+          <div class="li-sub">اكتب مثالاً حقيقياً من حياتك اليومية لكل عامل — متى تستخدم and ومتى تستخدم or؟</div>
         </div>
       </div>
     </div>
@@ -295,17 +306,17 @@ b = <span class="code-func">int</span>(<span class="code-func">input</span>(<spa
 
   <!-- Slide 10: End -->
   <div class="slide">
-    <span class="big-e">🔁</span>
+    <span class="big-e">🔀</span>
     <div class="stag">نهاية الجلسة الخامسة</div>
-    <div class="stitle">كتبتم كود Python حقيقي!</div>
-    <div class="ssub">print، input، المتغيرات، أنواع البيانات — هذا هو أساس كل برنامج في العالم!</div>
+    <div class="stitle">البرنامج يتخذ قرارات!</div>
+    <div class="ssub">if/elif/else، عوامل المقارنة، and/or/not — هذا هو "عقل" رصد (Rasd)!</div>
     <div class="box">
-      🔀 <strong style="color:var(--accent);">الأسبوع القادم:</strong> الشروط والحلقات — نجعل البرنامج يتخذ قرارات ويكرر الأوامر!
+      🔁 <strong style="color:var(--accent);">الأسبوع القادم:</strong> الحلقات والدوال — نجعل البرنامج يكرر الأوامر ونبنيه من قطع صغيرة قابلة لإعادة الاستخدام!
     </div>
     <div class="tag-row" style="margin-top:24px;">
-      <span class="badge teal">🐍 Python ✓</span>
-      <span class="badge blue">💻 Trinket ✓</span>
-      <span class="badge amber">🔁 الشروط تنتظر</span>
+      <span class="badge teal">🔀 if/elif/else ✓</span>
+      <span class="badge blue">🔗 and/or/not ✓</span>
+      <span class="badge amber">🔁 الحلقات تنتظر</span>
     </div>
   </div>
 

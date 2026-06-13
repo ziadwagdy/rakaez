@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة تحكم رصد</title>
+
+  <!-- خط عربي من Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ═══════════════════════════════
+       الخطوة ١: تصميم الصفحة الأساسي
+       ═══════════════════════════════ */
+    body {
+      background: #0d1117;
+      color: #e6edf3;
+      font-family: 'Cairo', sans-serif;
+      margin: 0;
+      padding: 24px;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 8px;
+      color: #00e5c0;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #8b949e;
+      font-size: 14px;
+      margin-bottom: 32px;
+    }
+
+    /* ═══════════════════════════════
+       الخطوة ٢: شبكة البطاقات
+       ═══════════════════════════════ */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════
+       الخطوة ٣: تصميم البطاقة
+       ═══════════════════════════════ */
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px 16px;
+      text-align: center;
+    }
+
+    .card .icon {
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .card .label {
+      font-size: 13px;
+      color: #8b949e;
+      margin-bottom: 12px;
+    }
+
+    .card .value {
+      font-size: 42px;
+      font-weight: 900;
+      color: #00e5c0;
+      /* TODO: JavaScript سيغيّر هذا اللون لاحقاً */
+    }
+
+    .card .unit {
+      font-size: 13px;
+      color: #8b949e;
+      margin-top: 6px;
+    }
+
+    .card .status {
+      font-size: 12px;
+      margin-top: 10px;
+      min-height: 18px;
+      /* TODO: الواجب — أضف رسالة التنبيه هنا */
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════
+       الخطوة ١: العنوان
+       غيّر النص باسمك
+       ═══════════════════════════════════════ -->
+  <h1>🛡️ لوحة تحكم رصد</h1>
+  <p class="subtitle">البيانات تتحدث كل ٣ ثوانٍ</p>
+
+  <!-- ═══════════════════════════════════════
+       الخطوة ٢: البطاقات الأربعة
+       كل بطاقة لها id فريد — JS ستستخدمه
+       ═══════════════════════════════════════ -->
+  <div class="dashboard">
+
+    <!-- بطاقة الحرارة -->
+    <div class="card">
+      <div class="icon">🌡️</div>
+      <div class="label">درجة الحرارة</div>
+      <div class="value" id="temp">--</div>
+      <div class="unit">°C</div>
+      <div class="status" id="temp-status"></div>
+    </div>
+
+    <!-- بطاقة الرطوبة -->
+    <div class="card">
+      <div class="icon">💧</div>
+      <div class="label">الرطوبة</div>
+      <div class="value" id="humid">--</div>
+      <div class="unit">%</div>
+      <div class="status" id="humid-status"></div>
+    </div>
+
+    <!-- بطاقة حساس المطر -->
+    <div class="card">
+      <div class="icon">🌧️</div>
+      <div class="label">حساس المطر</div>
+      <div class="value" id="water">--</div>
+      <div class="unit">/ 65535</div>
+      <div class="status" id="water-status"></div>
+    </div>
+
+    <!-- بطاقة رطوبة التربة -->
+    <div class="card">
+      <div class="icon">🌱</div>
+      <div class="label">رطوبة التربة</div>
+      <div class="value" id="soil">--</div>
+      <div class="unit">/ 65535</div>
+      <div class="status" id="soil-status"></div>
+    </div>
+
+  </div><!-- /dashboard -->
+
+
+  <!-- ═══════════════════════════════════════════════════════
+       الخطوة ٣: JavaScript — جلب البيانات من الـ Backend
+       ═══════════════════════════════════════════════════════ -->
+  <script>
+
+    function updateDashboard() {
+      fetch('http://localhost:8080/api/latest')
+        .then(response => response.json())
+        .then(data => {
+
+          // ── ضع القيم في البطاقات ────────────────────────
+          document.getElementById('temp').textContent  = data.temperature;
+          document.getElementById('humid').textContent = data.humidity;
+          document.getElementById('water').textContent = data.water_level;
+          document.getElementById('soil').textContent  = data.soil_moisture;
+
+          // ── الخطوة ٤: غيّر لون الحرارة حسب القيمة ──────
+          const tempEl = document.getElementById('temp');
+
+          if (data.temperature > 35) {
+            tempEl.style.color = '#ff6b6b';  // أحمر — حرارة عالية
+          } else if (data.temperature < 10) {
+            tempEl.style.color = '#58a6ff';  // أزرق — برودة شديدة
+          } else {
+            tempEl.style.color = '#00e5c0';  // عادي
+          }
+
+          // TODO (الواجب ٤): أضف نفس المنطق للرطوبة والمطر والتربة
+
+        })
+        .catch(error => {
+          // إذا لم يكن الـ Backend يعمل
+          console.log('تأكد أن رصد يعمل: python app.py');
+        });
+    }
+
+    // شغّل مرة الآن
+    updateDashboard();
+
+    // كرّر كل 3 ثوانٍ (3000 ميلي ثانية)
+    setInterval(updateDashboard, 3000);
+
+  </script>
+
+</body>
+</html>

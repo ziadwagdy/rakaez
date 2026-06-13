@@ -64,11 +64,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .check-sub{font-size:12px;color:var(--muted);margin-top:2px;}
 
 /* CODE */
-.code-block{background:#060b12;border:1px solid rgba(0,229,192,0.18);border-radius:10px;padding:16px 20px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.9;direction:ltr;text-align:left;margin:10px 0;overflow-x:auto;}
-.cc{color:var(--muted);}
-.ck{color:var(--blue);}
-.cs{color:var(--amber);}
-.cf{color:var(--accent);}
+.code-block{background:#060b12;border:1px solid rgba(0,229,192,0.18);border-radius:10px;padding:0;margin:10px 0;overflow-x:auto;direction:ltr;text-align:left;}
+.code-block code[class*="language-"]{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.9!important;background:transparent!important;text-shadow:none!important;padding:16px 20px!important;display:block!important;}
+.code-block.language-python,.code-block[class*="language-"]{background:#060b12!important;}
+pre.code-block{border-radius:10px!important;margin:10px 0!important;}
 
 /* STEPS */
 .steps{display:flex;flex-direction:column;gap:10px;}
@@ -102,6 +101,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 
 @media(max-width:600px){.sticky-bar{padding:10px 16px;}.page{padding:24px 16px 0;}.sec-title{font-size:18px;}}
 </style>
+  <!-- Prism.js syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 </head>
 <body>
 
@@ -379,15 +382,13 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
       <div class="block-label">💬 قل هذا</div>
       <p>«المتغير هو صندوق لحفظ قيمة. هنا عندنا صندوق اسمه temp يحفظ درجة الحرارة.»</p>
     </div>
-    <div class="code-block">
-<span class="cc"># تمرين ١: متغيرات وطباعة</span>
-temp  = <span class="ck">34.5</span>   <span class="cc"># درجة الحرارة</span>
-humid = <span class="ck">65</span>     <span class="cc"># الرطوبة</span>
+    <pre class="code-block language-python"><code class="language-python"># تمرين ١: متغيرات وطباعة
+temp  = 34.5   # درجة الحرارة
+humid = 65     # الرطوبة
 
-<span class="cf">print</span>(<span class="cs">"درجة الحرارة:"</span>, temp, <span class="cs">"°C"</span>)
-<span class="cf">print</span>(<span class="cs">"الرطوبة:"</span>, humid, <span class="cs">"%"</span>)
-<span class="cf">print</span>(<span class="cs">f"التقرير: الحرارة {temp}°C والرطوبة {humid}%"</span>)
-    </div>
+print("درجة الحرارة:", temp, "°C")
+print("الرطوبة:", humid, "%")
+print(f"التقرير: الحرارة {temp}°C والرطوبة {humid}%")</code></pre>
     <div class="block do" style="margin-top:8px;margin-bottom:0;">
       <div class="block-label">⚙️ بعد الكتابة</div>
       <p>اضغط Run ▶ وأرِهم الناتج. «غيّروا الأرقام — ماذا يحدث؟»</p>
@@ -401,17 +402,15 @@ humid = <span class="ck">65</span>     <span class="cc"># الرطوبة</span>
       <div class="block-label">💬 قل هذا</div>
       <p>«if تعني "إذا" — البرنامج يقرر ماذا يفعل بناءً على القيمة. هذا بالضبط ما رسمناه في المخطط الانسيابي!»</p>
     </div>
-    <div class="code-block">
-<span class="cc"># تمرين ٢: الشروط</span>
-temp = <span class="ck">38</span>
+    <pre class="code-block language-python"><code class="language-python"># تمرين ٢: الشروط
+temp = 38
 
-<span class="ck">if</span> temp > <span class="ck">35</span>:
-    <span class="cf">print</span>(<span class="cs">"🔴 تحذير: حرارة عالية جداً!"</span>)
-<span class="ck">elif</span> temp &lt; <span class="ck">10</span>:
-    <span class="cf">print</span>(<span class="cs">"🔵 تحذير: برودة شديدة!"</span>)
-<span class="ck">else</span>:
-    <span class="cf">print</span>(<span class="cs">"✅ الحرارة طبيعية"</span>)
-    </div>
+if temp > 35:
+    print("🔴 تحذير: حرارة عالية جداً!")
+elif temp &lt; 10:
+    print("🔵 تحذير: برودة شديدة!")
+else:
+    print("✅ الحرارة طبيعية")</code></pre>
     <div class="block warn" style="margin-top:8px;margin-bottom:0;">
       <div class="block-label">⚠️ انتبه هنا</div>
       <p>«المسافة قبل print مهمة جداً — Python تغضب إذا ما كانت موجودة! هذا يسمى indentation — ٤ مسافات.» — أرِهم الخطأ عمداً ثم صحّحه.</p>
@@ -425,15 +424,13 @@ temp = <span class="ck">38</span>
       <div class="block-label">💬 قل هذا</div>
       <p>«هذا التمرين يجعل البرنامج يسألكم — مثل Scratch كان يسأل المستخدم.»</p>
     </div>
-    <div class="code-block">
-<span class="cc"># تمرين ٣: الإدخال من المستخدم</span>
-temp = <span class="cf">float</span>(<span class="cf">input</span>(<span class="cs">"أدخل درجة الحرارة: "</span>))
+    <pre class="code-block language-python"><code class="language-python"># تمرين ٣: الإدخال من المستخدم
+temp = float(input("أدخل درجة الحرارة: "))
 
-<span class="ck">if</span> temp > <span class="ck">35</span>:
-    <span class="cf">print</span>(<span class="cs">"🔴 حرارة عالية!"</span>)
-<span class="ck">else</span>:
-    <span class="cf">print</span>(<span class="cs">"✅ طبيعي"</span>)
-    </div>
+if temp > 35:
+    print("🔴 حرارة عالية!")
+else:
+    print("✅ طبيعي")</code></pre>
     <div class="block do" style="margin-top:8px;margin-bottom:0;">
       <div class="block-label">⚙️ بعد الكتابة</div>
       <p>اطلب من طالب أن يقترح رقماً — أدخله وأرِهم النتيجة. «جربوا رقماً كبيراً ورقماً صغيراً.»</p>
@@ -447,13 +444,11 @@ temp = <span class="cf">float</span>(<span class="cf">input</span>(<span class="
       <div class="block-label">💬 قل هذا</div>
       <p>«for تعني: كرّر هذا الكود عدة مرات تلقائياً. رصد (Rasd) يستخدمها لقراءة الحساس كل ٣ ثوانٍ!»</p>
     </div>
-    <div class="code-block">
-<span class="cc"># تمرين ٤: الحلقة for</span>
-<span class="ck">for</span> i <span class="ck">in</span> <span class="cf">range</span>(<span class="ck">5</span>):
-    <span class="cf">print</span>(<span class="cs">f"قراءة رقم {i+1}: البرنامج يعمل!"</span>)
+    <pre class="code-block language-python"><code class="language-python"># تمرين ٤: الحلقة for
+for i in range(5):
+    print(f"قراءة رقم {i+1}: البرنامج يعمل!")
 
-<span class="cf">print</span>(<span class="cs">"اكتملت القراءات ✓"</span>)
-    </div>
+print("اكتملت القراءات ✓")</code></pre>
   </div>
 
   <!-- MINI PROJECT -->
@@ -464,31 +459,29 @@ temp = <span class="cf">float</span>(<span class="cf">input</span>(<span class="
       <p>«هذا البرنامج هو نتيجة التمارين الأربعة مجتمعةً. انظروا — input()، if/else، وطباعة النتائج. هذا رصد (Rasd) بشكل نصي بسيط!»</p>
       <p style="margin-top:6px;">«في الأسبوع الثاني — ستكتبون هذا بأنفسكم في Trinket. الآن أنا أريكم فقط كيف يبدو النهائي.»</p>
     </div>
-    <div class="code-block">
-<span class="cc"># حارس الغرفة النصي 🛡️</span>
-<span class="cc"># مشروعك الأول بـ Python الحقيقية</span>
+    <pre class="code-block language-python"><code class="language-python"># حارس الغرفة النصي 🛡️
+# مشروعك الأول بـ Python الحقيقية
 
-temp  = <span class="cf">float</span>(<span class="cf">input</span>(<span class="cs">"أدخل درجة الحرارة (°C): "</span>))
-humid = <span class="cf">float</span>(<span class="cf">input</span>(<span class="cs">"أدخل نسبة الرطوبة (%): "</span>))
+temp  = float(input("أدخل درجة الحرارة (°C): "))
+humid = float(input("أدخل نسبة الرطوبة (%): "))
 
-<span class="cf">print</span>(<span class="cs">"--- تقرير الغرفة ---"</span>)
+print("--- تقرير الغرفة ---")
 
-<span class="ck">if</span> temp > <span class="ck">35</span>:
-    <span class="cf">print</span>(<span class="cs">"🔴 تنبيه: حرارة عالية جداً!"</span>)
-<span class="ck">elif</span> temp &lt; <span class="ck">10</span>:
-    <span class="cf">print</span>(<span class="cs">"🔵 تنبيه: برودة شديدة!"</span>)
-<span class="ck">else</span>:
-    <span class="cf">print</span>(<span class="cs">"✅ الحرارة طبيعية"</span>)
+if temp > 35:
+    print("🔴 تنبيه: حرارة عالية جداً!")
+elif temp &lt; 10:
+    print("🔵 تنبيه: برودة شديدة!")
+else:
+    print("✅ الحرارة طبيعية")
 
-<span class="ck">if</span> humid > <span class="ck">80</span>:
-    <span class="cf">print</span>(<span class="cs">"💧 تنبيه: رطوبة مرتفعة جداً!"</span>)
-<span class="ck">elif</span> humid &lt; <span class="ck">20</span>:
-    <span class="cf">print</span>(<span class="cs">"🏜️ تنبيه: الهواء جاف جداً!"</span>)
-<span class="ck">else</span>:
-    <span class="cf">print</span>(<span class="cs">"✅ الرطوبة طبيعية"</span>)
+if humid > 80:
+    print("💧 تنبيه: رطوبة مرتفعة جداً!")
+elif humid &lt; 20:
+    print("🏜️ تنبيه: الهواء جاف جداً!")
+else:
+    print("✅ الرطوبة طبيعية")
 
-<span class="cf">print</span>(<span class="cs">"--- انتهى التقرير ---"</span>)
-    </div>
+print("--- انتهى التقرير ---")</code></pre>
     <div class="block do" style="margin-top:10px;margin-bottom:0;">
       <div class="block-label">⚙️ أرِهم كيف يأخذون screenshot</div>
       <p>Windows: اضغط <kbd style="background:var(--bg3);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 6px;font-family:'Space Mono';font-size:12px;">Win + Shift + S</kbd> — Mac: <kbd style="background:var(--bg3);border:1px solid rgba(255,255,255,0.15);border-radius:4px;padding:2px 6px;font-family:'Space Mono';font-size:12px;">Cmd + Shift + 4</kbd> — حدّد نافذة Trinket بالكامل</p>

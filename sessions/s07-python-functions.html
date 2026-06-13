@@ -66,6 +66,29 @@ pre.code-block{border-radius:12px!important;}
 .flow-box.amber{border-color:var(--amber);color:var(--amber);}
 .flow-arr{color:var(--muted);font-size:20px;}
 @media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}.flow-row{gap:4px;}.flow-arr{font-size:14px;}}
+
+/* Copy button on code blocks */
+pre.code-block { position: relative !important; }
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  left: 12px; /* LTR block, so left = visual right */
+  background: rgba(0,229,192,0.12);
+  border: 1px solid rgba(0,229,192,0.35);
+  color: #00e5c0;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s;
+  z-index: 10;
+  direction: ltr;
+}
+pre.code-block:hover .copy-btn { opacity: 1; }
+.copy-btn:hover { background: rgba(0,229,192,0.25); }
+.copy-btn.copied { color: #a0f0e0; border-color: rgba(160,240,224,0.4); }
 </style>
   <!-- Prism.js syntax highlighting -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
@@ -339,5 +362,41 @@ document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.
 let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
 bar.style.width=(1/total*100)+'%';
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('pre.code-block').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'نسخ';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var text = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(text).then(function () {
+        btn.textContent = '✓ نُسخ';
+        btn.classList.add('copied');
+        setTimeout(function () {
+          btn.textContent = 'نسخ';
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(function () {
+        /* fallback for older browsers */
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = '✓ نُسخ';
+        setTimeout(function () { btn.textContent = 'نسخ'; }, 2000);
+      });
+    });
+    pre.appendChild(btn);
+  });
+});
+</script>
+
 </body>
 </html>

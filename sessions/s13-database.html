@@ -49,14 +49,48 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
 .box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
 .big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
-.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.9;max-width:680px;width:100%;text-align:left;direction:ltr;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:0;max-width:700px;width:100%;overflow-x:auto;direction:ltr;text-align:left;margin:0;}
+.code-block code[class*="language-"],.code-block code{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:18px 22px!important;display:block!important;white-space:pre!important;}
+pre.code-block{border-radius:12px!important;position:relative;}
 .table-wrap{overflow-x:auto;max-width:800px;width:100%;}
 .db-table{border-collapse:collapse;width:100%;font-size:13px;font-family:'Space Mono',monospace;}
 .db-table th{background:rgba(0,229,192,0.1);color:var(--accent);padding:10px 16px;border:1px solid rgba(0,229,192,0.2);text-align:left;}
 .db-table td{padding:10px 16px;border:1px solid rgba(255,255,255,0.06);color:var(--muted);}
 .db-table tr:hover td{background:rgba(255,255,255,0.02);}
 @media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+
+/* Copy button on code blocks */
+pre.code-block { position: relative !important; }
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  left: 12px; /* LTR block, so left = visual right */
+  background: rgba(0,229,192,0.12);
+  border: 1px solid rgba(0,229,192,0.35);
+  color: #00e5c0;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s;
+  z-index: 10;
+  direction: ltr;
+}
+pre.code-block:hover .copy-btn { opacity: 1; }
+.copy-btn:hover { background: rgba(0,229,192,0.25); }
+.copy-btn.copied { color: #a0f0e0; border-color: rgba(160,240,224,0.4); }
 </style>
+  <!-- Prism.js syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css-extras.min.js"></script>
 </head>
 <body>
 <div class="orb orb1"></div><div class="orb orb2"></div>
@@ -112,19 +146,30 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="stag">SQL — لغة البيانات</div>
   <div class="stitle">أوامر SQL الأساسية 🔍</div>
   <div class="ssub">ثلاثة أوامر تكفيك لاستعراض كل بيانات رصد (Rasd)</div>
-  <div class="code-block">
-<span style="color:var(--muted);">-- عرض كل القراءات</span><br>
-SELECT * FROM readings;<br><br>
-<span style="color:var(--muted);">-- فلترة: الحرارة فوق 25 درجة فقط</span><br>
-SELECT * FROM readings<br>
-WHERE temperature > 25;<br><br>
-<span style="color:var(--muted);">-- متوسط درجة الحرارة</span><br>
-SELECT AVG(temperature) AS avg_temp<br>
-FROM readings;<br><br>
-<span style="color:var(--muted);">-- آخر 10 قراءات فقط</span><br>
-SELECT * FROM readings<br>
-ORDER BY timestamp DESC LIMIT 10;
-  </div>
+  <pre class="code-block language-sql"><code class="language-sql">-- عرض كل القراءات
+
+SELECT * FROM readings;
+
+
+-- فلترة: الحرارة فوق 25 درجة فقط
+
+SELECT * FROM readings
+
+WHERE temperature &gt; 25;
+
+
+-- متوسط درجة الحرارة
+
+SELECT AVG(temperature) AS avg_temp
+
+FROM readings;
+
+
+-- آخر 10 قراءات فقط
+
+SELECT * FROM readings
+
+ORDER BY timestamp DESC LIMIT 10;</code></pre>
 </div>
 
 <div class="slide">
@@ -155,36 +200,53 @@ ORDER BY timestamp DESC LIMIT 10;
   <div class="stag">Flask والـ Database</div>
   <div class="stitle">كيف يُخزّن Flask البيانات؟ 💾</div>
   <div class="ssub">في database.py — كل قراءة جديدة تُحفظ هكذا</div>
-  <div class="code-block">
-<span style="color:var(--muted);"># في database.py</span><br>
-import sqlite3<br><br>
-def save_reading(temp, hum, vib):<br>
-&nbsp;&nbsp;conn = sqlite3.connect('room_guardian.db')<br>
-&nbsp;&nbsp;cursor = conn.cursor()<br>
-&nbsp;&nbsp;cursor.execute(<br>
-&nbsp;&nbsp;&nbsp;&nbsp;"INSERT INTO readings (temperature, humidity, vibration)"<br>
-&nbsp;&nbsp;&nbsp;&nbsp;" VALUES (?, ?, ?)",<br>
-&nbsp;&nbsp;&nbsp;&nbsp;(temp, hum, vib)<br>
-&nbsp;&nbsp;)<br>
-&nbsp;&nbsp;conn.commit()<br>
-&nbsp;&nbsp;conn.close()
-  </div>
+  <pre class="code-block language-sql"><code class="language-sql"># في database.py
+
+import sqlite3
+
+
+def save_reading(temp, hum, vib):
+
+  conn = sqlite3.connect('room_guardian.db')
+
+  cursor = conn.cursor()
+
+  cursor.execute(
+
+    "INSERT INTO readings (temperature, humidity, vibration)"
+
+    " VALUES (?, ?, ?)",
+
+    (temp, hum, vib)
+
+  )
+
+  conn.commit()
+
+  conn.close()</code></pre>
 </div>
 
 <div class="slide">
   <div class="stag">استعلامات متقدمة</div>
   <div class="stitle">SQL أقوى مما تظن 🚀</div>
   <div class="ssub">بجملة واحدة تحصل على إجابة لأسئلة معقدة</div>
-  <div class="code-block">
-<span style="color:var(--muted);">-- أعلى درجة حرارة تم تسجيلها</span><br>
-SELECT MAX(temperature) FROM readings;<br><br>
-<span style="color:var(--muted);">-- متوسط الرطوبة خلال آخر ساعة</span><br>
-SELECT AVG(humidity) FROM readings<br>
-WHERE timestamp > datetime('now', '-1 hour');<br><br>
-<span style="color:var(--muted);">-- عدد مرات كشف الاهتزاز</span><br>
-SELECT COUNT(*) FROM readings<br>
-WHERE vibration = 1;
-  </div>
+  <pre class="code-block language-sql"><code class="language-sql">-- أعلى درجة حرارة تم تسجيلها
+
+SELECT MAX(temperature) FROM readings;
+
+
+-- متوسط الرطوبة خلال آخر ساعة
+
+SELECT AVG(humidity) FROM readings
+
+WHERE timestamp &gt; datetime('now', '-1 hour');
+
+
+-- عدد مرات كشف الاهتزاز
+
+SELECT COUNT(*) FROM readings
+
+WHERE vibration = 1;</code></pre>
 </div>
 
 <div class="slide">
@@ -222,5 +284,41 @@ document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.
 let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
 bar.style.width=(1/total*100)+'%';
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('pre.code-block').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'نسخ';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var text = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(text).then(function () {
+        btn.textContent = '✓ نُسخ';
+        btn.classList.add('copied');
+        setTimeout(function () {
+          btn.textContent = 'نسخ';
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(function () {
+        /* fallback for older browsers */
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = '✓ نُسخ';
+        setTimeout(function () { btn.textContent = 'نسخ'; }, 2000);
+      });
+    });
+    pre.appendChild(btn);
+  });
+});
+</script>
+
 </body>
 </html>

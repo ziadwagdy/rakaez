@@ -44,12 +44,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .card .ico{font-size:28px;margin-bottom:10px;display:block;}
 .card h3{font-size:15px;font-weight:700;color:var(--accent2);margin-bottom:6px;}
 .card p{font-size:13px;color:var(--muted);line-height:1.7;}
-.code-block{background:#0a0f1a;border:1px solid rgba(91,127,255,0.25);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.9;max-width:700px;width:100%;text-align:left;direction:ltr;}
-.code-comment{color:var(--muted);}
-.code-keyword{color:var(--accent2);}
-.code-string{color:var(--amber);}
-.code-func{color:var(--accent);}
-.code-type{color:#ff9f7f;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:0;max-width:700px;width:100%;overflow-x:auto;direction:ltr;text-align:left;margin:0;}
+.code-block code[class*="language-"],.code-block code{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:18px 22px!important;display:block!important;white-space:pre!important;}
+pre.code-block{border-radius:12px!important;position:relative;}
 .list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:740px;}
 .li-item{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;}
 .li-num{width:34px;height:34px;border-radius:50%;background:rgba(91,127,255,0.1);color:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;border:1px solid rgba(91,127,255,0.25);}
@@ -67,7 +64,39 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .hw-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:3px;}
 .hw-desc{font-size:12px;color:var(--muted);line-height:1.6;}
 .big-emoji{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
+
+/* Copy button on code blocks */
+pre.code-block { position: relative !important; }
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  left: 12px; /* LTR block, so left = visual right */
+  background: rgba(0,229,192,0.12);
+  border: 1px solid rgba(0,229,192,0.35);
+  color: #00e5c0;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s;
+  z-index: 10;
+  direction: ltr;
+}
+pre.code-block:hover .copy-btn { opacity: 1; }
+.copy-btn:hover { background: rgba(0,229,192,0.25); }
+.copy-btn.copied { color: #a0f0e0; border-color: rgba(160,240,224,0.4); }
 </style>
+  <!-- Prism.js syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css-extras.min.js"></script>
 </head>
 <body>
 <div class="orb orb1"></div><div class="orb orb2"></div>
@@ -138,19 +167,17 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="stag">المتغيرات بعمق</div>
   <div class="stitle">قراءات الحساسات كمتغيرات 🌡</div>
   <div class="ssub">هكذا يُخزّن رصد (Rasd) البيانات — متغير لكل حساس</div>
-  <div class="code-block">
-<span class="code-comment"># قراءات حساسات رصد (Rasd)</span>
-temperature  = 28.5     <span class="code-comment"># float — الحرارة بالسيلزيوس</span>
-humidity     = 65       <span class="code-comment"># int   — الرطوبة بالنسبة المئوية</span>
-water_level  = 62000    <span class="code-comment"># int   — قيمة عالية = جاف</span>
-soil_moisture = 18000   <span class="code-comment"># int   — قيمة منخفضة = رطب</span>
-rain_detected = <span class="code-keyword">False</span>  <span class="code-comment"># bool  — هل يمطر؟</span>
-location     = <span class="code-string">"غرفة الصف"</span> <span class="code-comment"># str   — اسم الموقع</span>
+  <pre class="code-block language-python"><code class="language-python"># قراءات حساسات رصد (Rasd)
+temperature  = 28.5     # float — الحرارة بالسيلزيوس
+humidity     = 65       # int   — الرطوبة بالنسبة المئوية
+water_level  = 62000    # int   — قيمة عالية = جاف
+soil_moisture = 18000   # int   — قيمة منخفضة = رطب
+rain_detected = False  # bool  — هل يمطر؟
+location     = "غرفة الصف" # str   — اسم الموقع
 
-<span class="code-comment"># طباعة تقرير</span>
-<span class="code-func">print</span>(<span class="code-string">f"الموقع: {location}"</span>)
-<span class="code-func">print</span>(<span class="code-string">f"الحرارة: {temperature}°C | الرطوبة: {humidity}%"</span>)
-  </div>
+# طباعة تقرير
+print(f"الموقع: {location}")
+print(f"الحرارة: {temperature}°C | الرطوبة: {humidity}%")</code></pre>
   <div class="box" style="margin-top:14px;">💡 الـ f-string يسمح لك بدمج المتغيرات مع النص بسهولة — f"النص {المتغير}"</div>
 </div>
 
@@ -159,21 +186,19 @@ location     = <span class="code-string">"غرفة الصف"</span> <span class=
   <div class="stag">تحويل الأنواع</div>
   <div class="stitle">input() دائماً يُرجع نصاً ⚠️</div>
   <div class="ssub">هذا الخطأ الأكثر شيوعاً للمبتدئين — وسنحله الآن للأبد</div>
-  <div class="code-block">
-<span class="code-comment"># ❌ خطأ شائع</span>
-temp = <span class="code-func">input</span>(<span class="code-string">"الحرارة؟ "</span>)
-<span class="code-keyword">if</span> temp > 35:          <span class="code-comment"># TypeError: لا يمكن مقارنة نص برقم!</span>
-    <span class="code-func">print</span>(<span class="code-string">"حار"</span>)
+  <pre class="code-block language-python"><code class="language-python"># ❌ خطأ شائع
+temp = input("الحرارة؟ ")
+if temp &gt; 35:          # TypeError: لا يمكن مقارنة نص برقم!
+    print("حار")
 
-<span class="code-comment"># ✅ الصحيح — حوّل النص إلى رقم</span>
-temp = <span class="code-type">float</span>(<span class="code-func">input</span>(<span class="code-string">"الحرارة؟ "</span>))
-<span class="code-keyword">if</span> temp > 35:          <span class="code-comment"># ✓ يعمل بشكل صحيح</span>
-    <span class="code-func">print</span>(<span class="code-string">"🔴 حار جداً"</span>)
+# ✅ الصحيح — حوّل النص إلى رقم
+temp = float(input("الحرارة؟ "))
+if temp &gt; 35:          # ✓ يعمل بشكل صحيح
+    print("🔴 حار جداً")
 
-<span class="code-comment"># أدوات التحويل:</span>
-<span class="code-comment"># int("42")  → 42    |  float("28.5") → 28.5</span>
-<span class="code-comment"># str(28)    → "28"  |  bool(0) → False</span>
-  </div>
+# أدوات التحويل:
+# int("42")  → 42    |  float("28.5") → 28.5
+# str(28)    → "28"  |  bool(0) → False</code></pre>
 </div>
 
 <!-- SLIDE 6 -->
@@ -181,30 +206,23 @@ temp = <span class="code-type">float</span>(<span class="code-func">input</span>
   <div class="stag">تطبيق ١</div>
   <div class="stitle">محاكي الحساس الكامل 🌡</div>
   <div class="ssub">اكتب هذا البرنامج على Trinket — ثم عدّله وجرّب</div>
-  <div class="code-block">
-<span class="code-comment"># محاكي حساس رصد (Rasd)</span>
-temp  = <span class="code-type">float</span>(<span class="code-func">input</span>(<span class="code-string">"درجة الحرارة (°C): "</span>))
-humid = <span class="code-type">int</span>(<span class="code-func">input</span>(<span class="code-string">"الرطوبة (%): "</span>))
+  <pre class="code-block language-python"><code class="language-python"># محاكي حساس رصد (Rasd)
+temp  = float(input("درجة الحرارة (°C): "))
+humid = int(input("الرطوبة (%): "))
 
-<span class="code-func">print</span>(<span class="code-string">"\n====== تقرير رصد ======"</span>)
-<span class="code-func">print</span>(<span class="code-string">f"الحرارة : {temp}°C"</span>)
-<span class="code-func">print</span>(<span class="code-string">f"الرطوبة : {humid}%"</span>)
-<span class="code-func">print</span>(<span class="code-string">"========================"</span>)
+print("\n====== تقرير رصد ======")
+print(f"الحرارة : {temp}°C")
+print(f"الرطوبة : {humid}%")
+print("========================")
 
-<span class="code-keyword">if</span> temp > 35:
-    <span class="code-func">print</span>(<span class="code-string">"🔴 تنبيه: حرارة عالية"</span>)
-<span class="code-keyword">elif</span> temp < 10:
-    <span class="code-func">print</span>(<span class="code-string">"🔵 تنبيه: برودة شديدة"</span>)
-<span class="code-keyword">else</span>:
-    <span class="code-func">print</span>(<span class="code-string">"✅ الحرارة طبيعية"</span>)
-
-<span class="code-keyword">if</span> humid > 80:
-    <span class="code-func">print</span>(<span class="code-string">"💧 تنبيه: رطوبة مرتفعة"</span>)
-<span class="code-keyword">elif</span> humid < 20:
-    <span class="code-func">print</span>(<span class="code-string">"🏜 تنبيه: جفاف"</span>)
-<span class="code-keyword">else</span>:
-    <span class="code-func">print</span>(<span class="code-string">"✅ الرطوبة طبيعية"</span>)
-  </div>
+if temp &gt; 35:
+    print("🔴 تنبيه: حرارة عالية")
+elif temp  80:
+    print("💧 تنبيه: رطوبة مرتفعة")
+elif humid &lt; 20:
+    print("🏜 تنبيه: جفاف")
+else:
+    print("✅ الرطوبة طبيعية")</code></pre>
 </div>
 
 <!-- SLIDE 7 -->
@@ -212,21 +230,19 @@ humid = <span class="code-type">int</span>(<span class="code-func">input</span>(
   <div class="stag">تطبيق ٢</div>
   <div class="stitle">محوّل الحرارة 🌡↔️🌡</div>
   <div class="ssub">الحساسات الأمريكية ترسل فهرنهايت — رصد (Rasd) يحتاج سيلزيوس</div>
-  <div class="code-block">
-<span class="code-comment"># محوّل درجات الحرارة</span>
+  <pre class="code-block language-python"><code class="language-python"># محوّل درجات الحرارة
 
-unit = <span class="code-func">input</span>(<span class="code-string">"أدخل الوحدة (C/F): "</span>).upper()
-temp = <span class="code-type">float</span>(<span class="code-func">input</span>(<span class="code-string">"أدخل درجة الحرارة: "</span>))
+unit = input("أدخل الوحدة (C/F): ").upper()
+temp = float(input("أدخل درجة الحرارة: "))
 
-<span class="code-keyword">if</span> unit == <span class="code-string">"C"</span>:
+if unit == "C":
     result = (temp * 9/5) + 32
-    <span class="code-func">print</span>(<span class="code-string">f"{temp}°C = {result:.1f}°F"</span>)
-<span class="code-keyword">elif</span> unit == <span class="code-string">"F"</span>:
+    print(f"{temp}°C = {result:.1f}°F")
+elif unit == "F":
     result = (temp - 32) * 5/9
-    <span class="code-func">print</span>(<span class="code-string">f"{temp}°F = {result:.1f}°C"</span>)
-<span class="code-keyword">else</span>:
-    <span class="code-func">print</span>(<span class="code-string">"وحدة غير معروفة! استخدم C أو F"</span>)
-  </div>
+    print(f"{temp}°F = {result:.1f}°C")
+else:
+    print("وحدة غير معروفة! استخدم C أو F")</code></pre>
   <div class="box" style="margin-top:14px;">🔍 جديد: <span style="font-family:monospace;color:var(--amber);">.upper()</span> تحوّل الحروف لكبيرة · <span style="font-family:monospace;color:var(--amber);">:.1f</span> تُقيّد الأرقام العشرية برقم واحد</div>
 </div>
 
@@ -235,21 +251,19 @@ temp = <span class="code-type">float</span>(<span class="code-func">input</span>
   <div class="stag">تطبيق ٣ — جماعي</div>
   <div class="stitle">لوحة تقرير رصد (Rasd) النصية 📊</div>
   <div class="ssub">نكتبها معاً على السبورة — ثم كل طالب يُشغّلها على Trinket</div>
-  <div class="code-block">
-<span class="code-comment"># لوحة تقرير نصية — مثل dashboard رصد لكن في Terminal</span>
+  <pre class="code-block language-python"><code class="language-python"># لوحة تقرير نصية — مثل dashboard رصد لكن في Terminal
 sensors = [
-    (<span class="code-string">"الحرارة"</span>,   <span class="code-type">float</span>(<span class="code-func">input</span>(<span class="code-string">"الحرارة°C: "</span>)),   10, 35),
-    (<span class="code-string">"الرطوبة"</span>,   <span class="code-type">int</span>(<span class="code-func">input</span>(<span class="code-string">"الرطوبة%: "</span>)),    20, 80),
+    ("الحرارة",   float(input("الحرارة°C: ")),   10, 35),
+    ("الرطوبة",   int(input("الرطوبة%: ")),    20, 80),
 ]
 
-<span class="code-func">print</span>(<span class="code-string">"\n╔══════════════════════╗"</span>)
-<span class="code-func">print</span>(<span class="code-string">"║   تقرير رصد (Rasd)   ║"</span>)
-<span class="code-func">print</span>(<span class="code-string">"╚══════════════════════╝"</span>)
+print("\n╔══════════════════════╗")
+print("║   تقرير رصد (Rasd)   ║")
+print("╚══════════════════════╝")
 
-<span class="code-keyword">for</span> name, val, mn, mx <span class="code-keyword">in</span> sensors:
-    status = <span class="code-string">"✅ طبيعي"</span> <span class="code-keyword">if</span> mn <= val <= mx <span class="code-keyword">else</span> <span class="code-string">"⚠️ تنبيه"</span>
-    <span class="code-func">print</span>(<span class="code-string">f"  {name}: {val}  →  {status}"</span>)
-  </div>
+for name, val, mn, mx in sensors:
+    status = "✅ طبيعي" if mn &lt;= val &lt;= mx else "⚠️ تنبيه"
+    print(f"  {name}: {val}  →  {status}")</code></pre>
 </div>
 
 <!-- SLIDE 9 -->
@@ -292,5 +306,41 @@ document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.
 let startX=0;document.addEventListener('touchstart',e=>startX=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-startX;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
 bar.style.width=(1/total*100)+'%';
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('pre.code-block').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'نسخ';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var text = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(text).then(function () {
+        btn.textContent = '✓ نُسخ';
+        btn.classList.add('copied');
+        setTimeout(function () {
+          btn.textContent = 'نسخ';
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(function () {
+        /* fallback for older browsers */
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = '✓ نُسخ';
+        setTimeout(function () { btn.textContent = 'نسخ'; }, 2000);
+      });
+    });
+    pre.appendChild(btn);
+  });
+});
+</script>
+
 </body>
 </html>

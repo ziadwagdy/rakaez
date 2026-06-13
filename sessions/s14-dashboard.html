@@ -49,9 +49,43 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
 .box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
 .big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
-.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.9;max-width:700px;width:100%;text-align:left;direction:ltr;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:0;max-width:700px;width:100%;overflow-x:auto;direction:ltr;text-align:left;margin:0;}
+.code-block code[class*="language-"],.code-block code{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:18px 22px!important;display:block!important;white-space:pre!important;}
+pre.code-block{border-radius:12px!important;position:relative;}
 @media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+
+/* Copy button on code blocks */
+pre.code-block { position: relative !important; }
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  left: 12px; /* LTR block, so left = visual right */
+  background: rgba(0,229,192,0.12);
+  border: 1px solid rgba(0,229,192,0.35);
+  color: #00e5c0;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s;
+  z-index: 10;
+  direction: ltr;
+}
+pre.code-block:hover .copy-btn { opacity: 1; }
+.copy-btn:hover { background: rgba(0,229,192,0.25); }
+.copy-btn.copied { color: #a0f0e0; border-color: rgba(160,240,224,0.4); }
 </style>
+  <!-- Prism.js syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css-extras.min.js"></script>
 </head>
 <body>
 <div class="orb orb1"></div><div class="orb orb2"></div>
@@ -99,54 +133,72 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="stag">كود الـ Dashboard</div>
   <div class="stitle">كيف يجلب الـ Dashboard البيانات؟ 🔌</div>
   <div class="ssub">في dashboard.html — هذا ما يحدث كل ٥ ثوانٍ</div>
-  <div class="code-block">
-<span style="color:var(--muted);">// JavaScript في dashboard.html</span><br>
-function updateDashboard() {<br>
-&nbsp;&nbsp;fetch('/api/readings')<br>
-&nbsp;&nbsp;&nbsp;&nbsp;.then(response => response.json())<br>
-&nbsp;&nbsp;&nbsp;&nbsp;.then(data => {<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById('temperature')<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.textContent = data.temperature + ' °C';<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;document.getElementById('humidity')<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.textContent = data.humidity + ' %';<br>
-&nbsp;&nbsp;&nbsp;&nbsp;});<br>
-}<br>
-setInterval(updateDashboard, 5000);
-  </div>
+  <pre class="code-block language-javascript"><code class="language-javascript">// JavaScript في dashboard.html
+
+function updateDashboard() {
+
+  fetch('/api/readings')
+
+    .then(response =&gt; response.json())
+
+    .then(data =&gt; {
+
+      document.getElementById('temperature')
+
+        .textContent = data.temperature + ' °C';
+
+      document.getElementById('humidity')
+
+        .textContent = data.humidity + ' %';
+
+    });
+
+}
+
+setInterval(updateDashboard, 5000);</code></pre>
 </div>
 
 <div class="slide">
   <div class="stag">تعديل CSS</div>
   <div class="stitle">غيّر ألوان الـ Dashboard 🌈</div>
   <div class="ssub">في بداية dashboard.html — غيّر أي متغير وشاهد التغيير فوراً</div>
-  <div class="code-block">
-<span style="color:var(--muted);">/* CSS Variables في dashboard.html */</span><br>
-:root {<br>
-&nbsp;&nbsp;--accent: #00e5c0;&nbsp;&nbsp; <span style="color:var(--muted);">/* لون أخضر-فيروزي */</span><br>
-&nbsp;&nbsp;--accent2: #5b7fff; <span style="color:var(--muted);">/* لون أزرق */</span><br>
-&nbsp;&nbsp;--warning: #ff6b6b; <span style="color:var(--muted);">/* لون التحذير */</span><br>
-&nbsp;&nbsp;--room-name: "غرفتي";<br>
-}<br><br>
-<span style="color:var(--muted);">/* جرّب تغيير --accent إلى #ff6b6b */</span><br>
-<span style="color:var(--muted);">/* أو إلى #ffb347 للون ذهبي */</span>
-  </div>
+  <pre class="code-block language-css"><code class="language-css">/* CSS Variables في dashboard.html */
+
+:root {
+
+  --accent: #00e5c0;   /* لون أخضر-فيروزي */
+
+  --accent2: #5b7fff; /* لون أزرق */
+
+  --warning: #ff6b6b; /* لون التحذير */
+
+  --room-name: "غرفتي";
+
+}
+
+
+/* جرّب تغيير --accent إلى #ff6b6b */
+
+/* أو إلى #ffb347 للون ذهبي */</code></pre>
 </div>
 
 <div class="slide">
   <div class="stag">تعديل HTML</div>
   <div class="stitle">غيّر اسم الغرفة والترحيب ✏️</div>
   <div class="ssub">ابحث عن هذه الأسطر في dashboard.html وعدّلها</div>
-  <div class="code-block">
-<span style="color:var(--muted);">&lt;!-- العنوان الرئيسي --&gt;</span><br>
-&lt;h1 id="room-title"&gt;رصد (Rasd)&lt;/h1&gt;<br><br>
-<span style="color:var(--muted);">&lt;!-- اسم الغرفة --&gt;</span><br>
-&lt;span id="room-name"&gt;غرفة المراقبة&lt;/span&gt;<br><br>
-<span style="color:var(--muted);">&lt;!-- رسالة الترحيب --&gt;</span><br>
-&lt;p class="welcome"&gt;<br>
-&nbsp;&nbsp;مرحباً بك في نظام المراقبة<br>
-&lt;/p&gt;<br><br>
-<span style="color:var(--muted);">&lt;!-- غيّر هذه النصوص لأي شيء تريده --&gt;</span>
-  </div>
+  <pre class="code-block language-python"><code class="language-python">رصد (Rasd)
+
+
+
+
+غرفة المراقبة
+
+
+
+
+
+
+  مرحباً بك في نظام المراقبة</code></pre>
 </div>
 
 <div class="slide">
@@ -165,19 +217,24 @@ setInterval(updateDashboard, 5000);
   <div class="stag">إضافة بطاقة جديدة</div>
   <div class="stitle">HTML من الصفر 🆕</div>
   <div class="ssub">أضف هذا الكود في dashboard.html بعد آخر بطاقة موجودة</div>
-  <div class="code-block">
-<span style="color:var(--muted);">&lt;!-- بطاقة معلوماتي --&gt;</span><br>
-&lt;div class="info-card"&gt;<br>
-&nbsp;&nbsp;&lt;div class="card-icon"&gt;👨‍💻&lt;/div&gt;<br>
-&nbsp;&nbsp;&lt;h3&gt;المطوّر&lt;/h3&gt;<br>
-&nbsp;&nbsp;&lt;p id="dev-name"&gt;اسمك هنا&lt;/p&gt;<br>
-&nbsp;&nbsp;&lt;p class="muted"&gt;Rakaez · إسطنبول&lt;/p&gt;<br>
-&lt;/div&gt;<br><br>
-<span style="color:var(--muted);">/* CSS للبطاقة */</span><br>
-.info-card { background: var(--card);<br>
-&nbsp;&nbsp;border: 1px solid var(--border);<br>
-&nbsp;&nbsp;border-radius: 16px; padding: 20px; }
-  </div>
+  <pre class="code-block language-css"><code class="language-css">👨‍💻
+
+  المطوّر
+
+  اسمك هنا
+
+  Rakaez · إسطنبول
+
+
+
+
+/* CSS للبطاقة */
+
+.info-card { background: var(--card);
+
+  border: 1px solid var(--border);
+
+  border-radius: 16px; padding: 20px; }</code></pre>
 </div>
 
 <div class="slide">
@@ -215,5 +272,41 @@ document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.
 let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
 bar.style.width=(1/total*100)+'%';
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('pre.code-block').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'نسخ';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var text = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(text).then(function () {
+        btn.textContent = '✓ نُسخ';
+        btn.classList.add('copied');
+        setTimeout(function () {
+          btn.textContent = 'نسخ';
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(function () {
+        /* fallback for older browsers */
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = '✓ نُسخ';
+        setTimeout(function () { btn.textContent = 'نسخ'; }, 2000);
+      });
+    });
+    pre.appendChild(btn);
+  });
+});
+</script>
+
 </body>
 </html>

@@ -63,11 +63,42 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .week-block ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:6px;}
 .week-block ul li{font-size:13px;color:var(--muted);line-height:1.6;padding-right:16px;position:relative;}
 .week-block ul li::before{content:"←";color:var(--accent);position:absolute;right:0;}
-.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.9;max-width:660px;width:100%;text-align:left;direction:ltr;}
-.code-comment{color:var(--muted);}
-.code-keyword{color:var(--accent2);}
-.code-string{color:var(--amber);}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:0;max-width:700px;width:100%;overflow-x:auto;direction:ltr;text-align:left;margin:0;}
+.code-block code[class*="language-"],.code-block code{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:18px 22px!important;display:block!important;white-space:pre!important;}
+pre.code-block{border-radius:12px!important;position:relative;}
+
+/* Copy button on code blocks */
+pre.code-block { position: relative !important; }
+.copy-btn {
+  position: absolute;
+  top: 10px;
+  left: 12px; /* LTR block, so left = visual right */
+  background: rgba(0,229,192,0.12);
+  border: 1px solid rgba(0,229,192,0.35);
+  color: #00e5c0;
+  font-family: 'Space Mono', monospace;
+  font-size: 11px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .2s;
+  z-index: 10;
+  direction: ltr;
+}
+pre.code-block:hover .copy-btn { opacity: 1; }
+.copy-btn:hover { background: rgba(0,229,192,0.25); }
+.copy-btn.copied { color: #a0f0e0; border-color: rgba(160,240,224,0.4); }
 </style>
+  <!-- Prism.js syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css-extras.min.js"></script>
 </head>
 <body>
 <div class="orb orb1"></div><div class="orb orb2"></div>
@@ -197,26 +228,19 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
   <div class="slide-section-tag">المشروع المصغّر</div>
   <div class="slide-title">حارس الغرفة النصي 🛡</div>
   <div class="slide-subtitle">الأسبوع الثاني — اجمع التمارين الأربعة في برنامج واحد على Trinket</div>
-  <div class="code-block">
-<span class="code-comment"># حارس الغرفة النصي — مشروعك الأول بـ Python</span>
+  <pre class="code-block language-python"><code class="language-python"># حارس الغرفة النصي — مشروعك الأول بـ Python
 
-temp  = <span class="code-keyword">float</span>(<span class="code-keyword">input</span>(<span class="code-string">"أدخل درجة الحرارة: "</span>))
-humid = <span class="code-keyword">float</span>(<span class="code-keyword">input</span>(<span class="code-string">"أدخل نسبة الرطوبة %: "</span>))
+temp  = float(input("أدخل درجة الحرارة: "))
+humid = float(input("أدخل نسبة الرطوبة %: "))
 
-<span class="code-keyword">print</span>(<span class="code-string">"--- تقرير الغرفة ---"</span>)
+print("--- تقرير الغرفة ---")
 
-<span class="code-keyword">if</span> temp > 35:
-    <span class="code-keyword">print</span>(<span class="code-string">"🔴 تحذير: حرارة عالية جداً"</span>)
-<span class="code-keyword">elif</span> temp < 10:
-    <span class="code-keyword">print</span>(<span class="code-string">"🔵 تحذير: برودة شديدة"</span>)
-<span class="code-keyword">else</span>:
-    <span class="code-keyword">print</span>(<span class="code-string">"✅ الحرارة طبيعية"</span>)
-
-<span class="code-keyword">if</span> humid > 80:
-    <span class="code-keyword">print</span>(<span class="code-string">"💧 تحذير: رطوبة مرتفعة"</span>)
-<span class="code-keyword">else</span>:
-    <span class="code-keyword">print</span>(<span class="code-string">"✅ الرطوبة طبيعية"</span>)
-  </div>
+if temp &gt; 35:
+    print("🔴 تحذير: حرارة عالية جداً")
+elif temp  80:
+    print("💧 تحذير: رطوبة مرتفعة")
+else:
+    print("✅ الرطوبة طبيعية")</code></pre>
   <div class="highlight-box" style="margin-top:14px;">📸 خذ screenshot لكودك وارفعه على Classroom مع شرح قصير: ماذا يفعل هذا البرنامج؟</div>
 </div>
 
@@ -261,5 +285,41 @@ document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.
 let startX=0;document.addEventListener('touchstart',e=>startX=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-startX;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
 bar.style.width=(1/total*100)+'%';
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('pre.code-block').forEach(function (pre) {
+    var btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'نسخ';
+    btn.addEventListener('click', function () {
+      var code = pre.querySelector('code');
+      var text = code ? code.innerText : pre.innerText;
+      navigator.clipboard.writeText(text).then(function () {
+        btn.textContent = '✓ نُسخ';
+        btn.classList.add('copied');
+        setTimeout(function () {
+          btn.textContent = 'نسخ';
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(function () {
+        /* fallback for older browsers */
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        btn.textContent = '✓ نُسخ';
+        setTimeout(function () { btn.textContent = 'نسخ'; }, 2000);
+      });
+    });
+    pre.appendChild(btn);
+  });
+});
+</script>
+
 </body>
 </html>

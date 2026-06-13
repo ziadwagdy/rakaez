@@ -52,13 +52,19 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
 .box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
 .big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
-.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.8;max-width:700px;width:100%;text-align:left;direction:ltr;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:0;max-width:700px;width:100%;overflow-x:auto;direction:ltr;text-align:left;margin:0;}
+.code-block code[class*="language-"]{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:20px 24px!important;display:block!important;}
+pre.code-block{border-radius:12px!important;}
 .code-comment{color:var(--muted);}
 .code-keyword{color:var(--accent2);}
 .code-string{color:var(--amber);}
 .code-func{color:var(--accent);}
 @media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
 </style>
+  <!-- Prism.js syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 </head>
 <body>
 <div class="orb orb1"></div>
@@ -89,18 +95,16 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="stag">مراجعة سريعة</div>
     <div class="stitle">Python ٢ — القرارات والمنطق 🔀</div>
     <div class="ssub">هيا نراجع سريعاً قبل أن نبدأ!</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># ماذا يطبع هذا الكود؟</span>
-temp = <span class="code-keyword">38</span>
-humid = <span class="code-keyword">75</span>
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># ماذا يطبع هذا الكود؟
+temp = 38
+humid = 75
 
-<span class="code-keyword">if</span> temp > <span class="code-keyword">35</span> <span class="code-keyword">and</span> humid > <span class="code-keyword">70</span>:
-    <span class="code-func">print</span>(<span class="code-string">"🔴 خطر مزدوج!"</span>)
-<span class="code-keyword">elif</span> temp > <span class="code-keyword">35</span>:
-    <span class="code-func">print</span>(<span class="code-string">"🟠 حرارة عالية فقط"</span>)
-<span class="code-keyword">else</span>:
-    <span class="code-func">print</span>(<span class="code-string">"✅ طبيعي"</span>)
-    </div>
+if temp > 35 and humid > 70:
+    print("🔴 خطر مزدوج!")
+elif temp > 35:
+    print("🟠 حرارة عالية فقط")
+else:
+    print("✅ طبيعي")</code></pre>
     <div class="box">💡 <strong style="color:var(--accent);">السؤال:</strong> ماذا يطبع البرنامج؟ ولماذا؟ — ناقشوا مع بعض قبل أن نكشف الإجابة!</div>
   </div>
 
@@ -109,21 +113,19 @@ humid = <span class="code-keyword">75</span>
     <div class="stag">الحلقات — النوع الأول</div>
     <div class="stitle">حلقة for 🔄</div>
     <div class="ssub">تكرر الكود لعدد محدد مسبقاً من المرات — مثالية لقراءات الحساسات!</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># اطبع الأرقام من 1 إلى 5</span>
-<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-func">range</span>(<span class="code-keyword">1</span>, <span class="code-keyword">6</span>):
-    <span class="code-func">print</span>(<span class="code-string">f"العدد: {i}"</span>)
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># اطبع الأرقام من 1 إلى 5
+for i in range(1, 6):
+    print(f"العدد: {i}")
 
-<span class="code-comment"># محاكاة 5 قراءات من الحساس</span>
-<span class="code-keyword">import</span> random
-<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-func">range</span>(<span class="code-keyword">5</span>):
-    temp = <span class="code-func">round</span>(random.<span class="code-func">uniform</span>(<span class="code-keyword">20</span>, <span class="code-keyword">40</span>), <span class="code-keyword">1</span>)
-    <span class="code-func">print</span>(<span class="code-string">f"القراءة {i+1}: {temp}°C"</span>)
+# محاكاة 5 قراءات من الحساس
+import random
+for i in range(5):
+    temp = round(random.uniform(20, 40), 1)
+    print(f"القراءة {i+1}: {temp}°C")
 
-<span class="code-comment"># range(start, stop, step) — الخطوة اختيارية</span>
-<span class="code-keyword">for</span> t <span class="code-keyword">in</span> <span class="code-func">range</span>(<span class="code-keyword">0</span>, <span class="code-keyword">100</span>, <span class="code-keyword">10</span>):  <span class="code-comment"># 0,10,20...90</span>
-    <span class="code-func">print</span>(<span class="code-string">f"درجة: {t}"</span>)
-    </div>
+# range(start, stop, step) — الخطوة اختيارية
+for t in range(0, 100, 10):  # 0,10,20...90
+    print(f"درجة: {t}")</code></pre>
     <div class="box">📝 <strong style="color:var(--accent);">range(stop):</strong> من 0 إلى stop-1 | <strong style="color:var(--accent);">range(start, stop):</strong> من start إلى stop-1</div>
   </div>
 
@@ -132,25 +134,23 @@ humid = <span class="code-keyword">75</span>
     <div class="stag">الحلقات — النوع الثاني</div>
     <div class="stitle">حلقة while ⏳</div>
     <div class="ssub">تكرر طالما الشرط صحيح — هكذا يعمل رصد (Rasd) فعلاً!</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># المراقبة المستمرة — نمط رصد (Rasd) الحقيقي</span>
-<span class="code-keyword">import</span> random, time
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># المراقبة المستمرة — نمط رصد (Rasd) الحقيقي
+import random, time
 
-monitoring = <span class="code-keyword">True</span>
-count = <span class="code-keyword">0</span>
+monitoring = True
+count = 0
 
-<span class="code-keyword">while</span> monitoring:
-    temp = <span class="code-func">round</span>(random.<span class="code-func">uniform</span>(<span class="code-keyword">15</span>, <span class="code-keyword">45</span>), <span class="code-keyword">1</span>)
-    count += <span class="code-keyword">1</span>
-    <span class="code-func">print</span>(<span class="code-string">f"#{count} — الحرارة: {temp}°C"</span>)
+while monitoring:
+    temp = round(random.uniform(15, 45), 1)
+    count += 1
+    print(f"#{count} — الحرارة: {temp}°C")
     
-    <span class="code-keyword">if</span> temp > <span class="code-keyword">40</span>:
-        <span class="code-func">print</span>(<span class="code-string">"🔴 تنبيه! إيقاف المراقبة."</span>)
-        monitoring = <span class="code-keyword">False</span>
+    if temp > 40:
+        print("🔴 تنبيه! إيقاف المراقبة.")
+        monitoring = False
     
-    <span class="code-keyword">if</span> count >= <span class="code-keyword">10</span>:   <span class="code-comment"># حد الأمان</span>
-        monitoring = <span class="code-keyword">False</span>
-    </div>
+    if count >= 10:   # حد الأمان
+        monitoring = False</code></pre>
     <div class="box">⚠️ <strong style="color:var(--accent3);">تحذير:</strong> دائماً ضع شرط إيقاف — وإلا سيعمل البرنامج إلى الأبد وستضطر لإيقافه يدوياً!</div>
   </div>
 
@@ -159,21 +159,19 @@ count = <span class="code-keyword">0</span>
     <div class="stag">التحكم بالحلقات</div>
     <div class="stitle">break و continue ⏹️</div>
     <div class="ssub">نتحكم في سلوك الحلقة بشكل أدق</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># break — أوقف الحلقة فوراً</span>
-<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-func">range</span>(<span class="code-keyword">100</span>):
-    temp = <span class="code-func">int</span>(<span class="code-func">input</span>(<span class="code-string">"أدخل قراءة (-1 للخروج): "</span>))
-    <span class="code-keyword">if</span> temp == -<span class="code-keyword">1</span>:
-        <span class="code-func">print</span>(<span class="code-string">"توقفت المراقبة."</span>)
-        <span class="code-keyword">break</span>              <span class="code-comment"># اخرج من الحلقة</span>
-    <span class="code-func">print</span>(<span class="code-string">f"تم تسجيل: {temp}°C"</span>)
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># break — أوقف الحلقة فوراً
+for i in range(100):
+    temp = int(input("أدخل قراءة (-1 للخروج): "))
+    if temp == -1:
+        print("توقفت المراقبة.")
+        break              # اخرج من الحلقة
+    print(f"تم تسجيل: {temp}°C")
 
-<span class="code-comment"># continue — تجاهل هذه الدورة وانتقل للتالية</span>
-<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-func">range</span>(<span class="code-keyword">10</span>):
-    <span class="code-keyword">if</span> i % <span class="code-keyword">2</span> == <span class="code-keyword">0</span>:
-        <span class="code-keyword">continue</span>           <span class="code-comment"># تخطَّ الأعداد الزوجية</span>
-    <span class="code-func">print</span>(<span class="code-string">f"فردي: {i}"</span>)  <span class="code-comment"># يطبع 1,3,5,7,9</span>
-    </div>
+# continue — تجاهل هذه الدورة وانتقل للتالية
+for i in range(10):
+    if i % 2 == 0:
+        continue           # تخطَّ الأعداد الزوجية
+    print(f"فردي: {i}")  # يطبع 1,3,5,7,9</code></pre>
     <div class="grid" style="max-width:640px;grid-template-columns:1fr 1fr;">
       <div class="card"><h3 style="color:var(--accent3);">break</h3><p>أوقف الحلقة نهائياً واخرج منها</p></div>
       <div class="card"><h3 style="color:var(--amber);">continue</h3><p>تجاهل الدورة الحالية وانتقل للتالية</p></div>
@@ -210,27 +208,25 @@ count = <span class="code-keyword">0</span>
     <div class="stag">بناء الدوال</div>
     <div class="stitle">def — تعريف دالة 🔧</div>
     <div class="ssub">هيكل الدالة دائماً نفسه — اسم، مدخلات، كود، مخرج (return)</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># دالة بسيطة</span>
-<span class="code-keyword">def</span> <span class="code-func">greet</span>(name):
-    <span class="code-func">print</span>(<span class="code-string">f"أهلاً يا {name}! 👋"</span>)
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># دالة بسيطة
+def greet(name):
+    print(f"أهلاً يا {name}! 👋")
 
-<span class="code-func">greet</span>(<span class="code-string">"زياد"</span>)     <span class="code-comment"># → أهلاً يا زياد!</span>
-<span class="code-func">greet</span>(<span class="code-string">"سارة"</span>)     <span class="code-comment"># → أهلاً يا سارة!</span>
+greet("زياد")     # → أهلاً يا زياد!
+greet("سارة")     # → أهلاً يا سارة!
 
-<span class="code-comment"># دالة مع return — تُرجع قيمة</span>
-<span class="code-keyword">def</span> <span class="code-func">check_sensor</span>(value, min_val, max_val):
-    <span class="code-keyword">if</span> value > max_val:
-        <span class="code-keyword">return</span> <span class="code-string">"HIGH"</span>
-    <span class="code-keyword">elif</span> value < min_val:
-        <span class="code-keyword">return</span> <span class="code-string">"LOW"</span>
-    <span class="code-keyword">else</span>:
-        <span class="code-keyword">return</span> <span class="code-string">"OK"</span>
+# دالة مع return — تُرجع قيمة
+def check_sensor(value, min_val, max_val):
+    if value > max_val:
+        return "HIGH"
+    elif value < min_val:
+        return "LOW"
+    else:
+        return "OK"
 
-<span class="code-comment"># الاستخدام</span>
-status = <span class="code-func">check_sensor</span>(<span class="code-keyword">38</span>, <span class="code-keyword">10</span>, <span class="code-keyword">35</span>)
-<span class="code-func">print</span>(<span class="code-string">f"حالة الحرارة: {status}"</span>)  <span class="code-comment"># → HIGH</span>
-    </div>
+# الاستخدام
+status = check_sensor(38, 10, 35)
+print(f"حالة الحرارة: {status}")  # → HIGH</code></pre>
     <div class="box">💡 <code style="color:var(--accent);">check_sensor()</code> هذه هي نفس الدالة الموجودة في <strong style="color:var(--accent);">alerts.py</strong> في رصد (Rasd)!</div>
   </div>
 
@@ -239,27 +235,25 @@ status = <span class="code-func">check_sensor</span>(<span class="code-keyword">
     <div class="stag">نشاط</div>
     <div class="stitle">حارس الغرفة بالدوال 🛡️</div>
     <div class="ssub">نعيد كتابة حارس الغرفة من الجلسة الماضية — بشكل أنظف باستخدام الدوال</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># أنشئ هذه الدوال الثلاث في Trinket:</span>
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># أنشئ هذه الدوال الثلاث في Trinket:
 
-<span class="code-keyword">def</span> <span class="code-func">check_temp</span>(temp):
-    <span class="code-comment">    """تحقق من درجة الحرارة وأرجع الحالة"""</span>
-    <span class="code-comment">    # اكتب الكود هنا</span>
+def check_temp(temp):
+        """تحقق من درجة الحرارة وأرجع الحالة"""
+        # اكتب الكود هنا
     pass
 
-<span class="code-keyword">def</span> <span class="code-func">check_humidity</span>(humid):
-    <span class="code-comment">    """تحقق من الرطوبة وأرجع الحالة"""</span>
+def check_humidity(humid):
+        """تحقق من الرطوبة وأرجع الحالة"""
     pass
 
-<span class="code-keyword">def</span> <span class="code-func">run_guardian</span>():
-    <span class="code-comment">    """تشغيل حارس الغرفة الكامل"""</span>
-    temp  = <span class="code-func">float</span>(<span class="code-func">input</span>(<span class="code-string">"الحرارة: "</span>))
-    humid = <span class="code-func">float</span>(<span class="code-func">input</span>(<span class="code-string">"الرطوبة: "</span>))
-    <span class="code-func">print</span>(<span class="code-string">f"الحرارة: {check_temp(temp)}"</span>)
-    <span class="code-func">print</span>(<span class="code-string">f"الرطوبة: {check_humidity(humid)}"</span>)
+def run_guardian():
+        """تشغيل حارس الغرفة الكامل"""
+    temp  = float(input("الحرارة: "))
+    humid = float(input("الرطوبة: "))
+    print(f"الحرارة: {check_temp(temp)}")
+    print(f"الرطوبة: {check_humidity(humid)}")
 
-<span class="code-func">run_guardian</span>()
-    </div>
+run_guardian()</code></pre>
     <div class="list" style="max-width:700px;margin-top:4px;">
       <div class="li-item">
         <div class="li-num">+</div>

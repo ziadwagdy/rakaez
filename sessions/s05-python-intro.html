@@ -52,7 +52,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
 .box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
 .big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
-.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.8;max-width:700px;width:100%;text-align:left;direction:ltr;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:0;max-width:700px;width:100%;overflow-x:auto;direction:ltr;text-align:left;margin:0;}
+.code-block code[class*="language-"]{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:20px 24px!important;display:block!important;}
+pre.code-block{border-radius:12px!important;}
 .code-comment{color:var(--muted);}
 .code-keyword{color:var(--accent2);}
 .code-string{color:var(--amber);}
@@ -64,6 +66,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .op-ex{font-size:11px;color:var(--amber);font-family:'Space Mono',monospace;margin-top:4px;}
 @media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}.ops-grid{grid-template-columns:repeat(2,1fr);}}
 </style>
+  <!-- Prism.js syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 </head>
 <body>
 <div class="orb orb1"></div>
@@ -140,19 +146,17 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="stag">اتخاذ القرار</div>
     <div class="stitle">if / elif / else 🔀</div>
     <div class="ssub">ثلاثة أجزاء لبناء أي قرار في Python</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># درجة الحرارة — مثال رصد (Rasd)</span>
-temp = <span class="code-func">float</span>(<span class="code-func">input</span>(<span class="code-string">"أدخل درجة الحرارة: "</span>))
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># درجة الحرارة — مثال رصد (Rasd)
+temp = float(input("أدخل درجة الحرارة: "))
 
-<span class="code-keyword">if</span> temp > <span class="code-keyword">35</span>:                    <span class="code-comment"># الشرط الأول</span>
-    <span class="code-func">print</span>(<span class="code-string">"🔴 خطر! حار جداً"</span>)
-<span class="code-keyword">elif</span> temp > <span class="code-keyword">25</span>:                  <span class="code-comment"># شرط بديل</span>
-    <span class="code-func">print</span>(<span class="code-string">"🟡 دافئ — طبيعي"</span>)
-<span class="code-keyword">elif</span> temp > <span class="code-keyword">10</span>:                  <span class="code-comment"># شرط بديل آخر</span>
-    <span class="code-func">print</span>(<span class="code-string">"🟢 معتدل ومريح"</span>)
-<span class="code-keyword">else</span>:                           <span class="code-comment"># كل الحالات الأخرى</span>
-    <span class="code-func">print</span>(<span class="code-string">"🔵 بارد! تنبيه حرارة منخفضة"</span>)
-    </div>
+if temp > 35:                    # الشرط الأول
+    print("🔴 خطر! حار جداً")
+elif temp > 25:                  # شرط بديل
+    print("🟡 دافئ — طبيعي")
+elif temp > 10:                  # شرط بديل آخر
+    print("🟢 معتدل ومريح")
+else:                           # كل الحالات الأخرى
+    print("🔵 بارد! تنبيه حرارة منخفضة")</code></pre>
     <div class="box">📐 <strong style="color:var(--accent);">المسافة البادئة إلزامية</strong> — 4 مسافات بعد كل if/elif/else يجب أن يكون الكود داخلها منزاحاً للأمام</div>
   </div>
 
@@ -161,20 +165,18 @@ temp = <span class="code-func">float</span>(<span class="code-func">input</span>
     <div class="stag">العوامل المنطقية</div>
     <div class="stitle">and / or / not 🔗</div>
     <div class="ssub">ندمج أكثر من شرط في قرار واحد — رصد (Rasd) يحتاجها دائماً</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># and — الشرطان معاً يجب أن يكونا صحيحين</span>
-<span class="code-keyword">if</span> temp > <span class="code-keyword">35</span> <span class="code-keyword">and</span> humid > <span class="code-keyword">80</span>:
-    <span class="code-func">print</span>(<span class="code-string">"🔴 حر ورطب — خطر مزدوج!"</span>)
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># and — الشرطان معاً يجب أن يكونا صحيحين
+if temp > 35 and humid > 80:
+    print("🔴 حر ورطب — خطر مزدوج!")
 
-<span class="code-comment"># or — يكفي شرط واحد صحيح</span>
-<span class="code-keyword">if</span> temp > <span class="code-keyword">35</span> <span class="code-keyword">or</span> temp < <span class="code-keyword">10</span>:
-    <span class="code-func">print</span>(<span class="code-string">"⚠️ درجة حرارة خارج المعدل!"</span>)
+# or — يكفي شرط واحد صحيح
+if temp > 35 or temp < 10:
+    print("⚠️ درجة حرارة خارج المعدل!")
 
-<span class="code-comment"># not — يعكس النتيجة</span>
-rain_ok = <span class="code-keyword">False</span>
-<span class="code-keyword">if</span> <span class="code-keyword">not</span> rain_ok:
-    <span class="code-func">print</span>(<span class="code-string">"🌧️ هناك مطر مكتشف!"</span>)
-    </div>
+# not — يعكس النتيجة
+rain_ok = False
+if not rain_ok:
+    print("🌧️ هناك مطر مكتشف!")</code></pre>
     <div class="grid" style="max-width:680px;grid-template-columns:repeat(3,1fr);">
       <div class="card"><h3 style="color:var(--accent);">and</h3><p>صحيح فقط إذا الاثنان صحيحان</p></div>
       <div class="card"><h3 style="color:var(--accent2);">or</h3><p>صحيح إذا واحد أو أكثر صحيح</p></div>
@@ -187,36 +189,34 @@ rain_ok = <span class="code-keyword">False</span>
     <div class="stag">ربط بالمشروع</div>
     <div class="stitle">حارس الغرفة الكامل 🛡️</div>
     <div class="ssub">نفس المنطق الموجود فعلاً في alerts.py داخل رصد (Rasd)!</div>
-    <div class="code-block">
-<span class="code-comment"># حارس الغرفة — كل الحساسات الأربعة</span>
-temp  = <span class="code-func">float</span>(<span class="code-func">input</span>(<span class="code-string">"الحرارة (°C): "</span>))
-humid = <span class="code-func">float</span>(<span class="code-func">input</span>(<span class="code-string">"الرطوبة (%): "</span>))
-water = <span class="code-func">int</span>(<span class="code-func">input</span>(<span class="code-string">"حساس المطر (0-65535): "</span>))
-soil  = <span class="code-func">int</span>(<span class="code-func">input</span>(<span class="code-string">"رطوبة التربة (0-65535): "</span>))
+    <pre class="code-block language-python"><code class="language-python"># حارس الغرفة — كل الحساسات الأربعة
+temp  = float(input("الحرارة (°C): "))
+humid = float(input("الرطوبة (%): "))
+water = int(input("حساس المطر (0-65535): "))
+soil  = int(input("رطوبة التربة (0-65535): "))
 
-alerts = <span class="code-keyword">0</span>
+alerts = 0
 
-<span class="code-keyword">if</span> temp > <span class="code-keyword">35</span> <span class="code-keyword">or</span> temp < <span class="code-keyword">10</span>:
-    <span class="code-func">print</span>(<span class="code-string">f"🌡️ تنبيه حرارة: {temp}°C"</span>)
-    alerts += <span class="code-keyword">1</span>
+if temp > 35 or temp < 10:
+    print(f"🌡️ تنبيه حرارة: {temp}°C")
+    alerts += 1
 
-<span class="code-keyword">if</span> humid > <span class="code-keyword">80</span> <span class="code-keyword">or</span> humid < <span class="code-keyword">20</span>:
-    <span class="code-func">print</span>(<span class="code-string">f"💧 تنبيه رطوبة: {humid}%"</span>)
-    alerts += <span class="code-keyword">1</span>
+if humid > 80 or humid < 20:
+    print(f"💧 تنبيه رطوبة: {humid}%")
+    alerts += 1
 
-<span class="code-keyword">if</span> water < <span class="code-keyword">20000</span>:
-    <span class="code-func">print</span>(<span class="code-string">"🌧️ تنبيه: مطر مكتشف!"</span>)
-    alerts += <span class="code-keyword">1</span>
+if water < 20000:
+    print("🌧️ تنبيه: مطر مكتشف!")
+    alerts += 1
 
-<span class="code-keyword">if</span> soil < <span class="code-keyword">20000</span>:
-    <span class="code-func">print</span>(<span class="code-string">"🌱 تنبيه: التربة جافة جداً!"</span>)
-    alerts += <span class="code-keyword">1</span>
+if soil < 20000:
+    print("🌱 تنبيه: التربة جافة جداً!")
+    alerts += 1
 
-<span class="code-keyword">if</span> alerts == <span class="code-keyword">0</span>:
-    <span class="code-func">print</span>(<span class="code-string">"✅ كل شيء طبيعي — رصد (Rasd) مطمئن"</span>)
-<span class="code-keyword">else</span>:
-    <span class="code-func">print</span>(<span class="code-string">f"⚠️ عدد التنبيهات: {alerts}"</span>)
-    </div>
+if alerts == 0:
+    print("✅ كل شيء طبيعي — رصد (Rasd) مطمئن")
+else:
+    print(f"⚠️ عدد التنبيهات: {alerts}")</code></pre>
   </div>
 
   <!-- Slide 7: Activity -->
@@ -255,22 +255,20 @@ alerts = <span class="code-keyword">0</span>
     <div class="stag">متقدم</div>
     <div class="stitle">الشروط المتداخلة 🪆</div>
     <div class="ssub">if داخل if — حين تحتاج قراراً داخل قرار آخر</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># تصنيف حالة الغرفة — درجتان من الخطورة</span>
-<span class="code-keyword">if</span> temp > <span class="code-keyword">30</span>:
-    <span class="code-comment">    # دخلنا منطقة الحرارة العالية</span>
-    <span class="code-keyword">if</span> humid > <span class="code-keyword">70</span>:
-        <span class="code-func">print</span>(<span class="code-string">"🔴 خطر حريق محتمل! أغلق الحساسات!"</span>)
-    <span class="code-keyword">else</span>:
-        <span class="code-func">print</span>(<span class="code-string">"🟠 حار لكن رطوبة معقولة — راقب الوضع"</span>)
-<span class="code-keyword">elif</span> temp < <span class="code-keyword">5</span>:
-    <span class="code-keyword">if</span> humid > <span class="code-keyword">60</span>:
-        <span class="code-func">print</span>(<span class="code-string">"❄️ بارد ورطب — خطر تكثف وصدأ!"</span>)
-    <span class="code-keyword">else</span>:
-        <span class="code-func">print</span>(<span class="code-string">"🔵 بارد فقط — تنبيه عادي"</span>)
-<span class="code-keyword">else</span>:
-    <span class="code-func">print</span>(<span class="code-string">"✅ الغرفة في الحدود الآمنة"</span>)
-    </div>
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># تصنيف حالة الغرفة — درجتان من الخطورة
+if temp > 30:
+        # دخلنا منطقة الحرارة العالية
+    if humid > 70:
+        print("🔴 خطر حريق محتمل! أغلق الحساسات!")
+    else:
+        print("🟠 حار لكن رطوبة معقولة — راقب الوضع")
+elif temp < 5:
+    if humid > 60:
+        print("❄️ بارد ورطب — خطر تكثف وصدأ!")
+    else:
+        print("🔵 بارد فقط — تنبيه عادي")
+else:
+    print("✅ الغرفة في الحدود الآمنة")</code></pre>
     <div class="box">📏 كل مستوى تداخل يحتاج <strong style="color:var(--accent);">4 مسافات إضافية</strong> — لا تنسَ الترتيب وإلا ستخطئ Python!</div>
   </div>
 

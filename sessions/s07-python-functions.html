@@ -52,7 +52,9 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
 .box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
 .big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
-.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:20px 24px;font-family:'Space Mono',monospace;font-size:13px;color:#a0f0e0;line-height:1.8;max-width:700px;width:100%;text-align:left;direction:ltr;}
+.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:0;max-width:700px;width:100%;overflow-x:auto;direction:ltr;text-align:left;margin:0;}
+.code-block code[class*="language-"]{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:20px 24px!important;display:block!important;}
+pre.code-block{border-radius:12px!important;}
 .code-comment{color:var(--muted);}
 .code-keyword{color:var(--accent2);}
 .code-string{color:var(--amber);}
@@ -65,6 +67,10 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
 .flow-arr{color:var(--muted);font-size:20px;}
 @media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}.flow-row{gap:4px;}.flow-arr{font-size:14px;}}
 </style>
+  <!-- Prism.js syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
 </head>
 <body>
 <div class="orb orb1"></div>
@@ -95,19 +101,17 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="stag">مراجعة سريعة</div>
     <div class="stitle">Python ٣ — الحلقات والدوال 🔁</div>
     <div class="ssub">هيا نراجع الأسبوع الماضي!</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-keyword">def</span> <span class="code-func">check_sensor</span>(value, min_val, max_val):
-    <span class="code-keyword">if</span> value > max_val:
-        <span class="code-keyword">return</span> <span class="code-string">"HIGH"</span>
-    <span class="code-keyword">elif</span> value < min_val:
-        <span class="code-keyword">return</span> <span class="code-string">"LOW"</span>
-    <span class="code-keyword">else</span>:
-        <span class="code-keyword">return</span> <span class="code-string">"OK"</span>
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python">def check_sensor(value, min_val, max_val):
+    if value > max_val:
+        return "HIGH"
+    elif value < min_val:
+        return "LOW"
+    else:
+        return "OK"
 
-<span class="code-keyword">for</span> i <span class="code-keyword">in</span> <span class="code-func">range</span>(<span class="code-keyword">3</span>):
-    result = <span class="code-func">check_sensor</span>(<span class="code-keyword">38</span>, <span class="code-keyword">10</span>, <span class="code-keyword">35</span>)
-    <span class="code-func">print</span>(<span class="code-string">f"القراءة {i+1}: {result}"</span>)
-    </div>
+for i in range(3):
+    result = check_sensor(38, 10, 35)
+    print(f"القراءة {i+1}: {result}")</code></pre>
     <div class="box">💡 اليوم نضيف <strong style="color:var(--accent);">القوائم والقواميس والـ JSON</strong> — وهذا ما يجعل رصد (Rasd) يرسل البيانات فعلاً عبر الشبكة!</div>
   </div>
 
@@ -116,24 +120,22 @@ body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(
     <div class="stag">القوائم</div>
     <div class="stitle">List — تخزين أكثر من قيمة 📋</div>
     <div class="ssub">بدلاً من متغير واحد لكل قراءة — نجمعها كلها في قائمة واحدة</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># قائمة بسيطة</span>
-readings = [<span class="code-keyword">32.1</span>, <span class="code-keyword">33.4</span>, <span class="code-keyword">31.8</span>, <span class="code-keyword">35.2</span>, <span class="code-keyword">29.9</span>]
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># قائمة بسيطة
+readings = [32.1, 33.4, 31.8, 35.2, 29.9]
 
-<span class="code-comment"># الوصول بالرقم (يبدأ من 0)</span>
-<span class="code-func">print</span>(readings[<span class="code-keyword">0</span>])   <span class="code-comment"># → 32.1 (الأول)</span>
-<span class="code-func">print</span>(readings[-<span class="code-keyword">1</span>])  <span class="code-comment"># → 29.9 (الأخير)</span>
+# الوصول بالرقم (يبدأ من 0)
+print(readings[0])   # → 32.1 (الأول)
+print(readings[-1])  # → 29.9 (الأخير)
 
-<span class="code-comment"># عمليات مفيدة</span>
-<span class="code-func">print</span>(<span class="code-func">len</span>(readings))    <span class="code-comment"># → 5 (الطول)</span>
-<span class="code-func">print</span>(<span class="code-func">max</span>(readings))    <span class="code-comment"># → 35.2 (الأعلى)</span>
-<span class="code-func">print</span>(<span class="code-func">min</span>(readings))    <span class="code-comment"># → 29.9 (الأدنى)</span>
-<span class="code-func">print</span>(<span class="code-func">sum</span>(readings)/<span class="code-func">len</span>(readings))  <span class="code-comment"># المتوسط</span>
+# عمليات مفيدة
+print(len(readings))    # → 5 (الطول)
+print(max(readings))    # → 35.2 (الأعلى)
+print(min(readings))    # → 29.9 (الأدنى)
+print(sum(readings)/len(readings))  # المتوسط
 
-<span class="code-comment"># إضافة قراءة جديدة</span>
-readings.<span class="code-func">append</span>(<span class="code-keyword">34.0</span>)
-<span class="code-func">print</span>(<span class="code-string">f"عدد القراءات الآن: {len(readings)}"</span>)
-    </div>
+# إضافة قراءة جديدة
+readings.append(34.0)
+print(f"عدد القراءات الآن: {len(readings)}")</code></pre>
     <div class="box">🔢 الفهرسة تبدأ من <strong style="color:var(--accent);">0</strong> — القائمة [a, b, c]: a هو [0]، b هو [1]، c هو [2]</div>
   </div>
 
@@ -142,27 +144,25 @@ readings.<span class="code-func">append</span>(<span class="code-keyword">34.0</
     <div class="stag">القواميس</div>
     <div class="stitle">Dict — بيانات بأسماء 📖</div>
     <div class="ssub">القاموس يربط مفتاحاً بقيمة — مثالي لتنظيم بيانات الحساسات!</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># قاموس بيانات حساس واحد</span>
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># قاموس بيانات حساس واحد
 reading = {
-    <span class="code-string">"temperature"</span>: <span class="code-keyword">34.2</span>,
-    <span class="code-string">"humidity"</span>:    <span class="code-keyword">65</span>,
-    <span class="code-string">"water_level"</span>: <span class="code-keyword">45000</span>,
-    <span class="code-string">"soil_moisture"</span>: <span class="code-keyword">38000</span>,
-    <span class="code-string">"location"</span>:    <span class="code-string">"الغرفة أ"</span>
+    "temperature": 34.2,
+    "humidity":    65,
+    "water_level": 45000,
+    "soil_moisture": 38000,
+    "location":    "الغرفة أ"
 }
 
-<span class="code-comment"># الوصول بالمفتاح</span>
-<span class="code-func">print</span>(reading[<span class="code-string">"temperature"</span>])  <span class="code-comment"># → 34.2</span>
-<span class="code-func">print</span>(reading[<span class="code-string">"humidity"</span>])     <span class="code-comment"># → 65</span>
+# الوصول بالمفتاح
+print(reading["temperature"])  # → 34.2
+print(reading["humidity"])     # → 65
 
-<span class="code-comment"># التعديل</span>
-reading[<span class="code-string">"temperature"</span>] = <span class="code-keyword">35.1</span>
+# التعديل
+reading["temperature"] = 35.1
 
-<span class="code-comment"># التكرار على المفاتيح</span>
-<span class="code-keyword">for</span> key, value <span class="code-keyword">in</span> reading.<span class="code-func">items</span>():
-    <span class="code-func">print</span>(<span class="code-string">f"{key}: {value}"</span>)
-    </div>
+# التكرار على المفاتيح
+for key, value in reading.items():
+    print(f"{key}: {value}")</code></pre>
     <div class="box">💡 هذا القاموس <strong style="color:var(--accent);">هو بالضبط</strong> ما يرسله الـ Pico W لـ Flask في رصد (Rasd)!</div>
   </div>
 
@@ -180,20 +180,18 @@ reading[<span class="code-string">"temperature"</span>] = <span class="code-keyw
       <div class="flow-arr">→</div>
       <div class="flow-box" style="border-color:var(--accent3);color:var(--accent3);">Dashboard<br>📊 واجهة</div>
     </div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-keyword">import</span> json
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python">import json
 
-<span class="code-comment"># من Python dict إلى نص JSON</span>
-data = {<span class="code-string">"temperature"</span>: <span class="code-keyword">34.2</span>, <span class="code-string">"humidity"</span>: <span class="code-keyword">65</span>}
-json_text = json.<span class="code-func">dumps</span>(data)
-<span class="code-func">print</span>(json_text)
-<span class="code-comment"># → '{"temperature": 34.2, "humidity": 65}'</span>
+# من Python dict إلى نص JSON
+data = {"temperature": 34.2, "humidity": 65}
+json_text = json.dumps(data)
+print(json_text)
+# → '{"temperature": 34.2, "humidity": 65}'
 
-<span class="code-comment"># من نص JSON إلى Python dict</span>
-received = <span class="code-string">'{"temp": 36.5, "humid": 70}'</span>
-parsed = json.<span class="code-func">loads</span>(received)
-<span class="code-func">print</span>(parsed[<span class="code-string">"temp"</span>])   <span class="code-comment"># → 36.5</span>
-    </div>
+# من نص JSON إلى Python dict
+received = '{"temp": 36.5, "humid": 70}'
+parsed = json.loads(received)
+print(parsed["temp"])   # → 36.5</code></pre>
     <div class="box">🌍 <strong style="color:var(--accent);">json.dumps()</strong> يحوّل dict لنص | <strong style="color:var(--accent);">json.loads()</strong> يحوّل نص لـ dict</div>
   </div>
 
@@ -202,32 +200,30 @@ parsed = json.<span class="code-func">loads</span>(received)
     <div class="stag">ربط بالمشروع</div>
     <div class="stitle">هكذا يعمل رصد (Rasd) فعلاً 🛡️</div>
     <div class="ssub">الكود التالي هو نسخة مبسطة من <code style="color:var(--accent);">app.py</code> الموجود في مجلد room-guardian!</div>
-    <div class="code-block">
-<span class="code-keyword">import</span> json
+    <pre class="code-block language-python"><code class="language-python">import json
 
-<span class="code-comment"># ١. الـ Pico W يرسل هذا الـ JSON</span>
-incoming_json = <span class="code-string">'''
+# ١. الـ Pico W يرسل هذا الـ JSON
+incoming_json = '''
 {
     "temperature": 34.2,
     "humidity": 75,
     "water_level": 15000,
     "soil_moisture": 42000
 }
-'''</span>
+'''
 
-<span class="code-comment"># ٢. Flask يحوله لـ dict</span>
-data = json.<span class="code-func">loads</span>(incoming_json)
+# ٢. Flask يحوله لـ dict
+data = json.loads(incoming_json)
 
-<span class="code-comment"># ٣. نفحص كل قيمة</span>
-<span class="code-keyword">if</span> data[<span class="code-string">"temperature"</span>] > <span class="code-keyword">35</span>:
-    <span class="code-func">print</span>(<span class="code-string">"🔴 تنبيه حرارة!"</span>)
+# ٣. نفحص كل قيمة
+if data["temperature"] > 35:
+    print("🔴 تنبيه حرارة!")
 
-<span class="code-keyword">if</span> data[<span class="code-string">"water_level"</span>] < <span class="code-keyword">20000</span>:
-    <span class="code-func">print</span>(<span class="code-string">"🌧️ تنبيه مطر!"</span>)
+if data["water_level"] < 20000:
+    print("🌧️ تنبيه مطر!")
 
-<span class="code-func">print</span>(<span class="code-string">f"الحرارة: {data['temperature']}°C"</span>)
-<span class="code-func">print</span>(<span class="code-string">f"الرطوبة: {data['humidity']}%"</span>)
-    </div>
+print(f"الحرارة: {data['temperature']}°C")
+print(f"الرطوبة: {data['humidity']}%")</code></pre>
   </div>
 
   <!-- Slide 7: Lists of Readings -->
@@ -235,24 +231,22 @@ data = json.<span class="code-func">loads</span>(incoming_json)
     <div class="stag">القوائم المتقدمة</div>
     <div class="stitle">قائمة من القواميس 📋📖</div>
     <div class="ssub">هكذا تخزن رصد (Rasd) قراءات متعددة في قاعدة البيانات</div>
-    <div class="code-block" style="margin-bottom:16px;">
-<span class="code-comment"># قائمة من القراءات</span>
+    <pre class="code-block language-python" style="margin-bottom:16px;"><code class="language-python"># قائمة من القراءات
 history = [
-    {<span class="code-string">"time"</span>: <span class="code-string">"10:00"</span>, <span class="code-string">"temp"</span>: <span class="code-keyword">32.1</span>, <span class="code-string">"humid"</span>: <span class="code-keyword">60</span>},
-    {<span class="code-string">"time"</span>: <span class="code-string">"10:10"</span>, <span class="code-string">"temp"</span>: <span class="code-keyword">33.5</span>, <span class="code-string">"humid"</span>: <span class="code-keyword">62</span>},
-    {<span class="code-string">"time"</span>: <span class="code-string">"10:20"</span>, <span class="code-string">"temp"</span>: <span class="code-keyword">36.0</span>, <span class="code-string">"humid"</span>: <span class="code-keyword">78</span>},
-    {<span class="code-string">"time"</span>: <span class="code-string">"10:30"</span>, <span class="code-string">"temp"</span>: <span class="code-keyword">34.2</span>, <span class="code-string">"humid"</span>: <span class="code-keyword">70</span>},
+    {"time": "10:00", "temp": 32.1, "humid": 60},
+    {"time": "10:10", "temp": 33.5, "humid": 62},
+    {"time": "10:20", "temp": 36.0, "humid": 78},
+    {"time": "10:30", "temp": 34.2, "humid": 70},
 ]
 
-<span class="code-comment"># تحليل القراءات</span>
-<span class="code-keyword">for</span> r <span class="code-keyword">in</span> history:
-    <span class="code-keyword">if</span> r[<span class="code-string">"temp"</span>] > <span class="code-keyword">35</span>:
-        <span class="code-func">print</span>(<span class="code-string">f"⚠️ {r['time']}: حرارة عالية {r['temp']}°C"</span>)
+# تحليل القراءات
+for r in history:
+    if r["temp"] > 35:
+        print(f"⚠️ {r['time']}: حرارة عالية {r['temp']}°C")
 
-<span class="code-comment"># المتوسط</span>
-avg = <span class="code-func">sum</span>(r[<span class="code-string">"temp"</span>] <span class="code-keyword">for</span> r <span class="code-keyword">in</span> history) / <span class="code-func">len</span>(history)
-<span class="code-func">print</span>(<span class="code-string">f"متوسط الحرارة: {avg:.1f}°C"</span>)
-    </div>
+# المتوسط
+avg = sum(r["temp"] for r in history) / len(history)
+print(f"متوسط الحرارة: {avg:.1f}°C")</code></pre>
     <div class="box">🗄️ <strong style="color:var(--accent);">data.db</strong> في رصد (Rasd) يخزن بالضبط قائمة من هذه القواميس — لكن في SQLite!</div>
   </div>
 

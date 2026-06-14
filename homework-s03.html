@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>واجب الجلسة ٣ — رصد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: #f6f8fa;
+  color: #1a1a2e;
+  line-height: 1.7;
+  padding: 0 0 60px;
+}
+
+.top-bar {
+  background: #ffffff;
+  border-bottom: 1px solid #e1e4e8;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.top-bar-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0d1117;
+}
+
+.top-bar-badge {
+  font-size: 12px;
+  background: #eafaf7;
+  color: #0a7c5c;
+  border: 1px solid #b6e9da;
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-weight: 600;
+}
+
+.container {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 24px 0;
+}
+
+/* PAGE HEADER */
+.page-header {
+  margin-bottom: 32px;
+}
+
+.page-header .label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: #6b7fa3;
+  margin-bottom: 10px;
+}
+
+.page-header h1 {
+  font-size: 28px;
+  font-weight: 900;
+  color: #0d1117;
+  margin-bottom: 6px;
+}
+
+.page-header .deadline {
+  font-size: 13px;
+  color: #6b7fa3;
+}
+
+.page-header .deadline strong {
+  color: #d04a02;
+}
+
+/* ABOUT BOX */
+.about-box {
+  background: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-right: 4px solid #00c9a7;
+  border-radius: 10px;
+  padding: 20px 22px;
+  margin-bottom: 28px;
+}
+
+.about-box h2 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0d1117;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.about-box p {
+  font-size: 14px;
+  color: #444d56;
+  line-height: 1.8;
+}
+
+/* TASK CARD */
+.task-card {
+  background: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+.task-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 18px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.task-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.icon-blue  { background: #e8f4fd; }
+.icon-green { background: #eafaf7; }
+.icon-amber { background: #fef9e7; }
+
+.task-header-text h3 {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0d1117;
+  margin-bottom: 2px;
+}
+
+.task-header-text span {
+  font-size: 12px;
+  color: #6b7fa3;
+}
+
+/* MANDATORY PAGE */
+.mandatory-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #d04a02;
+  background: #fff4ee;
+  border: 1px solid #fbd8c3;
+  border-radius: 20px;
+  padding: 3px 12px;
+  display: inline-block;
+  margin-bottom: 8px;
+}
+
+.page-item {
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.page-item:last-child { margin-bottom: 0; }
+
+.page-item .page-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0d1117;
+  margin-bottom: 4px;
+}
+
+.page-item .page-desc {
+  font-size: 13px;
+  color: #6b7fa3;
+}
+
+.workflow-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-top: 12px;
+}
+
+.workflow-item {
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 12px 14px;
+}
+
+.workflow-item .wf-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #0d1117;
+  margin-bottom: 3px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.workflow-item .wf-desc {
+  font-size: 12px;
+  color: #6b7fa3;
+  line-height: 1.6;
+}
+
+.dot-red    { color: #e53e3e; }
+.dot-blue   { color: #3182ce; }
+.dot-green  { color: #38a169; }
+.dot-amber  { color: #d69e2e; }
+
+/* STUDY ITEMS */
+.study-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.study-item:last-child { margin-bottom: 0; }
+
+.study-icon {
+  font-size: 22px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.study-item .study-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0d1117;
+  margin-bottom: 4px;
+}
+
+.study-item .study-desc {
+  font-size: 13px;
+  color: #6b7fa3;
+  line-height: 1.6;
+}
+
+.study-item a {
+  color: #0366d6;
+  text-decoration: none;
+  font-size: 13px;
+  display: inline-block;
+  margin-top: 4px;
+}
+
+.study-item a:hover { text-decoration: underline; }
+
+/* RESEARCH BOX */
+.research-q {
+  background: #f6f8fa;
+  border: 1px solid #e1e4e8;
+  border-radius: 8px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+}
+
+.research-q:last-child { margin-bottom: 0; }
+
+.research-q .q-num {
+  font-size: 11px;
+  font-weight: 700;
+  color: #6b7fa3;
+  margin-bottom: 4px;
+}
+
+.research-q .q-text {
+  font-size: 14px;
+  color: #0d1117;
+  line-height: 1.7;
+}
+
+/* DELIVERY BOX */
+.delivery-box {
+  background: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 12px;
+  padding: 22px 24px;
+  margin-top: 20px;
+}
+
+.delivery-box h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0d1117;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.delivery-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  font-size: 13px;
+  color: #444d56;
+  padding: 8px 0;
+  border-bottom: 1px solid #f0f0f0;
+  line-height: 1.6;
+}
+
+.delivery-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+.delivery-num {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #f0f4ff;
+  color: #3451b2;
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+footer {
+  text-align: center;
+  font-size: 12px;
+  color: #aab0ba;
+  margin-top: 40px;
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <span class="top-bar-title">🛡️ رصد — Rakaez Foundation</span>
+  <span class="top-bar-badge">الجلسة ٣ · ١٣ يونيو ٢٠٢٥</span>
+</div>
+
+<div class="container">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="label">واجب ما بعد الجلسة الثالثة</div>
+    <h1>مهام هذا الأسبوع</h1>
+    <p class="deadline">الموعد النهائي: <strong>قبل الجلسة القادمة</strong></p>
+  </div>
+
+  <!-- ABOUT RASD -->
+  <div class="about-box">
+    <h2>🛡️ عن نظام رصد</h2>
+    <p>
+      رصد هو نظام مراقبة بيئية ذكي يجمع قراءات من أربعة حساسات — درجة الحرارة، الرطوبة، المطر، ورطوبة التربة — ويرسلها عبر WiFi من جهاز Raspberry Pi Pico W إلى خادم Flask، الذي يحفظها في قاعدة بيانات ويعرضها على لوحة تحكم ويب تتحدّث تلقائياً كل ثلاث ثوانٍ. الهدف هو رصد البيئة والتنبيه الفوري عند تجاوز أي قيمة حدودها الآمنة.
+    </p>
+  </div>
+
+  <!-- TASK 1: UI/UX -->
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-icon icon-blue">✏️</div>
+      <div class="task-header-text">
+        <h3>المهمة الأولى — تصميم UI/UX</h3>
+        <span>استخدم أداتك المفضلة: Figma · Canva · ورقة وقلم</span>
+      </div>
+    </div>
+
+    <span class="mandatory-label">إلزامي</span>
+    <div class="page-item">
+      <div class="page-title">🏠 الصفحة الرئيسية — Home</div>
+      <div class="page-desc">
+        تعرض جميع قراءات الحساسات الأربعة في الوقت الفعلي — بطاقة لكل حساس تحتوي على القيمة الحالية واسم الحساس وحالته (طبيعي / تنبيه).
+      </div>
+    </div>
+
+    <p style="font-size: 13px; font-weight: 700; color: #444d56; margin: 16px 0 8px;">أربع صفحات إضافية — سيناريوهات مختلفة:</p>
+    <div class="workflow-grid">
+      <div class="workflow-item">
+        <div class="wf-title"><span class="dot-red">●</span> تنبيه الحرارة العالية</div>
+        <div class="wf-desc">كيف تبدو الصفحة عندما تتجاوز درجة الحرارة 35° — ماذا يتغير في الواجهة؟</div>
+      </div>
+      <div class="workflow-item">
+        <div class="wf-title"><span class="dot-blue">●</span> اكتشاف المطر</div>
+        <div class="wf-desc">كيف يُعرض تنبيه المطر عند اكتشافه — الألوان، الرسائل، التصميم</div>
+      </div>
+      <div class="workflow-item">
+        <div class="wf-title"><span class="dot-green">●</span> السجل التاريخي</div>
+        <div class="wf-desc">صفحة تعرض قراءات الساعة أو اليوم الماضي — جدول أو رسم بياني</div>
+      </div>
+      <div class="workflow-item">
+        <div class="wf-title"><span class="dot-amber">●</span> قائمة التنبيهات</div>
+        <div class="wf-desc">جميع التنبيهات مرتّبة من الأحدث للأقدم مع وقت كل تنبيه</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 2: HTML Study -->
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-icon icon-green">💻</div>
+      <div class="task-header-text">
+        <h3>المهمة الثانية — دراسة HTML</h3>
+        <span>طبّق كل مثال أثناء المشاهدة — لا تكتفِ بالمشاهدة فقط</span>
+      </div>
+    </div>
+
+    <div class="study-item">
+      <div class="study-icon">▶️</div>
+      <div>
+        <div class="study-title">كورس Elzero Web School — HTML</div>
+        <div class="study-desc">
+          شاهد من الفيديو الأول حتى الفيديو ٢٢. أنشئ ملف HTML منفصلاً لكل فيديو وطبّق فيه الأمثلة بنفسك.
+        </div>
+        <a href="https://www.youtube.com/watch?v=6QAELgirvjs&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji" target="_blank">
+          ▶ youtube.com — Elzero HTML Course
+        </a>
+      </div>
+    </div>
+
+    <div class="study-item">
+      <div class="study-icon">🌐</div>
+      <div>
+        <div class="study-title">W3Schools — HTML Tutorial</div>
+        <div class="study-desc">
+          جرّب كل الأمثلة التفاعلية على الموقع أثناء المشاهدة — استخدم زر "Try it Yourself" في كل مثال.
+        </div>
+        <a href="https://www.w3schools.com/html/" target="_blank">
+          ▶ w3schools.com/html
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- TASK 3: Research -->
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-icon icon-amber">🔒</div>
+      <div class="task-header-text">
+        <h3>المهمة الثالثة — بحث</h3>
+        <span>يُسلَّم كمستند Word أو PDF</span>
+      </div>
+    </div>
+
+    <p style="font-size: 14px; font-weight: 700; color: #0d1117; margin-bottom: 14px;">
+      موضوع البحث: أمان تطبيقات الويب — Web Application Security
+    </p>
+
+    <div class="research-q">
+      <div class="q-num">السؤال الأول</div>
+      <div class="q-text">ما هي أبرز التهديدات التي تتعرض لها تطبيقات الويب؟ اذكر على الأقل ثلاثة أنواع من الهجمات مع شرح مبسّط لكل منها.</div>
+    </div>
+    <div class="research-q">
+      <div class="q-num">السؤال الثاني</div>
+      <div class="q-text">كيف يمكن حماية موقع مثل رصد من هذه التهديدات؟ ما الإجراءات البسيطة التي يمكن تطبيقها؟</div>
+    </div>
+    <div class="research-q">
+      <div class="q-num">السؤال الثالث</div>
+      <div class="q-text">ابحث عن مثال حقيقي لاختراق موقع ويب حدث بسبب ثغرة أمنية — ماذا حدث وما الدرس المستفاد؟</div>
+    </div>
+  </div>
+
+  <!-- DELIVERY -->
+  <div class="delivery-box">
+    <h3>📤 التسليم</h3>
+    <div class="delivery-row">
+      <div class="delivery-num">١</div>
+      <div><strong>المهمة الأولى:</strong> صور أو ملف التصميم على Google Drive المشترك داخل مجلد باسمك</div>
+    </div>
+    <div class="delivery-row">
+      <div class="delivery-num">٢</div>
+      <div><strong>المهمة الثانية:</strong> مجلد مضغوط يحتوي على ملفات HTML لكل فيديو — سمّها <code style="background:#f6f8fa; padding:1px 5px; border-radius:4px; font-size:12px;">video-01.html</code>، <code style="background:#f6f8fa; padding:1px 5px; border-radius:4px; font-size:12px;">video-02.html</code> …</div>
+    </div>
+    <div class="delivery-row">
+      <div class="delivery-num">٣</div>
+      <div><strong>المهمة الثالثة:</strong> ملف Word أو PDF بعنوان واضح واسم الطالب</div>
+    </div>
+  </div>
+
+  <footer>رصد · Rakaez Foundation · Istanbul ٢٠٢٥</footer>
+
+</div>
+</body>
+</html>

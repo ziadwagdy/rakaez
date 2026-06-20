@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>رصد — لوحة حية كاملة</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0d1117; --card: #161b22; --border: #30363d;
+      --text: #e6edf3; --muted: #8b949e;
+      --accent: #00e5c0; --blue: #58a6ff; --amber: #f0b429; --green: #3fb950; --red: #ff6b6b;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; padding: 32px; }
+    h1 { text-align: center; color: var(--accent); font-size: 28px; margin-bottom: 4px; }
+    #last-update { text-align: center; color: var(--muted); font-size: 13px; margin-bottom: 28px; }
+    .dashboard { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; max-width: 900px; margin: 0 auto; }
+    .card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 28px 16px; text-align: center; transition: transform 0.2s; }
+    .card:hover { transform: translateY(-4px); }
+    .card .icon  { font-size: 28px; margin-bottom: 8px; }
+    .card .label { font-size: 13px; color: var(--muted); margin-bottom: 12px; }
+    .card .value { font-size: 44px; font-weight: 900; transition: color 0.3s; }
+    .card .unit  { font-size: 13px; color: var(--muted); margin-top: 6px; }
+    .card .status { font-size: 12px; margin-top: 8px; min-height: 16px; }
+  </style>
+</head>
+<body>
+  <h1>🛡️ لوحة تحكم رصد</h1>
+  <div id="last-update">جارٍ الاتصال...</div>
+
+  <div class="dashboard">
+    <div class="card">
+      <div class="icon">🌡️</div><div class="label">درجة الحرارة</div>
+      <div class="value" id="temp" style="color:var(--red)">--</div>
+      <div class="unit">°C</div><div class="status" id="temp-s"></div>
+    </div>
+    <div class="card">
+      <div class="icon">💧</div><div class="label">الرطوبة</div>
+      <div class="value" id="humid" style="color:var(--blue)">--</div>
+      <div class="unit">%</div><div class="status" id="humid-s"></div>
+    </div>
+    <div class="card">
+      <div class="icon">🌧️</div><div class="label">حساس المطر</div>
+      <div class="value" id="water" style="color:var(--green)">--</div>
+      <div class="unit">/ 65535</div><div class="status" id="water-s"></div>
+    </div>
+    <div class="card">
+      <div class="icon">🌱</div><div class="label">رطوبة التربة</div>
+      <div class="value" id="soil" style="color:var(--amber)">--</div>
+      <div class="unit">/ 65535</div><div class="status" id="soil-s"></div>
+    </div>
+  </div>
+
+  <script>
+    function set(id, val) { document.getElementById(id).textContent = val; }
+
+    function check(val, low, high, elId, statusId) {
+      const el = document.getElementById(elId);
+      const st = document.getElementById(statusId);
+      el.textContent = val;
+      if (val > high) { el.style.color = '#ff6b6b'; st.textContent = '⚠️ عالٍ'; }
+      else if (val < low) { el.style.color = '#58a6ff'; st.textContent = '⚠️ منخفض'; }
+      else { el.style.color = '#00e5c0'; st.textContent = '✅ طبيعي'; }
+    }
+
+    function update() {
+      fetch('http://localhost:8080/api/latest')
+        .then(r => r.json())
+        .then(d => {
+          check(d.temperature,   10, 35,    'temp',  'temp-s');
+          check(d.humidity,      20, 80,    'humid', 'humid-s');
+          check(d.water_level,   0,  60000, 'water', 'water-s');
+          check(d.soil_moisture, 0,  60000, 'soil',  'soil-s');
+          set('last-update', 'آخر تحديث: ' + new Date().toLocaleTimeString('ar'));
+        })
+        .catch(() => set('last-update', '❌ تحقق أن رصد يعمل: python app.py'));
+    }
+
+    update();
+    setInterval(update, 3000);
+  </script>
+</body>
+</html>

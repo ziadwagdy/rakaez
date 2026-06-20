@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>CSS — المحددات</title>
+  <style>
+    /* اسم العنصر — يطبق على كل h1 في الصفحة */
+    h1 {
+      color: #00e5c0;
+      text-align: center;
+    }
+
+    /* .class — يطبق على كل عنصر بهذا الـ class */
+    .card {
+      background: #161b22;
+      padding: 20px;
+      margin: 10px;
+    }
+
+    /* #id — يطبق على عنصر واحد فقط */
+    #temp {
+      font-size: 48px;
+      font-weight: 900;
+      color: #00e5c0;
+    }
+  </style>
+</head>
+<body style="background:#0d1117;color:#e6edf3;font-family:sans-serif;">
+
+  <h1>رصد</h1>
+
+  <div class="card">
+    <p>درجة الحرارة</p>
+    <div id="temp">28.5°C</div>
+  </div>
+
+  <div class="card">
+    <p>هذه البطاقة لها نفس class — نفس التصميم</p>
+  </div>
+
+</body>
+</html>

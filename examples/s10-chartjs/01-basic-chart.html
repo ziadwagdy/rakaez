@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>Chart.js — رسم بياني بسيط</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+</head>
+<body style="background:#0d1117;color:#e6edf3;font-family:sans-serif;padding:32px;">
+
+  <h2>درجات الحرارة — بيانات ثابتة</h2>
+  <canvas id="chart" width="800" height="300"></canvas>
+
+  <script>
+    const ctx = document.getElementById('chart');
+
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: ['١٢:٠٠', '١٢:٠٥', '١٢:١٠', '١٢:١٥', '١٢:٢٠'],
+        datasets: [{
+          label: 'درجة الحرارة °C',
+          data: [27, 28, 29.5, 31, 28.5],
+          borderColor: '#00e5c0',
+          backgroundColor: 'rgba(0,229,192,0.1)',
+          tension: 0.4,
+          fill: true
+        }]
+      },
+      options: {
+        plugins: { legend: { labels: { color: '#e6edf3' } } },
+        scales: {
+          x: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } },
+          y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' } }
+        }
+      }
+    });
+  </script>
+
+</body>
+</html>

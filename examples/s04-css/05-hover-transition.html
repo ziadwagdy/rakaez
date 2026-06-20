@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>CSS Hover + Transition</title>
+  <style>
+    body { background: #0d1117; color: #e6edf3; font-family: sans-serif; padding: 40px; display: flex; gap: 16px; }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px;
+      width: 160px;
+      text-align: center;
+      cursor: pointer;
+
+      /* الانتقال السلس — يجب أن يكون هنا وليس في :hover */
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .card:hover {
+      border-color: #00e5c0;
+      transform: translateY(-6px); /* يطفو للأعلى */
+    }
+
+    /* لون حدود مختلف لكل بطاقة */
+    .card:hover.temp  { border-color: #ff6b6b; }
+    .card:hover.humid { border-color: #58a6ff; }
+    .card:hover.water { border-color: #3fb950; }
+    .card:hover.soil  { border-color: #f0b429; }
+  </style>
+</head>
+<body>
+
+  <div class="card temp">🌡️<br>الحرارة</div>
+  <div class="card humid">💧<br>الرطوبة</div>
+  <div class="card water">🌧️<br>المطر</div>
+  <div class="card soil">🌱<br>التربة</div>
+
+</body>
+</html>

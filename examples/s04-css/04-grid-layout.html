@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>CSS Grid — أربع بطاقات</title>
+  <style>
+    body { background: #0d1117; color: #e6edf3; font-family: sans-serif; padding: 24px; }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr; /* 4 أعمدة متساوية */
+      gap: 16px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    /* جرّب: grid-template-columns: 1fr 1fr  ← عمودان فقط */
+    /* جرّب: grid-template-columns: 2fr 1fr 1fr  ← عمود أول أعرض */
+  </style>
+</head>
+<body>
+
+  <div class="dashboard">
+    <div class="card">🌡️<br>الحرارة<br><b>28.5°C</b></div>
+    <div class="card">💧<br>الرطوبة<br><b>65%</b></div>
+    <div class="card">🌧️<br>المطر<br><b>جاف</b></div>
+    <div class="card">🌱<br>التربة<br><b>18000</b></div>
+  </div>
+
+</body>
+</html>

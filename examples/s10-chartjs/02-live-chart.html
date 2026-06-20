@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>رصد — رسم بياني حي</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+  <style>
+    body { background: #0d1117; color: #e6edf3; font-family: 'Cairo', sans-serif; padding: 32px; }
+    h1 { color: #00e5c0; text-align: center; margin-bottom: 24px; }
+    .chart-box { background: #161b22; border: 1px solid #30363d; border-radius: 12px; padding: 24px; }
+  </style>
+</head>
+<body>
+
+  <h1>📈 سجل درجات الحرارة</h1>
+  <div class="chart-box">
+    <canvas id="chart" height="120"></canvas>
+  </div>
+
+  <script>
+    const MAX_POINTS = 20;   // أقصى عدد نقاط في الرسم
+
+    const chart = new Chart(document.getElementById('chart'), {
+      type: 'line',
+      data: {
+        labels: [],
+        datasets: [{
+          label: 'الحرارة °C',
+          data: [],
+          borderColor: '#00e5c0',
+          backgroundColor: 'rgba(0,229,192,0.1)',
+          tension: 0.4,
+          fill: true,
+          pointRadius: 3
+        }]
+      },
+      options: {
+        animation: false,
+        plugins: { legend: { labels: { color: '#e6edf3', font: { family: 'Cairo' } } } },
+        scales: {
+          x: { ticks: { color: '#8b949e', maxTicksLimit: 8 }, grid: { color: '#30363d' } },
+          y: { ticks: { color: '#8b949e' }, grid: { color: '#30363d' }, min: 0, max: 50 }
+        }
+      }
+    });
+
+    function addPoint(temp) {
+      const time = new Date().toLocaleTimeString('ar');
+
+      chart.data.labels.push(time);
+      chart.data.datasets[0].data.push(temp);
+
+      // احذف أقدم نقطة إذا تجاوزنا الحد
+      if (chart.data.labels.length > MAX_POINTS) {
+        chart.data.labels.shift();
+        chart.data.datasets[0].data.shift();
+      }
+
+      chart.update();
+    }
+
+    function fetchAndUpdate() {
+      fetch('http://localhost:8080/api/latest')
+        .then(r => r.json())
+        .then(d => addPoint(d.temperature))
+        .catch(() => console.log('تحقق أن رصد يعمل'));
+    }
+
+    fetchAndUpdate();
+    setInterval(fetchAndUpdate, 5000);
+  </script>
+
+</body>
+</html>

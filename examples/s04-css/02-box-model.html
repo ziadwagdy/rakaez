@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>CSS — Box Model</title>
+  <style>
+    body { background: #0d1117; color: #e6edf3; font-family: sans-serif; padding: 40px; }
+
+    .box {
+      background: #161b22;
+
+      /* padding — المسافة بين المحتوى والحدود */
+      padding: 24px;
+
+      /* border — الحدود */
+      border: 2px solid #00e5c0;
+      border-radius: 12px;
+
+      /* margin — المسافة بين هذا العنصر والعناصر المجاورة */
+      margin: 20px;
+
+      width: 200px;
+    }
+
+    /* جرّب تغيير الأرقام وشاهد الفرق */
+  </style>
+</head>
+<body>
+
+  <div class="box">
+    محتوى البطاقة هنا
+  </div>
+
+  <div class="box" style="padding: 8px; margin: 4px;">
+    padding صغير = مضغوط
+  </div>
+
+  <div class="box" style="padding: 40px; margin: 40px;">
+    padding كبير = فضاء أكثر
+  </div>
+
+</body>
+</html>

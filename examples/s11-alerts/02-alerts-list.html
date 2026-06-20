@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>رصد — قائمة التنبيهات</title>
+  <style>
+    body { background: #0d1117; color: #e6edf3; font-family: sans-serif; padding: 32px; }
+    h2 { color: #ff6b6b; margin-bottom: 16px; }
+    .alert-item {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-right: 3px solid #ff6b6b;
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+    .alert-time { color: #8b949e; font-size: 12px; margin-top: 4px; }
+    .empty { color: #8b949e; font-size: 14px; }
+  </style>
+</head>
+<body>
+
+  <h2>🔔 آخر التنبيهات</h2>
+  <div id="list"><p class="empty">جارٍ التحميل...</p></div>
+
+  <script>
+    function loadAlerts() {
+      fetch('http://localhost:8080/api/alerts')
+        .then(r => r.json())
+        .then(alerts => {
+          const list = document.getElementById('list');
+
+          if (alerts.length === 0) {
+            list.innerHTML = '<p class="empty">لا توجد تنبيهات حتى الآن ✅</p>';
+            return;
+          }
+
+          list.innerHTML = alerts.map(a => `
+            <div class="alert-item">
+              <strong>${a.message}</strong>
+              <div class="alert-time">${a.timestamp}</div>
+            </div>
+          `).join('');
+        });
+    }
+
+    loadAlerts();
+    setInterval(loadAlerts, 5000);
+  </script>
+
+</body>
+</html>

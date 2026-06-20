@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>رصد — التنبيهات</title>
+  <style>
+    body { background: #0d1117; color: #e6edf3; font-family: sans-serif; padding: 32px; }
+    .value { font-size: 64px; font-weight: 900; color: #00e5c0; margin: 16px 0; }
+    .alert {
+      background: rgba(255,107,107,0.1);
+      border: 1px solid #ff6b6b;
+      border-radius: 10px;
+      padding: 14px 18px;
+      color: #ff6b6b;
+      font-size: 15px;
+      display: none;    /* مخفي افتراضياً */
+      margin-top: 16px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="temp" class="value">--</div>
+  <div id="alert" class="alert">🔴 تحذير: درجة الحرارة تجاوزت الحد الآمن!</div>
+
+  <script>
+    function update() {
+      fetch('http://localhost:8080/api/latest')
+        .then(r => r.json())
+        .then(d => {
+          document.getElementById('temp').textContent = d.temperature + '°C';
+
+          const alert = document.getElementById('alert');
+          if (d.temperature > 35 || d.temperature < 10) {
+            alert.style.display = 'block';   // أظهر التنبيه
+          } else {
+            alert.style.display = 'none';    // أخفِ التنبيه
+          }
+        });
+    }
+
+    update();
+    setInterval(update, 3000);
+  </script>
+
+</body>
+</html>

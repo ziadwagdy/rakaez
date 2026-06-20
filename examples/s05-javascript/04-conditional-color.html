@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>JS — لون حسب القيمة</title>
+  <style>
+    body { background: #0d1117; color: #e6edf3; font-family: sans-serif; padding: 40px; }
+    #temp { font-size: 64px; font-weight: 900; transition: color 0.3s; }
+    #status { font-size: 18px; margin-top: 12px; }
+  </style>
+</head>
+<body>
+
+  <div id="temp">--</div>
+  <div id="status">جارٍ التحميل...</div>
+
+  <script>
+    function update() {
+      fetch('http://localhost:8080/api/latest')
+        .then(r => r.json())
+        .then(data => {
+          const el     = document.getElementById('temp');
+          const status = document.getElementById('status');
+          const t      = data.temperature;
+
+          el.textContent = t + '°C';
+
+          if (t > 35) {
+            el.style.color     = '#ff6b6b';
+            status.textContent = '🔴 تحذير: حرارة عالية!';
+          } else if (t < 10) {
+            el.style.color     = '#58a6ff';
+            status.textContent = '🔵 تحذير: برودة شديدة!';
+          } else {
+            el.style.color     = '#00e5c0';
+            status.textContent = '✅ الحرارة طبيعية';
+          }
+        });
+    }
+
+    update();
+    setInterval(update, 3000);
+  </script>
+
+</body>
+</html>

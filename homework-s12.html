@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>واجب الجلسة ١٢ — Flask Backend</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f8f9fa;--card:#fff;--border:#dee2e6;--text:#1a1a2e;--muted:#6c757d;
+  --accent:#0d6efd;--green:#198754;--amber:#fd7e14;--red:#dc3545;--light:#e9ecef;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);direction:rtl;padding:0 0 48px;}
+.top-bar{background:#1a1a2e;color:#e6edf3;padding:12px 40px;font-size:13px;display:flex;justify-content:space-between;align-items:center;}
+.top-bar a{color:#58a6ff;text-decoration:none;font-size:13px;}
+.hero{background:linear-gradient(135deg,#1a1a2e 0%,#16213e 60%,#0f3460 100%);color:#e6edf3;padding:48px 40px 36px;text-align:center;}
+.hero .badge{display:inline-block;background:rgba(0,229,192,0.15);border:1px solid rgba(0,229,192,0.4);color:#00e5c0;border-radius:20px;padding:4px 16px;font-size:12px;font-weight:700;letter-spacing:2px;margin-bottom:14px;}
+.hero h1{font-size:32px;font-weight:900;margin-bottom:10px;}
+.hero h1 span{color:#00e5c0;}
+.hero p{font-size:15px;color:#8b949e;max-width:560px;margin:0 auto;line-height:1.7;}
+.container{max-width:780px;margin:0 auto;padding:32px 20px;}
+.section{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px 32px;margin-bottom:24px;}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding-bottom:14px;border-bottom:2px solid var(--light);}
+.section-num{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:15px;flex-shrink:0;}
+.section-title{font-size:18px;font-weight:800;}
+.task-row{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-bottom:1px solid var(--light);}
+.task-row:last-child{border-bottom:none;}
+.task-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:6px;}
+.task-text{font-size:14px;line-height:1.7;color:var(--text);}
+.task-text strong{color:var(--accent);}
+.tag{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:700;margin-right:6px;}
+.note-box{background:#e8f4f8;border-right:4px solid var(--accent);border-radius:8px;padding:14px 16px;font-size:13px;color:var(--muted);line-height:1.7;margin-top:14px;}
+.note-box strong{color:var(--accent);}
+.submit-box{background:linear-gradient(135deg,#fff3cd,#fff);border:1px solid #ffc107;border-radius:12px;padding:20px 24px;margin-top:8px;}
+.submit-box h4{color:#856404;margin-bottom:8px;font-size:15px;}
+.submit-box p{font-size:13px;color:#856404;line-height:1.6;}
+.footer{text-align:center;padding:24px;font-size:12px;color:var(--muted);}
+</style>
+</head>
+<body>
+<div class="top-bar">
+  <span>دورة ركيز للتقنية · إسطنبول</span>
+  <a href="../index.html">← الرئيسية</a>
+</div>
+<div class="hero">
+  <div class="badge">الجلسة ١٢</div>
+  <h1>واجب <span>Flask Backend</span></h1>
+  <p>أضف endpoint جديد لرصد وافهم كيف يعمل الخادم</p>
+</div>
+<div class="container">
+
+<div class="section">
+  <div class="section-header">
+    <div class="section-num" style="background:#0d6efd;color:#fff">🐍</div>
+    <div class="section-title">تطوير Flask</div>
+  </div>
+  <div class="task-row">
+    <div class="task-dot" style="background:#0d6efd"></div>
+    <div class="task-text">أضف endpoint جديد: <code style='background:#f1f3f5;padding:1px 6px;border-radius:3px;direction:ltr'>GET /api/status</code></div>
+  </div>
+  <div class="task-row">
+    <div class="task-dot" style="background:#0d6efd"></div>
+    <div class="task-text">يُرجع JSON يتضمن: اسم الجهاز · وقت التشغيل · عدد القراءات المحفوظة · وضع Demo أم حقيقي</div>
+  </div>
+  <div class="task-row">
+    <div class="task-dot" style="background:#0d6efd"></div>
+    <div class="task-text">اختبره في المتصفح: localhost:8080/api/status</div>
+  </div><div class="note-box"><strong>تلميح:</strong> استخدم <code style='direction:ltr'>time.time()</code> لوقت التشغيل و <code style='direction:ltr'>db.count_readings()</code> أو ما يشابهه</div></div>
+<div class="section">
+  <div class="section-header">
+    <div class="section-num" style="background:#198754;color:#fff">📺</div>
+    <div class="section-title">دراسة</div>
+  </div>
+  <div class="task-row">
+    <div class="task-dot" style="background:#198754"></div>
+    <div class="task-text">شاهد: Flask Tutorial — أول ٢٠ دقيقة على YouTube</div>
+  </div>
+  <div class="task-row">
+    <div class="task-dot" style="background:#198754"></div>
+    <div class="task-text">الفرق بين GET و POST: اكتب مثالاً على كل منهما من رصد</div>
+  </div></div>
+<div class="submit-box">
+  <h4>📤 طريقة التسليم</h4>
+  <p>ارفع عملك في مجلد الجلسة الخاص بك على Google Drive قبل الجلسة القادمة.</p>
+</div>
+</div>
+<div class="footer">دورة ركيز للتقنية · رصد 🛡️</div>
+</body>
+</html>

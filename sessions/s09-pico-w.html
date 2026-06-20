@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>الجلسة ٨ — إلكترونيات</title>
+<title>الجلسة ٩ — Pico W</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
@@ -71,78 +71,112 @@ pre.code:hover .copy-btn{opacity:1;}
 #btn-next{left:24px;}
 #btn-prev{right:24px;}
 
-.progress-bar{background:var(--amber);}
-.tag{color:var(--amber);}
-.nav-badge{color:var(--amber);}
+.progress-bar{background:var(--purple);}
+.tag{color:var(--purple);}
+.nav-badge{color:var(--purple);}
 </style>
 </head>
 <body>
 <nav class="nav">
-  <span class="nav-badge">الجلسة ٨ · إلكترونيات ⚡</span>
+  <span class="nav-badge">الجلسة ٩ · Pico W 📡</span>
   <span class="nav-counter" id="counter">1 / 10</span>
 </nav>
 <div class="progress"><div class="progress-bar" id="prog"></div></div>
 <div class="deck" id="deck">
 <div class="slide active">
 
-    <div class="tag">الجلسة الثامنة</div>
-    <div class="title">كيف تعمل <span>المجسات؟</span></div>
-    <div class="sub">من الفيزياء إلى الرقم الذي يصل للوحتك</div>
+    <div class="tag">الجلسة التاسعة</div>
+    <div class="title">Pico W يُرسل <span>للخادم</span></div>
+    <div class="sub">المجس → Pico W → WiFi → Flask → لوحتك</div>
   
 </div>
 <div class="slide ">
 
     <div class="tag">ابدأ من هنا</div>
-    <div class="title">المجس يُرسل <span>رقماً</span></div>
-    <div class="sub" style="margin-bottom:16px">DHT11 يقيس الحرارة والرطوبة — كيف يتحول الحرارة لرقم؟</div>
-    <div class="grid-2"><div class="card "><h3>🌡️ المجس</h3><p>مادة كيميائية تغير مقاومتها مع الحرارة</p></div><div class="card amber"><h3>⚡ الدارة</h3><p>تيار كهربائي يمر — مقاومة أعلى = جهد أقل</p></div><div class="card blue"><h3>🔢 ADC</h3><p>محول رقمي يقرأ الجهد ويحوله لرقم 0-65535</p></div><div class="card accent"><h3>📡 WiFi</h3><p>Pico W يُرسل الرقم عبر HTTP POST لرصد</p></div></div>
+    <div class="title">رصد يستقبل <span>من Pico</span></div>
+    <div class="sub" style="margin-bottom:16px">افتح terminal: <code style="background:var(--card);padding:2px 8px;border-radius:4px;direction:ltr">python app.py</code> ثم شغّل Pico W وراقب الـ logs</div>
+    <div class="note"><strong>ستجد:</strong> POST /api/data 200 — يعني Pico W وصل للخادم بنجاح</div>
   
 </div>
 <div class="slide ">
 
-    <div class="tag">المفاهيم الأساسية</div>
-    <div class="title">ثلاثة أرقام <span>تحكم الكل</span></div>
-    <div class="steps"><div class="step"><div class="step-n">1</div><div class="step-body"><h4>الجهد (Voltage) — V</h4><p>قوة الدفع الكهربائي · مثل ضغط الماء · يُقاس بالفولت</p></div></div><div class="step"><div class="step-n">2</div><div class="step-body"><h4>التيار (Current) — A</h4><p>كمية الكهرباء المتدفقة · مثل معدل تدفق الماء · يُقاس بالأمبير</p></div></div><div class="step"><div class="step-n">3</div><div class="step-body"><h4>المقاومة (Resistance) — Ω</h4><p>عقبة تُقاوم التيار · تتحكم في كمية التدفق · يُقاس بالأوم</p></div></div></div>
-    <div class="note"><strong>قانون أوم:</strong> V = I × R — الجهد = التيار × المقاومة</div>
+    <div class="tag">ما هو Pico W؟</div>
+    <div class="title">كمبيوتر بحجم <span>بطاقة ائتمان</span></div>
+    <div class="grid-2"><div class="card blue"><h3>🧠 المعالج</h3><p>RP2040 dual-core · 264KB RAM · 2MB Flash</p></div><div class="card "><h3>📡 WiFi</h3><p>CYW43439 · 2.4GHz · يتصل بشبكتك مثل هاتفك</p></div><div class="card accent"><h3>🔌 GPIO</h3><p>26 دبوس برمجي · رقمي وتماثلي · PWM</p></div><div class="card green"><h3>🐍 MicroPython</h3><p>Python مصغّر يعمل مباشرة على الجهاز</p></div></div>
   
 </div>
 <div class="slide ">
 
-    <div class="tag">اللوح التجريبي</div>
-    <div class="title">Breadboard — بدون <span>لحام</span></div>
-    <div class="grid-3"><div class="card blue"><h3>الصفوف الأفقية</h3><p>٥ ثقوب متصلة أفقياً — كلها على نفس الوصلة</p></div><div class="card red"><h3>السكة الحمراء +</h3><p>مصدر الجهد الموجب — ٣.٣V من Pico</p></div><div class="card "><h3>السكة الزرقاء −</h3><p>الأرضي (Ground) — مرجع الدارة</p></div></div>
-    <div class="note"><strong>قاعدة ذهبية:</strong> لا تُوصّل + مباشرة بـ − بدون مقاومة → قصر!</div>
+    <div class="tag">الاتصال بـ WiFi</div>
+    <div class="title">Pico W يتصل <span>بالشبكة</span></div>
+    <pre class="code"><code class="language-python">import network
+import time
+
+wlan = network.WLAN(network.STA_IF)
+wlan.active(True)
+wlan.connect('اسم_الشبكة', 'كلمة_المرور')
+
+# انتظر حتى يتصل
+while not wlan.isconnected():
+    print('جاري الاتصال...')
+    time.sleep(1)
+
+print('متصل! IP:', wlan.ifconfig()[0])</code></pre>
+  
+</div>
+<div class="slide ">
+
+    <div class="tag">إرسال البيانات</div>
+    <div class="title">POST JSON <span>لرصد</span></div>
+    <pre class="code"><code class="language-python">import urequests
+import json
+
+data = {
+    'temperature': 28.5,
+    'humidity': 65.0,
+    'water_level': 50000,
+    'soil_moisture': 45000
+}
+
+response = urequests.post(
+    'http://192.168.1.100:8080/api/data',
+    json=data
+)
+
+print('الاستجابة:', response.status_code)
+response.close()</code></pre>
+  
+</div>
+<div class="slide ">
+
+    <div class="tag">قراءة DHT11</div>
+    <div class="title">المجس الأول <span>يعمل</span></div>
+    <pre class="code"><code class="language-python">import dht
+from machine import Pin
+
+sensor = dht.DHT11(Pin(15))
+
+sensor.measure()  # اقرأ الآن
+
+temp = sensor.temperature()
+humid = sensor.humidity()
+
+print(f'الحرارة: {temp}°C')
+print(f'الرطوبة: {humid}%')</code></pre>
   
 </div>
 <div class="slide ">
 
     <div class="tag">نشاط</div>
-    <div class="title">وصّل LED <span>يومض</span></div>
-    <div class="steps"><div class="step"><div class="step-n">1</div><div class="step-body"><h4>المكونات</h4><p>Pico W · LED · مقاومة 220Ω · Breadboard · أسلاك</p></div></div><div class="step"><div class="step-n">2</div><div class="step-body"><h4>التوصيل</h4><p>LED الطويل → GP15 | LED القصير → GND عبر ٢٢٠Ω</p></div></div><div class="step"><div class="step-n">3</div><div class="step-body"><h4>افتح Thonny</h4><p>اكتب الكود التالي واضغط Run</p></div></div><div class="step"><div class="step-n">4</div><div class="step-body"><h4>شاهد</h4><p>LED يومض كل ثانية!</p></div></div></div><pre class="code"><code class="language-python">from machine import Pin
-import time
-
-led = Pin(15, Pin.OUT)
-
-while True:
-    led.on()
-    time.sleep(1)
-    led.off()
-    time.sleep(1)</code></pre>
-  
-</div>
-<div class="slide ">
-
-    <div class="tag">مجسات رصد</div>
-    <div class="title">ثلاثة مجسات <span>حقيقية</span></div>
-    <div class="grid-3"><div class="card accent"><h3>🌡️ DHT11</h3><p>درجة الحرارة والرطوبة · GP15 · رقمي</p></div><div class="card blue"><h3>🌧️ مجس المطر</h3><p>اكتشاف الماء · GP26 (ADC0) · تماثلي</p></div><div class="card green"><h3>🌱 رطوبة التربة</h3><p>رطوبة التربة · GP27 (ADC1) · تماثلي</p></div></div>
-    <div class="note"><strong>تماثلي:</strong> يعطي قيمة من 0 إلى 65535 · <strong>رقمي:</strong> يعطي 0 أو 1 فقط</div>
+    <div class="title">شغّل <span>main.py</span> كاملاً</div>
+    <div class="steps"><div class="step"><div class="step-n">1</div><div class="step-body"><h4>افتح Thonny</h4><p>وصّل Pico W عبر USB</p></div></div><div class="step"><div class="step-n">2</div><div class="step-body"><h4>افتح pico/main.py</h4><p>من مجلد room-guardian</p></div></div><div class="step"><div class="step-n">3</div><div class="step-body"><h4>عدّل الشبكة</h4><p>ضع اسم WiFi وكلمة المرور الصحيحتين</p></div></div><div class="step"><div class="step-n">4</div><div class="step-body"><h4>Run</h4><p>شاهد البيانات تصل في app.py logs</p></div></div></div>
   
 </div>
 <div class="slide ">
 
     <div class="tag">ملخص اليوم</div>
     <div class="title">ماذا تعلمنا؟</div>
-    <div class="grid-2"><div class="card amber"><h3>⚡ V · I · R</h3><p>الكهرباء بثلاثة أرقام: جهد · تيار · مقاومة</p></div><div class="card "><h3>🔌 Breadboard</h3><p>لوح تجريبي بدون لحام — صفوف متصلة</p></div><div class="card green"><h3>🌡️ المجسات</h3><p>تحول الظاهرة الفيزيائية لرقم رقمي</p></div><div class="card blue"><h3>📌 الأسبوع القادم</h3><p>Pico W — MicroPython وإرسال البيانات</p></div></div>
+    <div class="grid-2"><div class="card purple"><h3>📡 Pico W</h3><p>كمبيوتر صغير يتصل بـ WiFi ويرسل بيانات</p></div><div class="card "><h3>🐍 MicroPython</h3><p>نفس Python — على جهاز صغير</p></div><div class="card blue"><h3>📤 HTTP POST</h3><p>يرسل JSON لرصد عبر الشبكة</p></div><div class="card green"><h3>📌 الأسبوع القادم</h3><p>المجسات الثلاثة — قراءة وإرسال كامل</p></div></div>
   
 </div>
 

@@ -2,423 +2,204 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الجلسة ١ — مرحباً بعالم التكنولوجيا</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>الجلسة ١ — مرحباً</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
 <style>
-:root{--bg:#080c14;--bg2:#0e1520;--bg3:#141d2e;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
-.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
-.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
-.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
-#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s ease;z-index:100;box-shadow:0 0 12px var(--accent);}
-#counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;letter-spacing:1px;}
-#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;z-index:100;letter-spacing:2px;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);padding:4px 12px;border-radius:20px;}
-#nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s ease;border:none;padding:0;}
-.dot.active{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:scale(1.4);}
-.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s ease;backdrop-filter:blur(8px);}
-.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
-#btn-prev{right:20px;}#btn-next{left:20px;}
-#slides{position:fixed;inset:0;z-index:1;}
-.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s ease,transform .6s ease;transform:translateY(30px);overflow-y:auto;}
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;
+  --accent:#00e5c0;--blue:#58a6ff;--amber:#f0b429;--red:#ff6b6b;--green:#3fb950;--purple:#bc8cff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;height:100vh;}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(13,17,23,0.96);border-bottom:1px solid var(--border);}
+.nav-badge{font-size:12px;font-weight:700;font-family:'Space Mono',monospace;color:var(--blue);letter-spacing:1px;}
+.nav-counter{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);}
+.progress{position:fixed;top:48px;left:0;right:0;height:2px;background:var(--border);z-index:99;}
+.progress-bar{height:100%;background:var(--blue);transition:width .4s;}
+.deck{height:100vh;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 80px 60px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;transform:translateY(16px);overflow-y:auto;}
 .slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
-.slide.exit{opacity:0;transform:translateY(-30px);}
-.title-eyebrow{font-size:13px;font-weight:400;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
-.title-main{font-size:clamp(40px,6vw,72px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
-.title-sub{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;}
-.title-badges{display:flex;gap:10px;margin-top:36px;flex-wrap:wrap;justify-content:center;}
-.t-badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
-.t-badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
-.t-badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
-.t-badge.red{border-color:var(--accent3);color:var(--accent3);background:rgba(255,107,107,0.08);}
-.slide-section-tag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
-.slide-title{font-size:clamp(28px,4vw,48px);font-weight:900;text-align:center;margin-bottom:8px;color:var(--text);}
-.slide-subtitle{font-size:15px;color:var(--muted);text-align:center;margin-bottom:36px;max-width:650px;line-height:1.7;}
-.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
-.info-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s ease;}
-.info-card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);box-shadow:0 12px 40px rgba(0,229,192,0.08);}
-.info-card .icon{font-size:28px;margin-bottom:10px;display:block;}
-.info-card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
-.info-card p{font-size:13px;color:var(--muted);line-height:1.7;}
-.activity-list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:750px;}
-.activity-item{display:flex;align-items:flex-start;gap:16px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
-.activity-num{width:36px;height:36px;border-radius:50%;background:rgba(0,229,192,0.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;border:1px solid rgba(0,229,192,0.25);}
-.activity-text{font-size:14px;font-weight:600;margin-bottom:4px;}
-.activity-sub{font-size:12px;color:var(--muted);line-height:1.6;}
-.hw-list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:700px;}
-.hw-item{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:14px 18px;}
-.hw-icon{font-size:22px;flex-shrink:0;line-height:1;margin-top:2px;}
-.hw-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
-.hw-desc{font-size:12px;color:var(--muted);line-height:1.6;}
-.highlight-box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:20px 28px;max-width:700px;width:100%;text-align:center;line-height:1.8;font-size:14px;color:var(--muted);}
-.big-emoji{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
-@media(max-width:768px){.slide{padding:40px 24px 80px;}.nav-btn{position:static;top:auto;transform:none;width:38px;height:38px;font-size:22px;font-weight:900;flex-shrink:0;border-color:rgba(0,229,192,0.4);background:rgba(0,229,192,0.1);}.nav-btn:hover{transform:scale(1.08);}#nav-dots{gap:6px;align-items:center;}.info-grid{grid-template-columns:1fr;}}
+.tag{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;font-family:'Space Mono',monospace;color:var(--blue);margin-bottom:12px;}
+.title{font-size:40px;font-weight:900;line-height:1.2;margin-bottom:12px;text-align:center;}
+.title span{color:var(--blue);}
+.sub{font-size:15px;color:var(--muted);text-align:center;max-width:640px;line-height:1.7;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:820px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;width:100%;max-width:820px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.card h3{font-size:14px;font-weight:700;margin-bottom:6px;}
+.card p,.card li{font-size:13px;color:var(--muted);line-height:1.6;}
+.card ul{padding-right:16px;margin-top:6px;}
+.card.accent{border-color:rgba(0,229,192,0.4);}
+.card.blue{border-color:rgba(88,166,255,0.4);}
+.card.amber{border-color:rgba(240,180,41,0.4);}
+.card.red{border-color:rgba(255,107,107,0.4);}
+.card.green{border-color:rgba(63,185,80,0.4);}
+pre.code{background:#0d1117!important;border:1px solid var(--border);border-radius:10px;padding:0!important;overflow-x:auto;direction:ltr;text-align:left;position:relative;width:100%;max-width:820px;}
+pre.code code{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:16px 20px!important;display:block!important;white-space:pre!important;}
+.copy-btn{position:absolute;top:8px;left:10px;background:rgba(88,166,255,0.1);border:1px solid rgba(88,166,255,0.3);color:var(--blue);font-family:'Space Mono',monospace;font-size:10px;padding:3px 10px;border-radius:5px;cursor:pointer;opacity:0;transition:opacity .2s;direction:ltr;}
+pre.code:hover .copy-btn{opacity:1;}
+.steps{display:flex;flex-direction:column;gap:10px;width:100%;max-width:700px;}
+.step{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;}
+.step-n{width:28px;height:28px;border-radius:50%;background:rgba(88,166,255,0.12);border:1px solid var(--blue);color:var(--blue);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Space Mono',monospace;}
+.step-n.g{background:rgba(63,185,80,0.12);border-color:var(--green);color:var(--green);}
+.step-n.a{background:rgba(240,180,41,0.12);border-color:var(--amber);color:var(--amber);}
+.step-body h4{font-weight:700;font-size:14px;margin-bottom:3px;}
+.step-body p{font-size:13px;color:var(--muted);line-height:1.5;}
+.note{background:rgba(88,166,255,0.05);border:1px solid rgba(88,166,255,0.2);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--muted);line-height:1.7;width:100%;max-width:820px;margin-top:10px;}
+.note strong,.note b{color:var(--blue);}
+.note.amber{background:rgba(240,180,41,0.05);border-color:rgba(240,180,41,0.25);}
+.note.amber strong{color:var(--amber);}
+.note.green{background:rgba(63,185,80,0.05);border-color:rgba(63,185,80,0.25);}
+.note.green strong{color:var(--green);}
+.hw-box{background:rgba(240,180,41,0.05);border:1px solid rgba(240,180,41,0.3);border-radius:12px;padding:20px 24px;width:100%;max-width:720px;}
+.hw-box h3{color:var(--amber);font-size:15px;margin-bottom:12px;}
+.hw-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:14px;line-height:1.6;}
+.hw-dot{color:var(--amber);font-size:18px;flex-shrink:0;line-height:1.4;}
+.big-emoji{font-size:72px;margin-bottom:16px;}
+.arch{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:560px;}
+.arch-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 24px;font-size:14px;font-weight:700;text-align:center;width:100%;}
+.arch-arrow{color:var(--muted);font-size:20px;}
+.nav-btn{position:fixed;bottom:24px;background:var(--card);border:1px solid var(--border);color:var(--text);width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:100;}
+.nav-btn:hover{border-color:var(--blue);color:var(--blue);}
+#btn-next{left:24px;}
+#btn-prev{right:24px;}
 
-/* Mobile bottom bar */
-@media(max-width:768px){
-  #btn-prev,#btn-next{position:static;transform:none;}
-  #mobile-bar{display:flex !important;}
-}
-#mobile-bar{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(8,12,20,0.95);backdrop-filter:blur(12px);border-top:1px solid var(--border);padding:12px 20px;z-index:100;align-items:center;gap:12px;justify-content:center;}
+.progress-bar{background:var(--accent);}
+.tag{color:var(--accent);}
+.nav-badge{color:var(--accent);}
 </style>
 </head>
 <body>
-<div class="orb orb1"></div>
-<div class="orb orb2"></div>
-<div id="progress-bar"></div>
-<div id="counter">01 / 10</div>
-<div id="session-badge">W1 · المرحلة ١</div>
-<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">›</button>
-<button class="nav-btn" id="btn-next" onclick="navigate(1)">‹</button>
+<nav class="nav">
+  <span class="nav-badge">الجلسة ١ · مرحباً 👋</span>
+  <span class="nav-counter" id="counter">1 / 10</span>
+</nav>
+<div class="progress"><div class="progress-bar" id="prog"></div></div>
+<div class="deck" id="deck">
+<div class="slide active">
 
-<div id="slides">
+    <div class="tag">الجلسة الأولى</div>
+    <div class="title">أهلاً في دورة <span>ركيز</span></div>
+    <div class="sub">١٦ أسبوعاً · تقنية حقيقية · مشروع حقيقي · ليس تعليماً من الكتاب</div>
+  
+</div>
+<div class="slide ">
 
-<!-- SLIDE 1: Title -->
-<div class="slide active" id="s1">
-  <div class="title-eyebrow">الجلسة الأولى — المرحلة الأولى</div>
-  <div class="title-main">مرحباً بعالم التكنولوجيا 🌍</div>
-  <div class="title-sub">رحلتنا الـ ١٦ جلسة تبدأ اليوم — من الفضول إلى المشروع الحقيقي</div>
-  <div class="title-badges">
-    <div class="t-badge teal">⏱ ٤ ساعات</div>
-    <div class="t-badge blue">👥 استكشاف وتعارف</div>
-    <div class="t-badge red">🎯 رصد (Rasd) Preview</div>
-  </div>
+    <div class="tag">هدف اليوم</div>
+    <div class="title">هذا ما <span>سنبنيه</span> معاً</div>
+    <div class="big-emoji">🛡️</div>
+    <div class="sub">نظام <strong style="color:var(--accent)">رصد</strong> — يراقب البيئة بالمجسات ويُرسل البيانات للوحة تحكم مباشرة على الإنترنت</div>
+    <div class="note" style="margin-top:16px"><strong>الآن:</strong> افتح localhost:8080 وشاهد رصد يعمل</div>
+  
+</div>
+<div class="slide ">
+
+    <div class="tag">كيف يعمل رصد؟</div>
+    <div class="title">الصورة الكاملة</div>
+    <div class="arch">
+      <div class="arch-box" style="border-color:rgba(0,229,192,0.5);color:var(--accent)">🌡️ مجسات (DHT11 + رطوبة + مطر)</div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-box" style="border-color:rgba(188,140,255,0.5);color:var(--purple)">📡 Raspberry Pi Pico W — يرسل عبر WiFi</div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-box" style="border-color:rgba(88,166,255,0.5);color:var(--blue)">🐍 Flask — خادم Python يستقبل البيانات</div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-box" style="border-color:rgba(240,180,41,0.5);color:var(--amber)">🗄️ SQLite — قاعدة بيانات تحفظ القراءات</div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-box" style="border-color:rgba(63,185,80,0.5);color:var(--green)">📊 لوحة تحكم HTML/JS — تعرض البيانات مباشرة</div>
+    </div>
+  
+</div>
+<div class="slide ">
+
+    <div class="tag">مسارات الدورة</div>
+    <div class="title">ستكتشف <span>مسارك</span></div>
+    <div class="grid-3" style="max-width:780px;margin-top:8px">
+      <div class="card accent"><h3>💻 البرمجيات</h3><p>HTML · CSS · JavaScript · Python · قواعد البيانات · Flask</p></div>
+      <div class="card" style="border-color:rgba(188,140,255,0.4)"><h3>⚡ الإلكترونيات</h3><p>دوائر · مجسات · Raspberry Pi Pico W · MicroPython</p></div>
+      <div class="card amber"><h3>⚙️ الميكاترونكس</h3><p>تصميم الأنظمة · دمج البرمجيات مع الأجهزة</p></div>
+    </div>
+    <div class="note" style="margin-top:14px">السؤال الأهم ليس "ماذا تتعلم" بل <strong>"ما الذي يثير فضولك أكثر؟"</strong></div>
+  
+</div>
+<div class="slide ">
+
+    <div class="tag">خارطة الطريق</div>
+    <div class="title">١٦ أسبوعاً خطوة بخطوة</div>
+    <div class="steps">
+      <div class="step"><div class="step-n">١-٢</div><div class="step-body"><h4>التفكير الحوسبي</h4><p>كيف تفكر الحاسوب؟ خرائط وخوارزميات</p></div></div>
+      <div class="step"><div class="step-n">٣-٥</div><div class="step-body"><h4>الواجهة الأمامية</h4><p>HTML · CSS · JavaScript — بناء لوحة رصد</p></div></div>
+      <div class="step"><div class="step-n">٦-٧</div><div class="step-body"><h4>Python</h4><p>منطق البرمجة · شرط · دالة · قائمة</p></div></div>
+      <div class="step"><div class="step-n">٨-١٠</div><div class="step-body"><h4>الإلكترونيات والمجسات</h4><p>دوائر · Pico W · إرسال البيانات</p></div></div>
+      <div class="step"><div class="step-n">١١-١٥</div><div class="step-body"><h4>بناء رصد</h4><p>Flask · SQLite · Chart.js · ngrok</p></div></div>
+      <div class="step"><div class="step-n g">١٦</div><div class="step-body"><h4>🎉 العرض النهائي</h4><p>تقدّم مشروعك أمام الجميع</p></div></div>
+    </div>
+  
+</div>
+<div class="slide ">
+
+    <div class="tag">أدوات الدورة</div>
+    <div class="title">ستستخدم هذه الأدوات</div>
+    <div class="grid-2" style="max-width:700px">
+      <div class="card blue"><h3>🌐 Trinket</h3><p>trinket.io/python3 — Python في المتصفح بلا تنصيب</p></div>
+      <div class="card green"><h3>😺 Scratch</h3><p>scratch.mit.edu — برمجة بصرية بالسحب والإفلات</p></div>
+      <div class="card accent"><h3>💻 VS Code</h3><p>محرر النصوص الذي يستخدمه المحترفون</p></div>
+      <div class="card amber"><h3>🔧 Thonny</h3><p>thonny.org — بيئة MicroPython للـ Pico W</p></div>
+    </div>
+  
+</div>
+<div class="slide ">
+
+    <div class="tag">نشاط اليوم</div>
+    <div class="title">استكشف <span>رصد</span> الآن</div>
+    <div class="steps"><div class="step"><div class="step-n">1</div><div class="step-body"><h4>افتح المتصفح</h4><p>اذهب إلى localhost:8080</p></div></div><div class="step"><div class="step-n">2</div><div class="step-body"><h4>شاهد البيانات</h4><p>ما المجسات الموجودة؟ ما الأرقام التي تراها؟</p></div></div><div class="step"><div class="step-n">3</div><div class="step-body"><h4>اضغط على التنبيهات</h4><p>ماذا يحدث عندما تتجاوز القيم الحد الأقصى؟</p></div></div><div class="step"><div class="step-n">4</div><div class="step-body"><h4>اسأل نفسك</h4><p>أي جزء يثير فضولك أكثر — الجانب المرئي أم الخلفي أم الأجهزة؟</p></div></div></div>
+  
+</div>
+<div class="hw-box"><h3>🏠 الواجب المنزلي</h3><div class="hw-item"><span class="hw-dot">◆</span><span>ابحث عن ٣ أمثلة لبرامج أو تطبيقات تستخدمها يومياً — ما الذي تعتقد أنها مبنية منه؟</span></div><div class="hw-item"><span class="hw-dot">◆</span><span>شاهد: CS50 Introduction (أول ١٥ دقيقة فقط) على YouTube</span></div><div class="hw-item"><span class="hw-dot">◆</span><span>اكتب سؤالاً واحداً تريد أن تعرف إجابته خلال هذه الدورة</span></div><div style="margin-top:10px;font-size:12px;color:var(--muted)">📅 الواجب في درايف الطالب الخاص بك</div></div><div class="slide ">
+
+    <div class="tag">ملخص اليوم</div>
+    <div class="title">ماذا تعلمنا؟</div>
+    <div class="grid-2"><div class="card accent"><h3>🛡️ رصد</h3><p>نظام متكامل من المجسات إلى الويب — ستبنيه بنفسك</p></div><div class="card "><h3>🔍 المسارات</h3><p>برمجيات · إلكترونيات · ميكاترونكس — اكتشف ميولك</p></div><div class="card blue"><h3>🗺️ الخطة</h3><p>١٦ أسبوعاً من الاستكشاف الحقيقي لا الحفظ</p></div><div class="card "><h3>📌 الأسبوع القادم</h3><p>التفكير الحوسبي: كيف نحل المشكلات بخطوات؟</p></div></div>
+  
 </div>
 
-<!-- SLIDE 2: Who are we? -->
-<div class="slide" id="s2">
-  <div class="slide-section-tag">تعارف</div>
-  <div class="slide-title">من نحن؟ 👋</div>
-  <div class="slide-subtitle">قبل أي كود أو أجهزة — نتعرف على بعض أولاً</div>
-  <div class="activity-list">
-    <div class="activity-item">
-      <div class="activity-num">١</div>
-      <div>
-        <div class="activity-text">قدّم نفسك في ٣٠ ثانية</div>
-        <div class="activity-sub">اسمك، عمرك، والتقنية التي تستخدمها أكثر شيء في يومك</div>
-      </div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-num">٢</div>
-      <div>
-        <div class="activity-text">سؤال الفضول: ما الذي يُثير اهتمامك أكثر؟</div>
-        <div class="activity-sub">البرمجة والكود / الإلكترونيات والأجهزة / التصميم والفن الرقمي</div>
-      </div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-num">٣</div>
-      <div>
-        <div class="activity-text">ما هدفك من هذا الكورس؟</div>
-        <div class="activity-sub">لا إجابة خاطئة — فضولك هو كل ما نحتاجه الآن</div>
-      </div>
-    </div>
-  </div>
 </div>
-
-<!-- SLIDE 3: What is tech? -->
-<div class="slide" id="s3">
-  <div class="slide-section-tag">ما هي التكنولوجيا؟</div>
-  <div class="slide-title">التكنولوجيا في كل مكان 💡</div>
-  <div class="slide-subtitle">كل جهاز من حولنا هو تقنية — من أبسطها إلى أعقدها</div>
-  <div class="info-grid">
-    <div class="info-card">
-      <span class="icon">📱</span>
-      <h3>الجهاز في يدك</h3>
-      <p>هاتفك الذكي يحتوي على أكثر من ٣ مليار ترانزستور — أصغر من خلية الدم الحمراء</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">🚗</span>
-      <h3>السيارة الذكية</h3>
-      <p>السيارة الحديثة تحتوي على أكثر من ١٠٠ مليون سطر كود — أكثر من مكوك الفضاء</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">🏥</span>
-      <h3>الطب والتقنية</h3>
-      <p>الذكاء الاصطناعي يشخّص الأمراض بدقة تفوق الأطباء في بعض الحالات</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">🌐</span>
-      <h3>الإنترنت</h3>
-      <p>أكثر من ٥ مليار شخص متصل بالإنترنت — شبكة صنعها البشر تربط العالم</p>
-    </div>
-  </div>
-</div>
-
-<!-- SLIDE 4: Career paths -->
-<div class="slide" id="s4">
-  <div class="slide-section-tag">مسارات التقنية</div>
-  <div class="slide-title">اختر مسارك 🗺</div>
-  <div class="slide-subtitle">هذا الكورس يُساعدك تكتشف — ليس تختار للأبد</div>
-  <div class="info-grid">
-    <div class="info-card">
-      <span class="icon">💻</span>
-      <h3>البرمجة والسوفتوير</h3>
-      <p>تبني تطبيقات، مواقع، ألعاب، وأنظمة — بالكود والمنطق</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">⚡</span>
-      <h3>الإلكترونيات والهاردوير</h3>
-      <p>تصمم دوائر، تبرمج الميكروكنترولر، وتبني الأجهزة من الصفر</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">⚙️</span>
-      <h3>الميكانيكا والروبوتيكس</h3>
-      <p>تجمع الميكانيكا والإلكترونيات والبرمجة لتبني روبوتات وآلات ذكية</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">🎨</span>
-      <h3>التصميم وتجربة المستخدم</h3>
-      <p>تصمم الواجهات والمنتجات — تجعل التكنولوجيا جميلة وسهلة الاستخدام</p>
-    </div>
-  </div>
-  <div class="highlight-box" style="margin-top:20px;">
-    💡 في نهاية الـ ١٦ جلسة — ستعرف أي مسار يُشعلك
-  </div>
-</div>
-
-<!-- SLIDE 5: رصد (Rasd) preview -->
-<div class="slide" id="s5">
-  <div class="slide-section-tag">مشروعنا</div>
-  <div class="slide-title">رصد (Rasd) 🛡</div>
-  <div class="slide-subtitle">هذا ما سنبنيه معاً خلال ١٦ جلسة — نظام مراقبة الغرفة الذكي</div>
-  <div class="info-grid">
-    <div class="info-card">
-      <span class="icon">🌡</span>
-      <h3>حساسات ذكية</h3>
-      <p>DHT11 يقيس الحرارة والرطوبة — حساس المطر وحساس الرطوبة يراقبان البيئة</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">🐍</span>
-      <h3>Python Backend</h3>
-      <p>خادم Flask يستقبل البيانات ويُخزّنها في قاعدة بيانات SQLite</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">📊</span>
-      <h3>Dashboard حي</h3>
-      <p>لوحة تحكم في المتصفح تعرض البيانات لحظة بلحظة مع تنبيهات تلقائية</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">🌐</span>
-      <h3>قابل للمشاركة</h3>
-      <p>عبر ngrok — يمكن لأي شخص في العالم رؤية بيانات غرفتك</p>
-    </div>
-  </div>
-</div>
-
-<!-- SLIDE 6: Live demo -->
-<div class="slide" id="s6">
-  <div class="slide-section-tag">عرض حي</div>
-  <div class="slide-title">رصد (Rasd) — شاهد وجرّب 👀</div>
-  <div class="slide-subtitle">المدرب يُشغّل النظام الآن — لاحظ كيف تتحرك البيانات على الشاشة</div>
-  <div class="activity-list">
-    <div class="activity-item">
-      <div class="activity-num">🌡</div>
-      <div>
-        <div class="activity-text">لاحظ أرقام الحرارة والرطوبة</div>
-        <div class="activity-sub">هل تتغير؟ ما الذي يُحدّثها؟</div>
-      </div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-num">📊</div>
-      <div>
-        <div class="activity-text">انظر إلى الرسم البياني</div>
-        <div class="activity-sub">يتحرك تلقائياً — بيانات حقيقية في الوقت الفعلي</div>
-      </div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-num">🔔</div>
-      <div>
-        <div class="activity-text">التنبيهات التلقائية</div>
-        <div class="activity-sub">إذا تجاوزت الحرارة الحد — يظهر تنبيه فوراً</div>
-      </div>
-    </div>
-  </div>
-  <div class="highlight-box" style="margin-top:20px;">
-    🤔 سؤال: ما الأجزاء التي تظنها بُنيت بالبرمجة؟ وما الذي يحتاج إلكترونيات؟
-  </div>
-</div>
-
-<!-- SLIDE 7: Mind map activity -->
-<div class="slide" id="s7">
-  <div class="slide-section-tag">نشاط جماعي</div>
-  <div class="slide-title">خريطة التقنية في حياتنا 🗺</div>
-  <div class="slide-subtitle">على السبورة معاً — نرسم كل التقنيات الموجودة حولنا</div>
-  <div class="activity-list">
-    <div class="activity-item">
-      <div class="activity-num">١</div>
-      <div>
-        <div class="activity-text">ابدأ بمركز: "غرفتي"</div>
-        <div class="activity-sub">ما الأجهزة الموجودة؟ هاتف، لابتوب، راوتر، تلفزيون...</div>
-      </div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-num">٢</div>
-      <div>
-        <div class="activity-text">لكل جهاز: ما التقنية بداخله؟</div>
-        <div class="activity-sub">برمجة؟ إلكترونيات؟ إنترنت؟ كاميرا؟ حساسات؟</div>
-      </div>
-    </div>
-    <div class="activity-item">
-      <div class="activity-num">٣</div>
-      <div>
-        <div class="activity-text">اختر جهازاً تريد بناءه يوماً ما</div>
-        <div class="activity-sub">اشرح بكلماتك كيف تتخيل أنه يعمل</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- SLIDE 8: Course structure -->
-<div class="slide" id="s8">
-  <div class="slide-section-tag">هيكل الكورس</div>
-  <div class="slide-title">رحلتنا الـ ١٦ جلسة 📅</div>
-  <div class="slide-subtitle">كل مرحلة تبني على ما قبلها — وكل شيء يصب في رصد (Rasd)</div>
-  <div class="info-grid">
-    <div class="info-card">
-      <span class="icon">🧭</span>
-      <h3>المرحلة ١–٢: الأساسيات</h3>
-      <p>التفكير المنطقي، الخوارزميات، المخططات الانسيابية</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">🐱</span>
-      <h3>المرحلة ٣–٤: Scratch</h3>
-      <p>البرمجة المرئية — نبني لعبتنا الأولى بدون كتابة كود</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">🐍</span>
-      <h3>المرحلة ٥–٧: Python</h3>
-      <p>البرمجة الحقيقية — متغيرات، شروط، حلقات، دوال</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">⚡</span>
-      <h3>المرحلة ٨–١٠: الهاردوير</h3>
-      <p>إلكترونيات، Arduino، حساسات — نربط الكود بالعالم الحقيقي</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">🛡</span>
-      <h3>المرحلة ١١–١٤: رصد (Rasd)</h3>
-      <p>نبني المشروع الكامل — Backend، Database، Dashboard</p>
-    </div>
-    <div class="info-card">
-      <span class="icon">🎓</span>
-      <h3>المرحلة ١٥–١٦: العرض</h3>
-      <p>التكامل، ngrok، العرض النهائي والاحتفال</p>
-    </div>
-  </div>
-</div>
-
-<!-- SLIDE 9: Home study -->
-<div class="slide" id="s9">
-  <div class="slide-section-tag">واجب الأسبوع</div>
-  <div class="slide-title">🏠 مهمتك هذا الأسبوع</div>
-  <div class="slide-subtitle">~٢.٥ ساعة — الروابط موجودة في Google Classroom</div>
-  <div class="hw-list">
-    <div class="hw-item">
-      <div class="hw-icon">▶️</div>
-      <div>
-        <div class="hw-title"><a href="https://www.youtube.com/watch?v=lFdaJPl249g&t=36s" target="_blank" style="color:var(--accent);text-decoration:none;">شاهد: ما هو إنترنت الأشياء؟ ← يوتيوب</a></div>
-        <div class="hw-desc">فيديو بالعربي — ١٥ دقيقة · بعده: اكتب في الدفتر ماذا يعني IoT بكلماتك أنت</div>
-      </div>
-    </div>
-    <div class="hw-item">
-      <div class="hw-icon">▶️</div>
-      <div>
-        <div class="hw-title"><a href="https://www.youtube.com/watch?v=9ndH9Qo05F4&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN" target="_blank" style="color:var(--accent);text-decoration:none;">شاهد: ما هي البرمجة؟ ← يوتيوب</a></div>
-        <div class="hw-desc">الحلقة الأولى من سلسلة تعلم البرمجة بالعربي — ١٥ دقيقة</div>
-      </div>
-    </div>
-    <div class="hw-item">
-      <div class="hw-icon">✏️</div>
-      <div>
-        <div class="hw-title">اكتب في الدفتر — ٣ أسئلة محددة</div>
-        <div class="hw-desc" style="line-height:2;">
-          ١. ارسم جهازاً تقنياً تستخدمه كل يوم — وحوله: ما الذي يحتاجه ليعمل؟ (إنترنت؟ بطارية؟ برمجة؟)<br>
-          ٢. أي مسار يجذبك أكثر الآن: برمجة / إلكترونيات / روبوتيكس / تصميم؟ ولماذا؟<br>
-          ٣. اكتب سؤالاً واحداً لا تزال تتساءل عنه بعد اليوم
-        </div>
-      </div>
-    </div>
-    <div class="hw-item" style="border-color:rgba(0,229,192,0.3);">
-      <div class="hw-icon">⭐</div>
-      <div>
-        <div class="hw-title">تحدي اختياري — ارفع على Classroom</div>
-        <div class="hw-desc">صوّر جهازاً في بيتك وارفع الصورة على Google Classroom مع إجابة: ما الذي تظن أن بداخله؟</div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- SLIDE 10: See you next week -->
-<div class="slide" id="s10">
-  <span class="big-emoji">🚀</span>
-  <div class="slide-title">الأسبوع القادم</div>
-  <div class="slide-subtitle" style="margin-bottom:40px;">نتعلم كيف يفكر الحاسوب — ونرسم أول خوارزمية في حياتنا</div>
-  <div class="title-badges">
-    <div class="t-badge teal">🧠 التفكير المنطقي</div>
-    <div class="t-badge blue">📊 المخطط الانسيابي</div>
-    <div class="t-badge red">✏️ أنشطة تفاعلية</div>
-  </div>
-  <div class="highlight-box" style="margin-top:40px;">
-    تذكّر: الفضول هو أهم أداة في التقنية — احتفظ به دائماً 💡
-  </div>
-</div>
-
-</div><!-- end slides -->
-
-<div id="nav-dots"></div>
-<div id="mobile-bar">
-  <button class="nav-btn" onclick="navigate(-1)">›</button>
-  <div id="nav-dots-mobile"></div>
-  <button class="nav-btn" onclick="navigate(1)">‹</button>
-</div>
-
+<button class="nav-btn" id="btn-prev">›</button>
+<button class="nav-btn" id="btn-next">‹</button>
 <script>
-const total = 10;
-let current = 0;
-const slides = document.querySelectorAll('.slide');
-const dotsEl = document.getElementById('nav-dots');
-const counter = document.getElementById('counter');
-const bar = document.getElementById('progress-bar');
-
-slides.forEach((_,i) => {
-  const d = document.createElement('button');
-  d.className = 'dot' + (i===0?' active':'');
-  d.onclick = () => goTo(i);
-  dotsEl.appendChild(d);
-});
-
-function goTo(n) {
-  slides[current].classList.remove('active');
-  slides[current].classList.add('exit');
-  setTimeout(() => slides[current].classList.remove('exit'), 600);
-  current = (n + total) % total;
-  slides[current].classList.add('active');
-  document.querySelectorAll('.dot').forEach((d,i) => d.classList.toggle('active', i===current));
-  counter.textContent = String(current+1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
-  bar.style.width = ((current+1)/total*100) + '%';
+const slides=document.querySelectorAll('.slide');
+const prog=document.getElementById('prog');
+const counter=document.getElementById('counter');
+let cur=0;
+function show(n){
+  slides[cur].classList.remove('active');
+  cur=Math.max(0,Math.min(n,slides.length-1));
+  slides[cur].classList.add('active');
+  prog.style.width=((cur+1)/slides.length*100)+'%';
+  counter.textContent=(cur+1)+' / '+slides.length;
 }
-
-function navigate(dir) { goTo(current + dir); }
-
-document.addEventListener('keydown', e => {
-  if(e.key==='ArrowLeft') navigate(1);
-  if(e.key==='ArrowRight') navigate(-1);
-  if(e.key==='ArrowUp') navigate(-1);
-  if(e.key==='ArrowDown') navigate(1);
+document.getElementById('btn-next').onclick=()=>show(cur+1);
+document.getElementById('btn-prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'||e.key==='ArrowDown')show(cur+1);
+  if(e.key==='ArrowRight'||e.key==='ArrowUp')show(cur-1);
 });
-
-let startX = 0;
-document.addEventListener('touchstart', e => startX = e.touches[0].clientX);
-document.addEventListener('touchend', e => {
-  const dx = e.changedTouches[0].clientX - startX;
-  if(Math.abs(dx) > 50) navigate(dx < 0 ? 1 : -1);
+document.querySelectorAll('pre.code').forEach(pre=>{
+  const btn=document.createElement('button');
+  btn.className='copy-btn';btn.textContent='نسخ';
+  btn.onclick=()=>{
+    navigator.clipboard.writeText(pre.querySelector('code').innerText).then(()=>{
+      btn.textContent='✓ نُسخ';setTimeout(()=>btn.textContent='نسخ',2000);
+    });
+  };
+  pre.appendChild(btn);
 });
-
-bar.style.width = (1/total*100) + '%';
 </script>
 </body>
 </html>

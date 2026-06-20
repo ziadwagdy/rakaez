@@ -1,312 +1,212 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الجلسة ١٤ — Frontend: لوحة التحكم</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>الجلسة ١٤ — اللوحة الكاملة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
 <style>
-:root{--bg:#080c14;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
-.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
-.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
-.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
-#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--accent2));transition:width .5s;z-index:100;box-shadow:0 0 12px var(--accent);}
-#counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;}
-#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--accent);font-family:'Space Mono',monospace;z-index:100;background:rgba(0,229,192,0.08);border:1px solid rgba(0,229,192,0.2);padding:4px 12px;border-radius:20px;}
-#nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s;border:none;padding:0;}
-.dot.active{background:var(--accent);box-shadow:0 0 10px var(--accent);transform:scale(1.4);}
-.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s;backdrop-filter:blur(8px);}
-.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
-#btn-prev{right:20px;}#btn-next{left:20px;}
-#slides{position:fixed;inset:0;z-index:1;}
-.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s,transform .6s;transform:translateY(30px);overflow-y:auto;}
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;
+  --accent:#00e5c0;--blue:#58a6ff;--amber:#f0b429;--red:#ff6b6b;--green:#3fb950;--purple:#bc8cff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;height:100vh;}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(13,17,23,0.96);border-bottom:1px solid var(--border);}
+.nav-badge{font-size:12px;font-weight:700;font-family:'Space Mono',monospace;color:var(--blue);letter-spacing:1px;}
+.nav-counter{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);}
+.progress{position:fixed;top:48px;left:0;right:0;height:2px;background:var(--border);z-index:99;}
+.progress-bar{height:100%;background:var(--blue);transition:width .4s;}
+.deck{height:100vh;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 80px 60px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;transform:translateY(16px);overflow-y:auto;}
 .slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
-.slide.exit{opacity:0;transform:translateY(-30px);}
-.eyebrow{font-size:13px;color:var(--accent);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
-.title-main{font-size:clamp(36px,5vw,64px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--accent) 60%,var(--accent2) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
-.subtitle{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;margin-bottom:32px;}
-.tag-row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;}
-.badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
-.badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
-.badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
-.badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
-.stag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
-.stitle{font-size:clamp(26px,4vw,44px);font-weight:900;text-align:center;margin-bottom:8px;}
-.ssub{font-size:15px;color:var(--muted);text-align:center;max-width:650px;line-height:1.7;margin-bottom:28px;}
-.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
-.card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s;}
-.card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);}
-.card .ico{font-size:28px;margin-bottom:10px;display:block;}
-.card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
-.card p{font-size:13px;color:var(--muted);line-height:1.7;}
-.list{display:flex;flex-direction:column;gap:12px;width:100%;max-width:740px;}
-.li-item{display:flex;align-items:flex-start;gap:14px;background:var(--card);border:1px solid var(--border);border-radius:14px;padding:16px 20px;}
-.li-num{width:36px;height:36px;border-radius:50%;background:rgba(0,229,192,0.1);color:var(--accent);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;border:1px solid rgba(0,229,192,0.25);}
-.li-title{font-size:14px;font-weight:700;margin-bottom:4px;}
-.li-sub{font-size:12px;color:var(--muted);line-height:1.6;}
-.box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:18px 24px;max-width:680px;width:100%;text-align:center;font-size:14px;color:var(--muted);line-height:1.8;}
-.big-e{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
-.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:0;max-width:700px;width:100%;overflow-x:auto;direction:ltr;text-align:left;margin:0;}
-.code-block code[class*="language-"],.code-block code{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:18px 22px!important;display:block!important;white-space:pre!important;}
-pre.code-block{border-radius:12px!important;position:relative;}
-@media(max-width:768px){.slide{padding:40px 20px 80px;}.grid{grid-template-columns:1fr;}}
+.tag{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;font-family:'Space Mono',monospace;color:var(--blue);margin-bottom:12px;}
+.title{font-size:40px;font-weight:900;line-height:1.2;margin-bottom:12px;text-align:center;}
+.title span{color:var(--blue);}
+.sub{font-size:15px;color:var(--muted);text-align:center;max-width:640px;line-height:1.7;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:820px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;width:100%;max-width:820px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.card h3{font-size:14px;font-weight:700;margin-bottom:6px;}
+.card p,.card li{font-size:13px;color:var(--muted);line-height:1.6;}
+.card ul{padding-right:16px;margin-top:6px;}
+.card.accent{border-color:rgba(0,229,192,0.4);}
+.card.blue{border-color:rgba(88,166,255,0.4);}
+.card.amber{border-color:rgba(240,180,41,0.4);}
+.card.red{border-color:rgba(255,107,107,0.4);}
+.card.green{border-color:rgba(63,185,80,0.4);}
+pre.code{background:#0d1117!important;border:1px solid var(--border);border-radius:10px;padding:0!important;overflow-x:auto;direction:ltr;text-align:left;position:relative;width:100%;max-width:820px;}
+pre.code code{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:16px 20px!important;display:block!important;white-space:pre!important;}
+.copy-btn{position:absolute;top:8px;left:10px;background:rgba(88,166,255,0.1);border:1px solid rgba(88,166,255,0.3);color:var(--blue);font-family:'Space Mono',monospace;font-size:10px;padding:3px 10px;border-radius:5px;cursor:pointer;opacity:0;transition:opacity .2s;direction:ltr;}
+pre.code:hover .copy-btn{opacity:1;}
+.steps{display:flex;flex-direction:column;gap:10px;width:100%;max-width:700px;}
+.step{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;}
+.step-n{width:28px;height:28px;border-radius:50%;background:rgba(88,166,255,0.12);border:1px solid var(--blue);color:var(--blue);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Space Mono',monospace;}
+.step-n.g{background:rgba(63,185,80,0.12);border-color:var(--green);color:var(--green);}
+.step-n.a{background:rgba(240,180,41,0.12);border-color:var(--amber);color:var(--amber);}
+.step-body h4{font-weight:700;font-size:14px;margin-bottom:3px;}
+.step-body p{font-size:13px;color:var(--muted);line-height:1.5;}
+.note{background:rgba(88,166,255,0.05);border:1px solid rgba(88,166,255,0.2);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--muted);line-height:1.7;width:100%;max-width:820px;margin-top:10px;}
+.note strong,.note b{color:var(--blue);}
+.note.amber{background:rgba(240,180,41,0.05);border-color:rgba(240,180,41,0.25);}
+.note.amber strong{color:var(--amber);}
+.note.green{background:rgba(63,185,80,0.05);border-color:rgba(63,185,80,0.25);}
+.note.green strong{color:var(--green);}
+.hw-box{background:rgba(240,180,41,0.05);border:1px solid rgba(240,180,41,0.3);border-radius:12px;padding:20px 24px;width:100%;max-width:720px;}
+.hw-box h3{color:var(--amber);font-size:15px;margin-bottom:12px;}
+.hw-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:14px;line-height:1.6;}
+.hw-dot{color:var(--amber);font-size:18px;flex-shrink:0;line-height:1.4;}
+.big-emoji{font-size:72px;margin-bottom:16px;}
+.arch{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:560px;}
+.arch-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 24px;font-size:14px;font-weight:700;text-align:center;width:100%;}
+.arch-arrow{color:var(--muted);font-size:20px;}
+.nav-btn{position:fixed;bottom:24px;background:var(--card);border:1px solid var(--border);color:var(--text);width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:100;}
+.nav-btn:hover{border-color:var(--blue);color:var(--blue);}
+#btn-next{left:24px;}
+#btn-prev{right:24px;}
 
-/* Copy button on code blocks */
-pre.code-block { position: relative !important; }
-.copy-btn {
-  position: absolute;
-  top: 10px;
-  left: 12px; /* LTR block, so left = visual right */
-  background: rgba(0,229,192,0.12);
-  border: 1px solid rgba(0,229,192,0.35);
-  color: #00e5c0;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity .2s;
-  z-index: 10;
-  direction: ltr;
-}
-pre.code-block:hover .copy-btn { opacity: 1; }
-.copy-btn:hover { background: rgba(0,229,192,0.25); }
-.copy-btn.copied { color: #a0f0e0; border-color: rgba(160,240,224,0.4); }
+.progress-bar{background:var(--blue);}
+.tag{color:var(--blue);}
+.nav-badge{color:var(--blue);}
 </style>
-  <!-- Prism.js syntax highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css-extras.min.js"></script>
 </head>
 <body>
-<div class="orb orb1"></div><div class="orb orb2"></div>
-<div id="progress-bar"></div><div id="counter">01 / 10</div>
-<div id="session-badge">W14 · المرحلة ٥</div>
-<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">›</button>
-<button class="nav-btn" id="btn-next" onclick="navigate(1)">‹</button>
-<div id="slides">
-
+<nav class="nav">
+  <span class="nav-badge">الجلسة ١٤ · Dashboard 📊</span>
+  <span class="nav-counter" id="counter">1 / 10</span>
+</nav>
+<div class="progress"><div class="progress-bar" id="prog"></div></div>
+<div class="deck" id="deck">
 <div class="slide active">
-  <div class="eyebrow">الجلسة الرابعة عشرة — المرحلة الخامسة</div>
-  <div class="title-main">Frontend — لوحة التحكم 📊</div>
-  <div class="subtitle">HTML + CSS + JavaScript = الوجه الجميل لـ رصد (Rasd) — نُخصّصه اليوم</div>
-  <div class="tag-row">
-    <div class="badge teal">🎨 HTML/CSS/JS</div>
-    <div class="badge blue">📊 Dashboard</div>
-    <div class="badge amber">✏️ تخصيص</div>
-  </div>
+
+    <div class="tag">الجلسة الرابعة عشرة</div>
+    <div class="title">رصد مكتمل — <span>الرسم البياني</span></div>
+    <div class="sub">آخر قطعة في اللغز — تاريخ القراءات على رسم بياني حي</div>
+  
 </div>
+<div class="slide ">
 
-<div class="slide">
-  <div class="stag">مراجعة</div>
-  <div class="stitle">من الـ Backend إلى الشاشة 🔄</div>
-  <div class="ssub">البيانات في قاعدة البيانات — الـ API يُخرجها — الـ Dashboard يعرضها</div>
-  <div class="list">
-    <div class="li-item"><div class="li-num">❓</div><div><div class="li-title">ما الاستعلام الذي يجلب آخر قراءة من SQLite؟</div><div class="li-sub">SELECT * FROM readings ORDER BY timestamp DESC LIMIT 1</div></div></div>
-    <div class="li-item"><div class="li-num">❓</div><div><div class="li-title">ما الـ endpoint الذي يُرجع هذه القراءة؟</div><div class="li-sub">/api/readings — يُرجع JSON يحتوي بيانات أحدث قراءة</div></div></div>
-    <div class="li-item"><div class="li-num">❓</div><div><div class="li-title">من يستهلك هذا الـ JSON؟</div><div class="li-sub">الـ Dashboard في المتصفح — عبر JavaScript وFetch API</div></div></div>
-  </div>
+    <div class="tag">ابدأ من هنا</div>
+    <div class="title">افتح <span>لوحة رصد</span> الكاملة</div>
+    <div class="sub" style="margin-bottom:16px">localhost:8080 — انزل لأسفل الصفحة — الرسم البياني يتحدث تلقائياً</div>
+    <div class="note"><strong>السؤال:</strong> من أين تأتي البيانات؟ والجواب في <code style="direction:ltr">/api/readings</code></div>
+    <pre class="code"><code class="language-javascript">// هكذا يجلب Chart.js بيانات رصد
+fetch('/api/readings')
+  .then(r => r.json())
+  .then(data => {
+    const labels = data.map(r => r.timestamp);
+    const temps  = data.map(r => r.temperature);
+    updateChart(labels, temps);
+  });</code></pre>
+  
 </div>
+<div class="slide ">
 
-<div class="slide">
-  <div class="stag">الثلاثي المقدس</div>
-  <div class="stitle">HTML + CSS + JavaScript 🎨</div>
-  <div class="ssub">ثلاث تقنيات لكل منها دور محدد — لا غنى عن أي منها</div>
-  <div class="grid">
-    <div class="card"><span class="ico">🏗</span><h3>HTML — الهيكل</h3><p>يُحدّد المحتوى والعناصر: بطاقات الحرارة، جدول التنبيهات، منطقة الرسم البياني</p></div>
-    <div class="card"><span class="ico">🎨</span><h3>CSS — التصميم</h3><p>الألوان، الخطوط، المسافات، الحركات — يُحوّل الهيكل الرمادي إلى واجهة جميلة</p></div>
-    <div class="card"><span class="ico">⚡</span><h3>JavaScript — التفاعل</h3><p>يجلب البيانات من الـ API، يُحدّث الأرقام، يُشغّل الرسوم البيانية</p></div>
-    <div class="card"><span class="ico">🌐</span><h3>Fetch API — الاتصال</h3><p>طريقة JavaScript لطلب البيانات من الـ Backend — بدونها لا بيانات على الشاشة</p></div>
-  </div>
+    <div class="tag">Chart.js</div>
+    <div class="title">رسم بياني <span>بـ ٥ أسطر</span></div>
+    <pre class="code"><code class="language-javascript">const ctx = document.getElementById('myChart');
+
+new Chart(ctx, {
+  type: 'line',
+  data: {
+    labels: ['١٠:٠٠', '١٠:٠٢', '١٠:٠٤'],
+    datasets: [{
+      label: 'درجة الحرارة',
+      data: [25, 27, 28.5],
+      borderColor: '#00e5c0',
+      fill: false
+    }]
+  }
+});</code></pre>
+  
 </div>
+<div class="slide ">
 
-<div class="slide">
-  <div class="stag">كود الـ Dashboard</div>
-  <div class="stitle">كيف يجلب الـ Dashboard البيانات؟ 🔌</div>
-  <div class="ssub">في dashboard.html — هذا ما يحدث كل ٥ ثوانٍ</div>
-  <pre class="code-block language-javascript"><code class="language-javascript">// JavaScript في dashboard.html
+    <div class="tag">تحديث الرسم البياني</div>
+    <div class="title">بيانات <span>حية</span></div>
+    <pre class="code"><code class="language-javascript">let chart; // الرسم البياني
 
-function updateDashboard() {
-
+function updateChart() {
   fetch('/api/readings')
-
-    .then(response =&gt; response.json())
-
-    .then(data =&gt; {
-
-      document.getElementById('temperature')
-
-        .textContent = data.temperature + ' °C';
-
-      document.getElementById('humidity')
-
-        .textContent = data.humidity + ' %';
-
+    .then(r => r.json())
+    .then(data => {
+      chart.data.labels   = data.map(r => r.timestamp.slice(11,16));
+      chart.data.datasets[0].data = data.map(r => r.temperature);
+      chart.update(); // أعِد الرسم
     });
-
 }
 
-setInterval(updateDashboard, 5000);</code></pre>
+setInterval(updateChart, 10000); // كل 10 ثوانٍ</code></pre>
+  
 </div>
+<div class="slide ">
 
-<div class="slide">
-  <div class="stag">تعديل CSS</div>
-  <div class="stitle">غيّر ألوان الـ Dashboard 🌈</div>
-  <div class="ssub">في بداية dashboard.html — غيّر أي متغير وشاهد التغيير فوراً</div>
-  <pre class="code-block language-css"><code class="language-css">/* CSS Variables في dashboard.html */
-
-:root {
-
-  --accent: #00e5c0;   /* لون أخضر-فيروزي */
-
-  --accent2: #5b7fff; /* لون أزرق */
-
-  --warning: #ff6b6b; /* لون التحذير */
-
-  --room-name: "غرفتي";
-
+    <div class="tag">CSS Variables</div>
+    <div class="title">غيّر <span>ألوان رصد</span> كلها بسطر</div>
+    <pre class="code"><code class="language-css">:root {
+  --accent: #00e5c0; /* غيّر هذا اللون */
+  --bg: #0d1117;
+  --card: #161b22;
 }
 
-
-/* جرّب تغيير --accent إلى #ff6b6b */
-
-/* أو إلى #ffb347 للون ذهبي */</code></pre>
+/* الآن كل مكوّن يستخدم var(--accent) يتغير تلقائياً */
+.card { border-color: var(--accent); }
+.value { color: var(--accent); }
+.progress-bar { background: var(--accent); }</code></pre>
+  
 </div>
+<div class="slide ">
 
-<div class="slide">
-  <div class="stag">تعديل HTML</div>
-  <div class="stitle">غيّر اسم الغرفة والترحيب ✏️</div>
-  <div class="ssub">ابحث عن هذه الأسطر في dashboard.html وعدّلها</div>
-  <pre class="code-block language-python"><code class="language-python">رصد (Rasd)
-
-
-
-
-غرفة المراقبة
-
-
-
-
-
-
-  مرحباً بك في نظام المراقبة</code></pre>
+    <div class="tag">نشاط</div>
+    <div class="title">خصّص <span>لوحتك</span></div>
+    <div class="steps"><div class="step"><div class="step-n">1</div><div class="step-body"><h4>افتح frontend/index.html</h4><p>في VS Code</p></div></div><div class="step"><div class="step-n">2</div><div class="step-body"><h4>غيّر --accent</h4><p>في :root — اختر لونك المفضل</p></div></div><div class="step"><div class="step-n">3</div><div class="step-body"><h4>أضف chart ثانٍ</h4><p>للرطوبة — نفس النمط</p></div></div><div class="step"><div class="step-n">4</div><div class="step-body"><h4>أضف بطاقة خامسة</h4><p>مجس من اختيارك مع CSS مخصص</p></div></div></div>
+  
 </div>
+<div class="hw-box"><h3>🏠 الواجب المنزلي</h3><div class="hw-item"><span class="hw-dot">◆</span><span>أضف رسماً بيانياً ثانياً للرطوبة في لوحتك — بلون مختلف</span></div><div class="hw-item"><span class="hw-dot">◆</span><span>خصّص CSS variables اللوحة بألوانك الخاصة — التقط صورة قبل وبعد</span></div><div class="hw-item"><span class="hw-dot">◆</span><span>اختياري: أضف بطاقة تعرض التنبيهات بنص عربي بدل الأرقام</span></div><div style="margin-top:10px;font-size:12px;color:var(--muted)">📅 ارفع index.html المعدّل في درايف الطالب</div></div><div class="slide ">
 
-<div class="slide">
-  <div class="stag">نشاط — مسابقة</div>
-  <div class="stitle">من يملك أجمل Dashboard؟ 🏆</div>
-  <div class="ssub">٢٠ دقيقة — كل طالب يُخصّص الـ Dashboard بأسلوبه الخاص</div>
-  <div class="list">
-    <div class="li-item"><div class="li-num">١</div><div><div class="li-title">افتح dashboard.html في VS Code</div><div class="li-sub">شغّل Live Server — التغييرات تظهر فوراً في المتصفح</div></div></div>
-    <div class="li-item"><div class="li-num">٢</div><div><div class="li-title">غيّر الاسم والألوان</div><div class="li-sub">اسم غرفتك، لونك المفضل، رسالة ترحيب بالعربي</div></div></div>
-    <div class="li-item"><div class="li-num">٣</div><div><div class="li-title">أضف بطاقة جديدة</div><div class="li-sub">بطاقة "عن المشروع" تحتوي اسمك وتاريخ إنشاء النظام</div></div></div>
-  </div>
-  <div class="box" style="margin-top:16px;">🎨 في نهاية الـ ٢٠ دقيقة — كل طالب يعرض تعديلاته</div>
-</div>
-
-<div class="slide">
-  <div class="stag">إضافة بطاقة جديدة</div>
-  <div class="stitle">HTML من الصفر 🆕</div>
-  <div class="ssub">أضف هذا الكود في dashboard.html بعد آخر بطاقة موجودة</div>
-  <pre class="code-block language-css"><code class="language-css">👨‍💻
-
-  المطوّر
-
-  اسمك هنا
-
-  Rakaez · إسطنبول
-
-
-
-
-/* CSS للبطاقة */
-
-.info-card { background: var(--card);
-
-  border: 1px solid var(--border);
-
-  border-radius: 16px; padding: 20px; }</code></pre>
-</div>
-
-<div class="slide">
-  <div class="stag">واجب الأسبوع</div>
-  <div class="stitle">🏠 مهمتك هذا الأسبوع</div>
-  <div class="ssub">اجعل الـ Dashboard يعكس شخصيتك — وتحضّر لـ ngrok</div>
-  <div class="list">
-    <div class="li-item"><div class="li-num">🎨</div><div><div class="li-title">أضف قسماً يعرض اسمك واسم الغرفة</div><div class="li-sub">HTML + CSS — اجعله يبدو جزءاً طبيعياً من الـ Dashboard</div></div></div>
-    <div class="li-item"><div class="li-num">💬</div><div><div class="li-title">خصّص رسائل التنبيه بالعربية</div><div class="li-sub">بدل "TEMP_HIGH" → "تحذير: الحرارة مرتفعة جداً! 🔴"</div></div></div>
-    <div class="li-item"><div class="li-num">📥</div><div><div class="li-title">حمّل ngrok وسجّل حساباً مجانياً</div><div class="li-sub">ngrok.com — ستحتاجه الجلسة القادمة لمشاركة رابطك</div></div></div>
-    <div class="li-item" style="border-color:rgba(0,229,192,0.3);"><div class="li-num">⭐</div><div><div class="li-title">تحدي: أضف تأثيراً بصرياً للتنبيه</div><div class="li-sub">عند تجاوز الحد: البطاقة تتحول للأحمر أو تومض</div></div></div>
-  </div>
-</div>
-
-<div class="slide">
-  <div class="big-e">🔗</div>
-  <div class="stitle">الأسبوع القادم — ngrok والتكامل الكامل!</div>
-  <div class="ssub" style="margin-bottom:32px;">نُشغّل كل شيء معاً ونشارك رابط رصد (Rasd) مع العالم</div>
-  <div class="tag-row">
-    <div class="badge teal">🌐 ngrok</div>
-    <div class="badge blue">🔗 تكامل كامل</div>
-    <div class="badge amber">🧪 اختبار شامل</div>
-  </div>
-  <div class="box" style="margin-top:36px;">الجلسة القادمة: رابط مشروعك يعمل على هاتف أي شخص في العالم 🌍</div>
+    <div class="tag">ملخص اليوم</div>
+    <div class="title">ماذا تعلمنا؟</div>
+    <div class="grid-2"><div class="card blue"><h3>📊 Chart.js</h3><p>رسم بياني حي من بيانات JSON — ٥ أسطر</p></div><div class="card "><h3>🔄 chart.update()</h3><p>حدّث الرسم بدون إعادة تحميل الصفحة</p></div><div class="card accent"><h3>🎨 CSS Variables</h3><p>غيّر --accent تغيّر اللوحة كلها</p></div><div class="card green"><h3>📌 الأسبوع القادم</h3><p>ngrok — شارك رصد مع العالم</p></div></div>
+  
 </div>
 
 </div>
-<div id="nav-dots"></div>
+<button class="nav-btn" id="btn-prev">›</button>
+<button class="nav-btn" id="btn-next">‹</button>
 <script>
-const total=10;let current=0;const slides=document.querySelectorAll('.slide');const dotsEl=document.getElementById('nav-dots');const counter=document.getElementById('counter');const bar=document.getElementById('progress-bar');
-slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
-function goTo(n){slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),600);current=(n+total)%total;slides[current].classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');bar.style.width=((current+1)/total*100)+'%';}
-function navigate(dir){goTo(current+dir);}
-document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.key==='ArrowRight')navigate(-1);});
-let sx=0;document.addEventListener('touchstart',e=>sx=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-sx;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
-bar.style.width=(1/total*100)+'%';
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('pre.code-block').forEach(function (pre) {
-    var btn = document.createElement('button');
-    btn.className = 'copy-btn';
-    btn.textContent = 'نسخ';
-    btn.addEventListener('click', function () {
-      var code = pre.querySelector('code');
-      var text = code ? code.innerText : pre.innerText;
-      navigator.clipboard.writeText(text).then(function () {
-        btn.textContent = '✓ نُسخ';
-        btn.classList.add('copied');
-        setTimeout(function () {
-          btn.textContent = 'نسخ';
-          btn.classList.remove('copied');
-        }, 2000);
-      }).catch(function () {
-        /* fallback for older browsers */
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        btn.textContent = '✓ نُسخ';
-        setTimeout(function () { btn.textContent = 'نسخ'; }, 2000);
-      });
+const slides=document.querySelectorAll('.slide');
+const prog=document.getElementById('prog');
+const counter=document.getElementById('counter');
+let cur=0;
+function show(n){
+  slides[cur].classList.remove('active');
+  cur=Math.max(0,Math.min(n,slides.length-1));
+  slides[cur].classList.add('active');
+  prog.style.width=((cur+1)/slides.length*100)+'%';
+  counter.textContent=(cur+1)+' / '+slides.length;
+}
+document.getElementById('btn-next').onclick=()=>show(cur+1);
+document.getElementById('btn-prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'||e.key==='ArrowDown')show(cur+1);
+  if(e.key==='ArrowRight'||e.key==='ArrowUp')show(cur-1);
+});
+document.querySelectorAll('pre.code').forEach(pre=>{
+  const btn=document.createElement('button');
+  btn.className='copy-btn';btn.textContent='نسخ';
+  btn.onclick=()=>{
+    navigator.clipboard.writeText(pre.querySelector('code').innerText).then(()=>{
+      btn.textContent='✓ نُسخ';setTimeout(()=>btn.textContent='نسخ',2000);
     });
-    pre.appendChild(btn);
-  });
+  };
+  pre.appendChild(btn);
 });
 </script>
-
 </body>
 </html>

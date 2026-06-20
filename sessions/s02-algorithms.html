@@ -2,324 +2,192 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>الجلسة ٢ — جلسة الانطلاق (أونلاين)</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>الجلسة ٢ — خوارزميات</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&family=Space+Mono&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-markup.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
 <style>
-:root{--bg:#080c14;--bg2:#0e1520;--bg3:#141d2e;--accent:#00e5c0;--accent2:#5b7fff;--accent3:#ff6b6b;--amber:#ffb347;--text:#e8f0fe;--muted:#6b7fa3;--border:rgba(0,229,192,0.15);--card:rgba(14,21,32,0.9);}
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-html,body{width:100%;height:100%;background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;user-select:none;}
-body::before{content:'';position:fixed;inset:0;background-image:linear-gradient(rgba(0,229,192,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(0,229,192,0.04) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;z-index:0;}
-.orb{position:fixed;border-radius:50%;filter:blur(100px);pointer-events:none;z-index:0;opacity:0.18;}
-.orb1{width:500px;height:500px;background:#00e5c0;top:-150px;right:-150px;}
-.orb2{width:400px;height:400px;background:#5b7fff;bottom:-100px;left:-100px;}
-#progress-bar{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,var(--accent),var(--amber));transition:width .5s ease;z-index:100;box-shadow:0 0 12px var(--amber);}
-#counter{position:fixed;top:18px;left:24px;font-size:12px;color:var(--muted);font-family:'Space Mono',monospace;z-index:100;letter-spacing:1px;}
-#session-badge{position:fixed;top:18px;right:24px;font-size:11px;color:var(--amber);font-family:'Space Mono',monospace;z-index:100;letter-spacing:2px;background:rgba(255,179,71,0.08);border:1px solid rgba(255,179,71,0.25);padding:4px 12px;border-radius:20px;}
-#nav-dots{position:fixed;bottom:28px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:100;}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--muted);cursor:pointer;transition:all .3s ease;border:none;padding:0;}
-.dot.active{background:var(--amber);box-shadow:0 0 10px var(--amber);transform:scale(1.4);}
-.nav-btn{position:fixed;top:50%;transform:translateY(-50%);width:44px;height:44px;border-radius:50%;border:1px solid var(--border);background:rgba(14,21,32,0.8);color:var(--accent);font-size:18px;cursor:pointer;z-index:100;display:flex;align-items:center;justify-content:center;transition:all .2s ease;backdrop-filter:blur(8px);}
-.nav-btn:hover{background:rgba(0,229,192,0.15);transform:translateY(-50%) scale(1.1);}
-#btn-prev{right:20px;}#btn-next{left:20px;}
-#slides{position:fixed;inset:0;z-index:1;}
-.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 80px 80px;opacity:0;pointer-events:none;transition:opacity .6s ease,transform .6s ease;transform:translateY(30px);overflow-y:auto;}
+:root{--bg:#0d1117;--card:#161b22;--border:#30363d;--text:#e6edf3;--muted:#8b949e;
+  --accent:#00e5c0;--blue:#58a6ff;--amber:#f0b429;--red:#ff6b6b;--green:#3fb950;--purple:#bc8cff;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);font-family:'Cairo',sans-serif;color:var(--text);overflow:hidden;height:100vh;}
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:12px 28px;background:rgba(13,17,23,0.96);border-bottom:1px solid var(--border);}
+.nav-badge{font-size:12px;font-weight:700;font-family:'Space Mono',monospace;color:var(--blue);letter-spacing:1px;}
+.nav-counter{font-family:'Space Mono',monospace;font-size:12px;color:var(--muted);}
+.progress{position:fixed;top:48px;left:0;right:0;height:2px;background:var(--border);z-index:99;}
+.progress-bar{height:100%;background:var(--blue);transition:width .4s;}
+.deck{height:100vh;overflow:hidden;}
+.slide{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:72px 80px 60px;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;transform:translateY(16px);overflow-y:auto;}
 .slide.active{opacity:1;pointer-events:all;transform:translateY(0);}
-.slide.exit{opacity:0;transform:translateY(-30px);}
-.title-eyebrow{font-size:13px;font-weight:400;color:var(--amber);letter-spacing:4px;text-transform:uppercase;margin-bottom:20px;font-family:'Space Mono',monospace;}
-.title-main{font-size:clamp(36px,5.5vw,66px);font-weight:900;line-height:1.1;text-align:center;background:linear-gradient(135deg,#fff 0%,var(--amber) 60%,var(--accent) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:24px;}
-.title-sub{font-size:16px;color:var(--muted);text-align:center;max-width:600px;line-height:1.7;}
-.title-badges{display:flex;gap:10px;margin-top:36px;flex-wrap:wrap;justify-content:center;}
-.t-badge{padding:8px 18px;border-radius:30px;font-size:13px;font-weight:600;border:1px solid;display:flex;align-items:center;gap:6px;}
-.t-badge.teal{border-color:var(--accent);color:var(--accent);background:rgba(0,229,192,0.08);}
-.t-badge.blue{border-color:var(--accent2);color:var(--accent2);background:rgba(91,127,255,0.08);}
-.t-badge.amber{border-color:var(--amber);color:var(--amber);background:rgba(255,179,71,0.08);}
-.slide-section-tag{font-size:11px;font-weight:600;letter-spacing:3px;color:var(--accent);font-family:'Space Mono',monospace;text-transform:uppercase;margin-bottom:12px;}
-.slide-title{font-size:clamp(26px,4vw,46px);font-weight:900;text-align:center;margin-bottom:8px;color:var(--text);}
-.slide-subtitle{font-size:15px;color:var(--muted);text-align:center;margin-bottom:32px;max-width:650px;line-height:1.7;}
-.info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;width:100%;max-width:900px;}
-.info-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:20px 22px;transition:all .3s ease;}
-.info-card:hover{border-color:rgba(0,229,192,0.4);transform:translateY(-3px);}
-.info-card .icon{font-size:28px;margin-bottom:10px;display:block;}
-.info-card h3{font-size:15px;font-weight:700;color:var(--accent);margin-bottom:6px;}
-.info-card p{font-size:13px;color:var(--muted);line-height:1.7;}
-.hw-list{display:flex;flex-direction:column;gap:10px;width:100%;max-width:720px;}
-.hw-item{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 20px;}
-.hw-icon{font-size:22px;flex-shrink:0;line-height:1;margin-top:2px;min-width:28px;text-align:center;font-weight:700;color:var(--accent);}
-.hw-title{font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;}
-.hw-desc{font-size:12px;color:var(--muted);line-height:1.7;}
-.hw-link{color:var(--accent);text-decoration:none;font-weight:600;}
-.highlight-box{background:rgba(0,229,192,0.06);border:1px solid rgba(0,229,192,0.2);border-radius:14px;padding:20px 28px;max-width:700px;width:100%;text-align:center;line-height:1.8;font-size:14px;color:var(--muted);}
-.amber-box{background:rgba(255,179,71,0.06);border:1px solid rgba(255,179,71,0.25);border-radius:14px;padding:18px 26px;max-width:700px;width:100%;text-align:center;line-height:1.8;font-size:14px;color:var(--muted);}
-.big-emoji{font-size:80px;margin-bottom:20px;display:block;text-align:center;}
-.week-plan{display:flex;flex-direction:column;gap:12px;width:100%;max-width:740px;}
-.week-block{border-radius:14px;padding:18px 22px;border:1px solid;}
-.week-block.w1{background:rgba(91,127,255,0.06);border-color:rgba(91,127,255,0.3);}
-.week-block.w2{background:rgba(0,229,192,0.06);border-color:rgba(0,229,192,0.25);}
-.week-block h3{font-size:14px;font-weight:700;margin-bottom:10px;}
-.week-block.w1 h3{color:var(--accent2);}
-.week-block.w2 h3{color:var(--accent);}
-.week-block ul{list-style:none;padding:0;display:flex;flex-direction:column;gap:6px;}
-.week-block ul li{font-size:13px;color:var(--muted);line-height:1.6;padding-right:16px;position:relative;}
-.week-block ul li::before{content:"←";color:var(--accent);position:absolute;right:0;}
-.code-block{background:#0a0f1a;border:1px solid rgba(0,229,192,0.2);border-radius:12px;padding:0;max-width:700px;width:100%;overflow-x:auto;direction:ltr;text-align:left;margin:0;}
-.code-block code[class*="language-"],.code-block code{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:18px 22px!important;display:block!important;white-space:pre!important;}
-pre.code-block{border-radius:12px!important;position:relative;}
+.tag{font-size:11px;font-weight:700;letter-spacing:3px;text-transform:uppercase;font-family:'Space Mono',monospace;color:var(--blue);margin-bottom:12px;}
+.title{font-size:40px;font-weight:900;line-height:1.2;margin-bottom:12px;text-align:center;}
+.title span{color:var(--blue);}
+.sub{font-size:15px;color:var(--muted);text-align:center;max-width:640px;line-height:1.7;}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;width:100%;max-width:820px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;width:100%;max-width:820px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px;}
+.card h3{font-size:14px;font-weight:700;margin-bottom:6px;}
+.card p,.card li{font-size:13px;color:var(--muted);line-height:1.6;}
+.card ul{padding-right:16px;margin-top:6px;}
+.card.accent{border-color:rgba(0,229,192,0.4);}
+.card.blue{border-color:rgba(88,166,255,0.4);}
+.card.amber{border-color:rgba(240,180,41,0.4);}
+.card.red{border-color:rgba(255,107,107,0.4);}
+.card.green{border-color:rgba(63,185,80,0.4);}
+pre.code{background:#0d1117!important;border:1px solid var(--border);border-radius:10px;padding:0!important;overflow-x:auto;direction:ltr;text-align:left;position:relative;width:100%;max-width:820px;}
+pre.code code{font-family:'Space Mono',monospace!important;font-size:13px!important;line-height:1.8!important;background:transparent!important;text-shadow:none!important;padding:16px 20px!important;display:block!important;white-space:pre!important;}
+.copy-btn{position:absolute;top:8px;left:10px;background:rgba(88,166,255,0.1);border:1px solid rgba(88,166,255,0.3);color:var(--blue);font-family:'Space Mono',monospace;font-size:10px;padding:3px 10px;border-radius:5px;cursor:pointer;opacity:0;transition:opacity .2s;direction:ltr;}
+pre.code:hover .copy-btn{opacity:1;}
+.steps{display:flex;flex-direction:column;gap:10px;width:100%;max-width:700px;}
+.step{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;}
+.step-n{width:28px;height:28px;border-radius:50%;background:rgba(88,166,255,0.12);border:1px solid var(--blue);color:var(--blue);font-weight:700;font-size:13px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Space Mono',monospace;}
+.step-n.g{background:rgba(63,185,80,0.12);border-color:var(--green);color:var(--green);}
+.step-n.a{background:rgba(240,180,41,0.12);border-color:var(--amber);color:var(--amber);}
+.step-body h4{font-weight:700;font-size:14px;margin-bottom:3px;}
+.step-body p{font-size:13px;color:var(--muted);line-height:1.5;}
+.note{background:rgba(88,166,255,0.05);border:1px solid rgba(88,166,255,0.2);border-radius:10px;padding:14px 18px;font-size:13px;color:var(--muted);line-height:1.7;width:100%;max-width:820px;margin-top:10px;}
+.note strong,.note b{color:var(--blue);}
+.note.amber{background:rgba(240,180,41,0.05);border-color:rgba(240,180,41,0.25);}
+.note.amber strong{color:var(--amber);}
+.note.green{background:rgba(63,185,80,0.05);border-color:rgba(63,185,80,0.25);}
+.note.green strong{color:var(--green);}
+.hw-box{background:rgba(240,180,41,0.05);border:1px solid rgba(240,180,41,0.3);border-radius:12px;padding:20px 24px;width:100%;max-width:720px;}
+.hw-box h3{color:var(--amber);font-size:15px;margin-bottom:12px;}
+.hw-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:14px;line-height:1.6;}
+.hw-dot{color:var(--amber);font-size:18px;flex-shrink:0;line-height:1.4;}
+.big-emoji{font-size:72px;margin-bottom:16px;}
+.arch{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;max-width:560px;}
+.arch-box{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:10px 24px;font-size:14px;font-weight:700;text-align:center;width:100%;}
+.arch-arrow{color:var(--muted);font-size:20px;}
+.nav-btn{position:fixed;bottom:24px;background:var(--card);border:1px solid var(--border);color:var(--text);width:44px;height:44px;border-radius:50%;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;z-index:100;}
+.nav-btn:hover{border-color:var(--blue);color:var(--blue);}
+#btn-next{left:24px;}
+#btn-prev{right:24px;}
 
-/* Copy button on code blocks */
-pre.code-block { position: relative !important; }
-.copy-btn {
-  position: absolute;
-  top: 10px;
-  left: 12px; /* LTR block, so left = visual right */
-  background: rgba(0,229,192,0.12);
-  border: 1px solid rgba(0,229,192,0.35);
-  color: #00e5c0;
-  font-family: 'Space Mono', monospace;
-  font-size: 11px;
-  padding: 4px 10px;
-  border-radius: 6px;
-  cursor: pointer;
-  opacity: 0;
-  transition: opacity .2s;
-  z-index: 10;
-  direction: ltr;
-}
-pre.code-block:hover .copy-btn { opacity: 1; }
-.copy-btn:hover { background: rgba(0,229,192,0.25); }
-.copy-btn.copied { color: #a0f0e0; border-color: rgba(160,240,224,0.4); }
+.progress-bar{background:var(--accent);}
+.tag{color:var(--accent);}
+.nav-badge{color:var(--accent);}
 </style>
-  <!-- Prism.js syntax highlighting -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-python.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-c.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-bash.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-sql.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-javascript.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/components/prism-css-extras.min.js"></script>
 </head>
 <body>
-<div class="orb orb1"></div><div class="orb orb2"></div>
-<div id="progress-bar"></div>
-<div id="counter">01 / 08</div>
-<div id="session-badge">W2 · أونلاين 🌐</div>
-<button class="nav-btn" id="btn-prev" onclick="navigate(-1)">›</button>
-<button class="nav-btn" id="btn-next" onclick="navigate(1)">‹</button>
-<div id="slides">
+<nav class="nav">
+  <span class="nav-badge">الجلسة ٢ · خوارزميات 🗺️</span>
+  <span class="nav-counter" id="counter">1 / 10</span>
+</nav>
+<div class="progress"><div class="progress-bar" id="prog"></div></div>
+<div class="deck" id="deck">
+<div class="slide active">
 
-<!-- SLIDE 1 -->
-<div class="slide active" id="s1">
-  <div class="title-eyebrow">الجلسة الثانية — عبر الإنترنت</div>
-  <div class="title-main">جلسة الانطلاق 🚀</div>
-  <div class="title-sub">جلسة قصيرة أونلاين — نوزع واجبات الإجازة ونضع الخطة</div>
-  <div class="title-badges">
-    <div class="t-badge amber">🌐 أونلاين · ٤٥ دقيقة</div>
-    <div class="t-badge teal">🏖 إجازة مثمرة</div>
-    <div class="t-badge blue">🐍 Python تبدأ اليوم</div>
-  </div>
+    <div class="tag">الجلسة الثانية</div>
+    <div class="title">كيف يُفكّر <span>الكمبيوتر؟</span></div>
+    <div class="sub">قبل أن تكتب كوداً — تحتاج أن تفكر بطريقته</div>
+  
 </div>
+<div class="slide ">
 
-<!-- SLIDE 2 -->
-<div class="slide" id="s2">
-  <div class="slide-section-tag">تذكّر</div>
-  <div class="slide-title">ماذا فعلنا في الجلسة الأولى؟ 💭</div>
-  <div class="slide-subtitle">قبل أن تبدأ الإجازة — دعونا نتأكد أننا على نفس الصفحة</div>
-  <div class="info-grid">
-    <div class="info-card"><span class="icon">🌍</span><h3>تعارفنا</h3><p>اخترنا اهتماماتنا الأولى — برمجة، إلكترونيات، تصميم، أو روبوتيكس</p></div>
-    <div class="info-card"><span class="icon">🛡</span><h3>رأينا رصد (Rasd)</h3><p>المشروع الحقيقي يعمل — بيانات حية، رسوم بيانية، تنبيهات تلقائية</p></div>
-    <div class="info-card"><span class="icon">📊</span><h3>المخططات الانسيابية</h3><p>رسمنا خوارزمية الصباح وخوارزمية رصد — ونعرف الآن ما هي القرارات والعمليات</p></div>
-  </div>
-</div>
-
-<!-- SLIDE 3 -->
-<div class="slide" id="s3">
-  <div class="slide-section-tag">الخطة</div>
-  <div class="slide-title">أسبوعان — كل أسبوع له هدف 📅</div>
-  <div class="slide-subtitle">المجموع: ~١٠ ساعات. الإجازة ليست توقفاً — هي بداية Python</div>
-  <div class="week-plan">
-    <div class="week-block w1">
-      <h3>الأسبوع الأول — Scratch + Python أولى الخطوات</h3>
-      <ul>
-        <li>أكمل مشروع Scratch "المحاكي الذكي" وارفعه على Google Classroom</li>
-        <li>شاهد فيديوَي IoT والبرمجة (الروابط في Classroom)</li>
-        <li>نفّذ التمارين ١–٤ على Trinket (متغيرات، شروط، حلقات، إدخال)</li>
-      </ul>
-    </div>
-    <div class="week-block w2">
-      <h3>الأسبوع الثاني — المشروع المصغّر + IoT</h3>
-      <ul>
-        <li>نفّذ "حارس الغرفة النصي" على Trinket واحفظ screenshot</li>
-        <li>شاهد فيديو المنزل الذكي (رابطه في Classroom)</li>
-        <li>ارسم في الدفتر: ما الحساسات التي يحتاجها منزل ذكي؟</li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<!-- SLIDE 4 -->
-<div class="slide" id="s4">
-  <div class="slide-section-tag">الواجب الأول</div>
-  <div class="slide-title">مشروع Scratch — المحاكي الذكي 🎮</div>
-  <div class="slide-subtitle">برنامج يسأل المستخدم عن الغرفة ويعطيه تقريراً — تماماً مثل رصد (Rasd)</div>
-  <div class="hw-list">
-    <div class="hw-item">
-      <div class="hw-icon">١</div>
-      <div>
-        <div class="hw-title">عند الضغط ▶ — الشخصية تقول "أهلاً! أنا حارس الغرفة 🛡️"</div>
-        <div class="hw-desc">أي sprite تختاره — ثم تسأل: <strong style="color:#e8f0fe;">"ما درجة الحرارة الآن؟ (بالمئوية)"</strong> باستخدام كتلة Ask and Wait</div>
+    <div class="tag">ابدأ من هنا</div>
+    <div class="title">رصد يتخذ <span>قرارات</span></div>
+    <div class="sub" style="margin-bottom:20px">هذا هو المنطق الحقيقي داخل رصد — كيف يقرر إرسال تنبيه؟</div>
+    <div class="arch" style="max-width:480px">
+      <div class="arch-box" style="border-color:rgba(0,229,192,0.5);color:var(--accent)">📡 قراءة درجة الحرارة من DHT11</div>
+      <div class="arch-arrow">↓</div>
+      <div class="arch-box" style="background:rgba(240,180,41,0.08);border-color:rgba(240,180,41,0.5);color:var(--amber)">🔷 هل الحرارة أكبر من ٣٥؟</div>
+      <div style="display:flex;gap:40px;font-size:13px;color:var(--muted)"><span>← نعم</span><span>لا →</span></div>
+      <div style="display:flex;gap:40px;width:100%">
+        <div class="arch-box" style="border-color:rgba(255,107,107,0.5);color:var(--red)">🔔 إرسال تنبيه</div>
+        <div class="arch-box" style="border-color:rgba(63,185,80,0.5);color:var(--green)">✅ انتظار ثانيتين</div>
       </div>
     </div>
-    <div class="hw-item">
-      <div class="hw-icon">٢</div>
-      <div>
-        <div class="hw-title">إذا الإجابة > 35 ← خلفية حمراء + "🔴 تحذير! الغرفة ساخنة جداً"</div>
-        <div class="hw-desc">Control → If/Else · Looks → Switch Backdrop · Looks → Say</div>
-      </div>
+  
+</div>
+<div class="slide ">
+
+    <div class="tag">ما هي الخوارزمية؟</div>
+    <div class="title">خطوات <span>محددة</span> لحل مشكلة</div>
+    <div class="grid-2"><div class="card blue"><h3>📋 خطوات</h3><p>كل خوارزمية لها خطوات مرتبة — لا يمكن تخطّي خطوة</p></div><div class="card amber"><h3>🔷 قرارات</h3><p>في كل قرار: نعم أو لا — طريقان لا ثالث</p></div><div class="card green"><h3>🔄 تكرار</h3><p>أحياناً نكرر خطوة حتى يتحقق شرط</p></div><div class="card accent"><h3>🏁 نهاية</h3><p>كل خوارزمية لها بداية ونهاية واضحتان</p></div></div>
+  
+</div>
+<div class="slide ">
+
+    <div class="tag">المخطط الانسيابي</div>
+    <div class="title">نرسم الخوارزمية <span>بصرياً</span></div>
+    <div class="grid-3"><div class="card blue"><h3>🔵 دائرة</h3><p>البداية والنهاية</p></div><div class="card "><h3>▭ مستطيل</h3><p>خطوة / فعل</p></div><div class="card amber"><h3>🔷 معين</h3><p>قرار: نعم / لا</p></div></div>
+    <div class="note" style="margin-top:14px">المخطط الانسيابي ليس للكمبيوتر فقط — أي عملية يمكن رسمها هكذا</div>
+  
+</div>
+<div class="slide ">
+
+    <div class="tag">مثال حقيقي</div>
+    <div class="title">خوارزمية <span>تسجيل الدخول</span></div>
+    <div class="steps" style="max-width:600px">
+      <div class="step"><div class="step-n">١</div><div class="step-body"><h4>ابدأ</h4><p>المستخدم يفتح الموقع</p></div></div>
+      <div class="step"><div class="step-n a">؟</div><div class="step-body"><h4>هل لديك حساب؟</h4><p>نعم ← تسجيل الدخول | لا ← إنشاء حساب</p></div></div>
+      <div class="step"><div class="step-n">٢</div><div class="step-body"><h4>أدخل البريد وكلمة السر</h4><p>المستخدم يملأ النموذج</p></div></div>
+      <div class="step"><div class="step-n a">؟</div><div class="step-body"><h4>هل البيانات صحيحة؟</h4><p>نعم ← ادخل | لا ← أعد المحاولة</p></div></div>
+      <div class="step"><div class="step-n g">✓</div><div class="step-body"><h4>ادخل للموقع</h4><p>النهاية</p></div></div>
     </div>
-    <div class="hw-item">
-      <div class="hw-icon">٣</div>
-      <div>
-        <div class="hw-title">إذا الإجابة < 10 ← خلفية زرقاء + "🔵 تحذير! الغرفة باردة جداً"</div>
-        <div class="hw-desc">أضف شرطاً ثانياً داخل الـ else — نفس الطريقة</div>
-      </div>
-    </div>
-    <div class="hw-item">
-      <div class="hw-icon">٤</div>
-      <div>
-        <div class="hw-title">وإلا ← خلفية خضراء + "✅ الغرفة بخير"</div>
-        <div class="hw-desc">ستحتاج ٣ خلفيات تصنعها من Paint داخل Scratch: حمراء · زرقاء · خضراء</div>
-      </div>
-    </div>
-    <div class="hw-item">
-      <div class="hw-icon">⭐</div>
-      <div>
-        <div class="hw-title">تحدي إضافي — نجمة: أضف حساس الرطوبة</div>
-        <div class="hw-desc">اسأل عن الرطوبة — إذا تجاوزت ٨٠٪ → قل "💧 رطوبة عالية، انتبه!" بنفس طريقة الحرارة</div>
-      </div>
-    </div>
-    <div class="hw-item">
-      <div class="hw-icon">📤</div>
-      <div>
-        <div class="hw-title">التسليم: Share ← انسخ الرابط ← الصقه في Classroom</div>
-        <div class="hw-desc">الموعد: نهاية الأسبوع الأول · إذا ما عندك حساب Scratch → screenshot وارفعه</div>
-      </div>
-    </div>
-  </div>
-  <div class="amber-box" style="margin-top:14px;">💡 هذا المشروع هو رصد (Rasd) بـ Scratch — ستبني نفس المنطق لاحقاً بـ Python وFlask وقاعدة بيانات حقيقية!</div>
+  
 </div>
+<div class="slide ">
 
-<!-- SLIDE 5 -->
-<div class="slide" id="s5">
-  <div class="slide-section-tag">الواجب الثاني</div>
-  <div class="slide-title">Python على Trinket — ٤ تمارين 🐍</div>
-  <div class="slide-subtitle">على <a href="https://trinket.io/python3" target="_blank" style="color:var(--accent);text-decoration:none;font-weight:700;">trinket.io/python3</a> — بدون تثبيت أو حساب</div>
-  <div class="hw-list">
-    <div class="hw-item"><div class="hw-icon">١</div><div><div class="hw-title">المتغيرات والطباعة</div><div class="hw-desc">خزّن درجة حرارة ورطوبة في متغيرَين واطبعهما مع رسالة وصفية</div></div></div>
-    <div class="hw-item"><div class="hw-icon">٢</div><div><div class="hw-title">الشروط if/elif/else</div><div class="hw-desc">إذا temp > 35: "تحذير حرارة عالية" · إذا temp &lt; 10: "تحذير برودة" · وإلا: "وضع طبيعي"</div></div></div>
-    <div class="hw-item"><div class="hw-icon">٣</div><div><div class="hw-title">الإدخال من المستخدم</div><div class="hw-desc">استخدم input() لتسأل المستخدم عن الحرارة — ثم أخبره بحالة الغرفة</div></div></div>
-    <div class="hw-item"><div class="hw-icon">٤</div><div><div class="hw-title">الحلقة for</div><div class="hw-desc">اطبع "قراءة رقم X" من ١ إلى ٥ باستخدام for i in range(5)</div></div></div>
-  </div>
+    <div class="tag">التفكير الحوسبي</div>
+    <div class="title">أربع مهارات <span>أساسية</span></div>
+    <div class="grid-2"><div class="card blue"><h3>🔍 تحليل المشكلة</h3><p>قسّمها لأجزاء صغيرة — لا تحاول حلها دفعة واحدة</p></div><div class="card accent"><h3>🔎 البحث عن الأنماط</h3><p>هل رأيت هذه المشكلة من قبل؟</p></div><div class="card "><h3>📐 التجريد</h3><p>ركّز على المهم وتجاهل التفاصيل الآن</p></div><div class="card green"><h3>🗺️ رسم الخطة</h3><p>صمّم الحل قبل الكتابة — ارسم أولاً</p></div></div>
+  
 </div>
+<div class="slide ">
 
-<!-- SLIDE 6 -->
-<div class="slide" id="s6">
-  <div class="slide-section-tag">المشروع المصغّر</div>
-  <div class="slide-title">حارس الغرفة النصي 🛡</div>
-  <div class="slide-subtitle">الأسبوع الثاني — اجمع التمارين الأربعة في برنامج واحد على Trinket</div>
-  <pre class="code-block language-python"><code class="language-python"># حارس الغرفة النصي — مشروعك الأول بـ Python
-
-temp  = float(input("أدخل درجة الحرارة: "))
-humid = float(input("أدخل نسبة الرطوبة %: "))
-
-print("--- تقرير الغرفة ---")
-
-if temp &gt; 35:
-    print("🔴 تحذير: حرارة عالية جداً")
-elif temp  80:
-    print("💧 تحذير: رطوبة مرتفعة")
-else:
-    print("✅ الرطوبة طبيعية")</code></pre>
-  <div class="highlight-box" style="margin-top:14px;">📸 خذ screenshot لكودك وارفعه على Classroom مع شرح قصير: ماذا يفعل هذا البرنامج؟</div>
+    <div class="tag">نشاط اليوم</div>
+    <div class="title">ارسم مخططاً <span>انسيابياً</span></div>
+    <div class="steps"><div class="step"><div class="step-n">1</div><div class="step-body"><h4>اختر موقفاً يومياً</h4><p>مثال: تحضير الشاي · اتخاذ قرار · عبور الطريق</p></div></div><div class="step"><div class="step-n">2</div><div class="step-body"><h4>حدد البداية والنهاية</h4><p>ابدأ بدائرة وانتهِ بدائرة</p></div></div><div class="step"><div class="step-n">3</div><div class="step-body"><h4>أضف الخطوات</h4><p>مستطيلات للأفعال، معينات للقرارات</p></div></div><div class="step"><div class="step-n">4</div><div class="step-body"><h4>اعرض على زميل</h4><p>هل يفهم المخطط بدونك تشرح له؟</p></div></div></div>
+  
 </div>
+<div class="hw-box"><h3>🏠 الواجب المنزلي</h3><div class="hw-item"><span class="hw-dot">◆</span><span>ارسم مخططاً انسيابياً لأحد: (١) تحضير أي وجبة · (٢) التحقق من الواجب · (٣) قرار مشاهدة برنامج</span></div><div class="hw-item"><span class="hw-dot">◆</span><span>شاهد: 'What is an Algorithm?' على قناة CS Dojo (٥ دقائق)</span></div><div class="hw-item"><span class="hw-dot">◆</span><span>على Scratch: افتح مشروعاً جاهزاً واقرأ البلوكات — ماذا تعتقد أنه يفعل؟</span></div><div style="margin-top:10px;font-size:12px;color:var(--muted)">📅 الواجب يُرفع في درايف الطالب الخاص بك</div></div><div class="slide ">
 
-<!-- SLIDE 7 -->
-<div class="slide" id="s7">
-  <div class="slide-section-tag">الموارد</div>
-  <div class="slide-title">فيديوهات لكل واجب 📺</div>
-  <div class="slide-subtitle">شاهد الفيديو المناسب قبل تنفيذ كل واجب — كل الروابط في Classroom</div>
-  <div class="hw-list">
-    <div class="hw-item"><div class="hw-icon">🌐</div><div><div class="hw-title"><a href="https://www.youtube.com/watch?v=lFdaJPl249g&t=36s" target="_blank" class="hw-link">ما هو إنترنت الأشياء؟ — قبل مشروع Scratch</a></div><div class="hw-desc">١٥ دقيقة · بعده: اكتب في الدفتر ٣ أجهزة IoT تستخدمها يومياً</div></div></div>
-    <div class="hw-item"><div class="hw-icon">🐍</div><div><div class="hw-title"><a href="https://www.youtube.com/watch?v=9ndH9Qo05F4&list=PLoP3S2S1qTfBCtTYJ2dyy3mpn7aWAAjdN" target="_blank" class="hw-link">ما هي البرمجة؟ — قبل تمارين Trinket</a></div><div class="hw-desc">١٥ دقيقة · يعطيك فكرة عن البرمجة قبل ما تبدأ الكتابة</div></div></div>
-    <div class="hw-item"><div class="hw-icon">📗</div><div><div class="hw-title"><a href="https://www.youtube.com/watch?v=hQnZxqp3Q0Y" target="_blank" class="hw-link">Python #007 — المتغيرات (Elzero) — للتمرين الأول</a></div><div class="hw-desc">شرح المتغيرات وأنواع البيانات — ساعدك في تمرين ١ (متغيرات وطباعة)</div></div></div>
-    <div class="hw-item"><div class="hw-icon">📗</div><div><div class="hw-title"><a href="https://www.youtube.com/playlist?list=PLDoPjvoNmBAyE_gei5d18qkfIe-Z8mocs" target="_blank" class="hw-link">Mastering Python بالعربي (Elzero) — للتمارين ٢ و٣ و٤</a></div><div class="hw-desc">حلقات #010–#020 تغطي if/else و input() · حلقات #040+ تغطي for loop · شاهد الحلقة المناسبة قبل كل تمرين</div></div></div>
-    <div class="hw-item"><div class="hw-icon">🏠</div><div><div class="hw-title">المنزل الذكي — الأسبوع الثاني (رابطه في Classroom)</div><div class="hw-desc">بعده: ارسم في الدفتر مخطط منزل ذكي وحساساته</div></div></div>
-  </div>
-</div>
-
-<!-- SLIDE 8 -->
-<div class="slide" id="s8">
-  <span class="big-emoji">👋</span>
-  <div class="slide-title">أراكم بعد الإجازة!</div>
-  <div class="slide-subtitle" style="margin-bottom:36px;">الجلسة القادمة حضورية — نبني الجسر من Scratch إلى Python معاً</div>
-  <div class="title-badges">
-    <div class="t-badge teal">🌉 S03 — الجسر: Scratch ← Python</div>
-    <div class="t-badge blue">🐍 أول كود Python حقيقي</div>
-  </div>
-  <div class="amber-box" style="margin-top:36px;">📌 سلّم مشروع Scratch + screenshot التمارين على Google Classroom قبل الجلسة القادمة</div>
+    <div class="tag">ملخص اليوم</div>
+    <div class="title">ماذا تعلمنا؟</div>
+    <div class="grid-2"><div class="card accent"><h3>🗺️ الخوارزمية</h3><p>خطوات مرتبة + قرارات + تكرار = أي برنامج</p></div><div class="card "><h3>🔷 المخطط الانسيابي</h3><p>طريقة رسم الخوارزمية: دائرة · مستطيل · معين</p></div><div class="card blue"><h3>🧠 التفكير الحوسبي</h3><p>تحليل → أنماط → تجريد → خطة</p></div><div class="card green"><h3>📌 الأسبوع القادم</h3><p>HTML — نبني هيكل لوحة رصد</p></div></div>
+  
 </div>
 
 </div>
-<div id="nav-dots"></div>
+<button class="nav-btn" id="btn-prev">›</button>
+<button class="nav-btn" id="btn-next">‹</button>
 <script>
-const total=8;let current=0;
 const slides=document.querySelectorAll('.slide');
-const dotsEl=document.getElementById('nav-dots');
+const prog=document.getElementById('prog');
 const counter=document.getElementById('counter');
-const bar=document.getElementById('progress-bar');
-slides.forEach((_,i)=>{const d=document.createElement('button');d.className='dot'+(i===0?' active':'');d.onclick=()=>goTo(i);dotsEl.appendChild(d);});
-function goTo(n){slides[current].classList.remove('active');slides[current].classList.add('exit');setTimeout(()=>slides[current].classList.remove('exit'),600);current=(n+total)%total;slides[current].classList.add('active');document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===current));counter.textContent=String(current+1).padStart(2,'0')+' / '+String(total).padStart(2,'0');bar.style.width=((current+1)/total*100)+'%';}
-function navigate(dir){goTo(current+dir);}
-document.addEventListener('keydown',e=>{if(e.key==='ArrowLeft')navigate(1);if(e.key==='ArrowRight')navigate(-1);});
-let startX=0;document.addEventListener('touchstart',e=>startX=e.touches[0].clientX);document.addEventListener('touchend',e=>{const dx=e.changedTouches[0].clientX-startX;if(Math.abs(dx)>50)navigate(dx<0?1:-1);});
-bar.style.width=(1/total*100)+'%';
-</script>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('pre.code-block').forEach(function (pre) {
-    var btn = document.createElement('button');
-    btn.className = 'copy-btn';
-    btn.textContent = 'نسخ';
-    btn.addEventListener('click', function () {
-      var code = pre.querySelector('code');
-      var text = code ? code.innerText : pre.innerText;
-      navigator.clipboard.writeText(text).then(function () {
-        btn.textContent = '✓ نُسخ';
-        btn.classList.add('copied');
-        setTimeout(function () {
-          btn.textContent = 'نسخ';
-          btn.classList.remove('copied');
-        }, 2000);
-      }).catch(function () {
-        /* fallback for older browsers */
-        var ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-        btn.textContent = '✓ نُسخ';
-        setTimeout(function () { btn.textContent = 'نسخ'; }, 2000);
-      });
+let cur=0;
+function show(n){
+  slides[cur].classList.remove('active');
+  cur=Math.max(0,Math.min(n,slides.length-1));
+  slides[cur].classList.add('active');
+  prog.style.width=((cur+1)/slides.length*100)+'%';
+  counter.textContent=(cur+1)+' / '+slides.length;
+}
+document.getElementById('btn-next').onclick=()=>show(cur+1);
+document.getElementById('btn-prev').onclick=()=>show(cur-1);
+document.addEventListener('keydown',e=>{
+  if(e.key==='ArrowLeft'||e.key==='ArrowDown')show(cur+1);
+  if(e.key==='ArrowRight'||e.key==='ArrowUp')show(cur-1);
+});
+document.querySelectorAll('pre.code').forEach(pre=>{
+  const btn=document.createElement('button');
+  btn.className='copy-btn';btn.textContent='نسخ';
+  btn.onclick=()=>{
+    navigator.clipboard.writeText(pre.querySelector('code').innerText).then(()=>{
+      btn.textContent='✓ نُسخ';setTimeout(()=>btn.textContent='نسخ',2000);
     });
-    pre.appendChild(btn);
-  });
+  };
+  pre.appendChild(btn);
 });
 </script>
-
 </body>
 </html>

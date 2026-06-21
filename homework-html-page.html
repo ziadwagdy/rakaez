@@ -265,7 +265,7 @@ body {
 
     <div class="page-item">
       <div class="page-title"><span class="badge-required">إلزامي</span> index.html — الصفحة الرئيسية</div>
-      <div class="page-desc">اللوحة الرئيسية لرصد: عنوان المشروع + بطاقات المجسات الأربعة (حرارة · رطوبة · مطر · تربة)</div>
+      <div class="page-desc">اللوحة الرئيسية لرصد: عنوان المشروع + بطاقات الحساسات الأربعة — Sensors (حرارة · رطوبة · مطر · تربة)</div>
     </div>
     <div class="page-item">
       <div class="page-title"><span class="badge-optional">اختياري</span> about.html — صفحة عن المشروع</div>
@@ -328,7 +328,7 @@ body {
     <hr class="divider" style="margin:20px 0">
 
     <!-- CODE EXAMPLE -->
-    <h4 style="font-size:13px;font-weight:700;color:#6b7fa3;letter-spacing:1px;margin-bottom:4px;text-transform:uppercase">مثال — هيكل الصفحة وبطاقة مجس الحرارة</h4>
+    <h4 style="font-size:13px;font-weight:700;color:#6b7fa3;letter-spacing:1px;margin-bottom:4px;text-transform:uppercase">مثال — هيكل الصفحة وبطاقة حساس الحرارة (Sensor)</h4>
     <p style="font-size:13px;color:#6b7fa3;margin-bottom:12px">هذا مثال يُظهر لك النمط — لا تنسخه كما هو، بل أنشئ تصميمك الخاص بناءً على رسمتك</p>
 
     <div class="code-wrap">
@@ -348,7 +348,7 @@ body {
   <span class="t">&lt;h1&gt;</span><span class="tx">🛡️ رصد — لوحة المراقبة</span><span class="t">&lt;/h1&gt;</span>
   <span class="t">&lt;p&gt;</span><span class="tx">مراقبة البيئة في الوقت الفعلي</span><span class="t">&lt;/p&gt;</span>
 
-  <span class="c">&lt;!-- بطاقة مجس الحرارة --&gt;</span>
+  <span class="c">&lt;!-- بطاقة حساس الحرارة — Sensor --&gt;</span>
   <span class="t">&lt;div</span> <span class="a">id</span>=<span class="s">"temp-card"</span><span class="t">&gt;</span>
     <span class="t">&lt;p&gt;</span><span class="tx">🌡️</span><span class="t">&lt;/p&gt;</span>
     <span class="t">&lt;h2&gt;</span><span class="tx">درجة الحرارة</span><span class="t">&lt;/h2&gt;</span>
@@ -356,14 +356,14 @@ body {
     <span class="t">&lt;p&gt;</span><span class="tx">°C</span><span class="t">&lt;/p&gt;</span>
   <span class="t">&lt;/div&gt;</span>
 
-  <span class="c">&lt;!-- ستضيف بطاقات الرطوبة والمطر والتربة بنفس النمط --&gt;</span>
+  <span class="c">&lt;!-- ستضيف حساسات الرطوبة والمطر والتربة (Sensors) بنفس النمط --&gt;</span>
 
 <span class="t">&lt;/body&gt;</span>
 <span class="t">&lt;/html&gt;</span></pre>
     </div>
 
     <div class="info-box">
-      <strong>لاحظ:</strong> كل بطاقة مجس = <code style="background:#dbeafe;padding:1px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:12px;direction:ltr">&lt;div&gt;</code> تحتوي على: رمز تعبيري + عنوان + قيمة + وحدة القياس.<br>
+      <strong>لاحظ:</strong> كل بطاقة حساس (Sensor) =<code style="background:#dbeafe;padding:1px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:12px;direction:ltr">&lt;div&gt;</code> تحتوي على: رمز تعبيري + عنوان + قيمة + وحدة القياس.<br>
       أضف <code style="background:#dbeafe;padding:1px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:12px;direction:ltr">id="temp"</code> للقيمة — ستحتاجه لاحقاً عندما نربط JavaScript.
     </div>
 
@@ -371,24 +371,53 @@ body {
       <strong>تذكّر:</strong> الواجب بدون CSS — لا تُضف أي style الآن. الصفحة ستبدو بسيطة وهذا طبيعي تماماً. التنسيق يأتي في الجلسة القادمة.
     </div>
 
+    <!-- EMOJI BOX -->
+    <h4 style="font-size:13px;font-weight:700;color:#6b7fa3;letter-spacing:1px;margin:20px 0 8px;text-transform:uppercase">الرموز التعبيرية — انسخ من هنا مباشرة</h4>
+    <div style="background:#fffbe6;border:1px solid #f0cc5a;border-radius:10px;padding:16px 20px;margin-bottom:20px;">
+      <p style="font-size:12px;color:#856404;margin-bottom:12px;font-weight:700">📋 انقر على الرمز الذي تريده وانسخه (Ctrl+C) ثم الصقه في كودك</p>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;text-align:center;">
+        <div style="background:#fff;border:1px solid #e1e4e8;border-radius:8px;padding:12px 8px;cursor:pointer;" onclick="navigator.clipboard.writeText('🌡️');this.querySelector('span').textContent='✓ نُسخ';setTimeout(()=>this.querySelector('span').textContent='انسخ',1500)">
+          <div style="font-size:32px;margin-bottom:4px">🌡️</div>
+          <div style="font-size:12px;font-weight:700;color:#0d1117">حرارة</div>
+          <span style="font-size:10px;color:#6b7fa3">انسخ</span>
+        </div>
+        <div style="background:#fff;border:1px solid #e1e4e8;border-radius:8px;padding:12px 8px;cursor:pointer;" onclick="navigator.clipboard.writeText('💧');this.querySelector('span').textContent='✓ نُسخ';setTimeout(()=>this.querySelector('span').textContent='انسخ',1500)">
+          <div style="font-size:32px;margin-bottom:4px">💧</div>
+          <div style="font-size:12px;font-weight:700;color:#0d1117">رطوبة</div>
+          <span style="font-size:10px;color:#6b7fa3">انسخ</span>
+        </div>
+        <div style="background:#fff;border:1px solid #e1e4e8;border-radius:8px;padding:12px 8px;cursor:pointer;" onclick="navigator.clipboard.writeText('🌧️');this.querySelector('span').textContent='✓ نُسخ';setTimeout(()=>this.querySelector('span').textContent='انسخ',1500)">
+          <div style="font-size:32px;margin-bottom:4px">🌧️</div>
+          <div style="font-size:12px;font-weight:700;color:#0d1117">مطر</div>
+          <span style="font-size:10px;color:#6b7fa3">انسخ</span>
+        </div>
+        <div style="background:#fff;border:1px solid #e1e4e8;border-radius:8px;padding:12px 8px;cursor:pointer;" onclick="navigator.clipboard.writeText('🌱');this.querySelector('span').textContent='✓ نُسخ';setTimeout(()=>this.querySelector('span').textContent='انسخ',1500)">
+          <div style="font-size:32px;margin-bottom:4px">🌱</div>
+          <div style="font-size:12px;font-weight:700;color:#0d1117">تربة</div>
+          <span style="font-size:10px;color:#6b7fa3">انسخ</span>
+        </div>
+      </div>
+      <p style="font-size:11px;color:#6b7fa3;margin-top:10px;text-align:center">يمكنك أيضاً زيارة emojipedia.org للبحث عن أي رمز تريده</p>
+    </div>
+
     <!-- WHAT TO BUILD -->
-    <h4 style="font-size:13px;font-weight:700;color:#0d1117;margin:20px 0 12px">البطاقات الأربع التي ستبنيها في index.html</h4>
+    <h4 style="font-size:13px;font-weight:700;color:#0d1117;margin:20px 0 12px">الحساسات الأربعة (Sensors) التي ستبنيها في index.html</h4>
 
     <div class="page-item">
-      <div class="page-title">🌡️ بطاقة درجة الحرارة — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="temp"</code></div>
-      <div class="page-desc">تعرض: رمز 🌡️ · النص "درجة الحرارة" · القيمة (مثلاً: 28) · الوحدة °C</div>
+      <div class="page-title">🌡️ حساس درجة الحرارة (Temperature Sensor) — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="temp"</code></div>
+      <div class="page-desc">تعرض: رمز 🌡️ · النص "حساس الحرارة" · القيمة (مثلاً: 28) · الوحدة °C</div>
     </div>
     <div class="page-item">
-      <div class="page-title">💧 بطاقة الرطوبة — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="humid"</code></div>
-      <div class="page-desc">تعرض: رمز 💧 · النص "الرطوبة" · القيمة (مثلاً: 65) · الوحدة %</div>
+      <div class="page-title">💧 حساس الرطوبة (Humidity Sensor) — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="humid"</code></div>
+      <div class="page-desc">تعرض: رمز 💧 · النص "حساس الرطوبة" · القيمة (مثلاً: 65) · الوحدة %</div>
     </div>
     <div class="page-item">
-      <div class="page-title">🌧️ بطاقة مجس المطر — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="water"</code></div>
-      <div class="page-desc">تعرض: رمز 🌧️ · النص "مستشعر المطر" · القيمة (مثلاً: 52000) · الوحدة ADC</div>
+      <div class="page-title">🌧️ بطاقة حساس المطر (Sensor) — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="water"</code></div>
+      <div class="page-desc">تعرض: رمز 🌧️ · النص "حساس المطر" · القيمة (مثلاً: 52000) · الوحدة ADC</div>
     </div>
     <div class="page-item">
-      <div class="page-title">🌱 بطاقة رطوبة التربة — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="soil"</code></div>
-      <div class="page-desc">تعرض: رمز 🌱 · النص "رطوبة التربة" · القيمة (مثلاً: 48000) · الوحدة ADC</div>
+      <div class="page-title">🌱 حساس رطوبة التربة (Soil Sensor) — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="soil"</code></div>
+      <div class="page-desc">تعرض: رمز 🌱 · النص "حساس التربة" · القيمة (مثلاً: 48000) · الوحدة ADC</div>
     </div>
 
   </div><!-- end task-card -->

@@ -220,6 +220,14 @@ body {
 </head>
 <body>
 
+<!-- COMPUTER NOTICE -->
+<div style="background:#1a1a2e;color:#e6edf3;padding:14px 32px;display:flex;align-items:center;gap:12px;justify-content:center;text-align:center;">
+  <span style="font-size:22px">💻</span>
+  <p style="font-size:13px;line-height:1.6">
+    <strong style="color:#f0b429">ملاحظة:</strong> افتح هذه الصفحة على <strong style="color:#00e5c0">الكمبيوتر أو اللابتوب</strong> — لن تستطيع تنفيذ الواجب من الهاتف
+  </p>
+</div>
+
 <!-- TOP BAR -->
 <div class="top-bar">
   <span class="top-bar-title">دورة ركيز للتقنية · إسطنبول</span>
@@ -233,6 +241,7 @@ body {
     <div class="label">HOMEWORK · HTML</div>
     <h1>بناء صفحة رصد بـ HTML</h1>
     <p class="deadline">طبّق ما تعلّمته وحوّل تصميمك الورقي إلى كود حقيقي</p>
+    <p class="deadline" style="margin-top:8px">⏰ الموعد النهائي: <strong>الجمعة · منتصف الليل</strong> — أي تسليم بعد هذا الوقت لن يُقبل</p>
   </div>
 
   <!-- DEPENDENCY BANNER -->
@@ -580,13 +589,75 @@ body {
 
 
   <!-- ══════════════════════════════════════════════════════
+       GOOGLE DRIVE GUIDE
+  ══════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-icon icon-blue">📁</div>
+      <div class="task-header-text">
+        <h3>كيف ترفع واجبك على Google Drive؟</h3>
+        <span>اتبع هذه الخطوات بالترتيب</span>
+      </div>
+    </div>
+
+    <ul class="steps-list">
+      <li class="step-item">
+        <div class="step-num num-blue">١</div>
+        <div class="step-body">
+          <h4>افتح Google Drive</h4>
+          <p>اذهب إلى <strong>drive.google.com</strong> وسجّل دخولك بحساب Google الخاص بك</p>
+          <div class="hint">💡 إذا لم يكن لديك حساب Google، أنشئ واحداً مجاناً من gmail.com</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-blue">٢</div>
+        <div class="step-body">
+          <h4>أنشئ مجلداً خاصاً بك</h4>
+          <p>اضغط <strong>+ جديد ← مجلد</strong> وسمّه: <strong>اسمك — رصد</strong><br>
+          مثال: <em>زياد — رصد</em></p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-blue">٣</div>
+        <div class="step-body">
+          <h4>ارفع ملفاتك داخل المجلد</h4>
+          <p>افتح المجلد الذي أنشأته ← اضغط <strong>+ جديد ← رفع ملف</strong><br>
+          اختر <strong>index.html</strong> من جهازك وارفعه<br>
+          كرّر نفس الخطوة لملف <strong>البحث (.docx)</strong></p>
+          <div class="hint">📎 يمكنك سحب الملفات وإفلاتها مباشرة داخل نافذة Drive</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-blue">٤</div>
+        <div class="step-body">
+          <h4>شارك المجلد مع المدرّب</h4>
+          <p>انقر بزر الأيمن على المجلد ← <strong>مشاركة</strong><br>
+          أدخل البريد الإلكتروني: <strong>zwagdy@gmail.com</strong><br>
+          اختر صلاحية: <strong>يمكنه المشاهدة</strong> ← اضغط إرسال</p>
+          <div class="hint">✅ ستصلك رسالة تأكيد — هذا يعني أن التسليم وصل</div>
+        </div>
+      </li>
+    </ul>
+
+    <div style="background:#fff5f5;border:1px solid #fecdd3;border-right:4px solid #dc2626;border-radius:8px;padding:14px 18px;margin-top:14px;display:flex;gap:10px;align-items:flex-start;">
+      <span style="font-size:22px;flex-shrink:0">🚫</span>
+      <div>
+        <p style="font-size:14px;font-weight:700;color:#991b1b;margin-bottom:4px">الموعد النهائي — الجمعة منتصف الليل (12:00 AM)</p>
+        <p style="font-size:13px;color:#9b1c1c;line-height:1.7">أي تسليم بعد هذا الوقت <strong>لن يُقبل ولن يُصحَّح</strong>، بغض النظر عن السبب.<br>
+        لا تنتظر آخر لحظة — ارفع ملفاتك فور الانتهاء منها.</p>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
        SUBMISSION
   ══════════════════════════════════════════════════════ -->
   <div class="submit-card">
     <h3>📤 ملخص التسليم</h3>
     <div class="submit-row">
       <span class="submit-dot">🏗️</span>
-      <p><strong>المهمة الأولى:</strong> ملف index.html (+ أي ملفات اختيارية) — ارفعه في Google Drive · مجلد "الجلسة الحالية"</p>
+      <p><strong>المهمة الأولى:</strong> ملف index.html (+ أي ملفات اختيارية) — مجلد Google Drive الخاص بك</p>
     </div>
     <div class="submit-row">
       <span class="submit-dot">📺</span>
@@ -594,11 +665,11 @@ body {
     </div>
     <div class="submit-row">
       <span class="submit-dot">🤖</span>
-      <p><strong>المهمة الثالثة:</strong> ملف Word (.docx) — ارفعه في نفس المجلد على Google Drive</p>
+      <p><strong>المهمة الثالثة:</strong> ملف Word (.docx) — في نفس مجلد Google Drive</p>
     </div>
-    <div class="submit-row">
-      <span class="submit-dot">📅</span>
-      <p><strong>الموعد النهائي:</strong> قبل بداية الجلسة القادمة مباشرة</p>
+    <div class="submit-row" style="background:#fff5f5;border-radius:8px;padding:12px 10px;margin-top:6px;">
+      <span class="submit-dot">⏰</span>
+      <p style="color:#991b1b"><strong>الموعد النهائي: الجمعة منتصف الليل</strong> — أي تسليم بعد هذا الوقت لن يُقبل</p>
     </div>
   </div>
 

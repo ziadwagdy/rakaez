@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>واجب بناء صفحة رصد — HTML</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: #f6f8fa;
+  color: #1a1a2e;
+  line-height: 1.7;
+  padding: 0 0 60px;
+}
+
+.top-bar {
+  background: #ffffff;
+  border-bottom: 1px solid #e1e4e8;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.top-bar-title { font-size: 14px; font-weight: 700; color: #0d1117; }
+.top-bar-badge {
+  font-size: 12px;
+  background: #eafaf7;
+  color: #0a7c5c;
+  border: 1px solid #b6e9da;
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-weight: 600;
+}
+
+.container { max-width: 780px; margin: 0 auto; padding: 40px 24px 0; }
+
+/* PAGE HEADER */
+.page-header { margin-bottom: 32px; }
+.page-header .label {
+  font-size: 11px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: #6b7fa3; margin-bottom: 10px;
+}
+.page-header h1 { font-size: 28px; font-weight: 900; color: #0d1117; margin-bottom: 6px; }
+.page-header .deadline { font-size: 13px; color: #6b7fa3; }
+.page-header .deadline strong { color: #d04a02; }
+
+/* DEPENDENCY BANNER */
+.dep-banner {
+  background: #fffbe6;
+  border: 1px solid #f0cc5a;
+  border-right: 4px solid #d69e2e;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.dep-banner .dep-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+.dep-banner h4 { font-size: 14px; font-weight: 700; color: #7b5e00; margin-bottom: 4px; }
+.dep-banner p { font-size: 13px; color: #856404; line-height: 1.7; }
+.dep-banner strong { color: #7b5e00; }
+
+/* TASK CARD */
+.task-card {
+  background: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.task-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0;
+}
+.task-icon {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.icon-blue  { background: #e8f4fd; }
+.icon-green { background: #eafaf7; }
+.icon-amber { background: #fef9e7; }
+.icon-purple{ background: #f3effe; }
+.task-header-text h3 { font-size: 16px; font-weight: 700; color: #0d1117; margin-bottom: 2px; }
+.task-header-text span { font-size: 12px; color: #6b7fa3; }
+
+/* STEPS */
+.steps-list { list-style: none; margin-top: 4px; }
+.step-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 14px 0; border-bottom: 1px solid #f3f4f6;
+}
+.step-item:last-child { border-bottom: none; padding-bottom: 0; }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; font-family: 'Space Mono', monospace;
+  margin-top: 2px;
+}
+.num-blue   { background: #e8f4fd; color: #0366d6; border: 1px solid #c8e1f9; }
+.num-green  { background: #eafaf7; color: #0a7c5c; border: 1px solid #b6e9da; }
+.num-amber  { background: #fef9e7; color: #b45309; border: 1px solid #f0cc5a; }
+.step-body h4 { font-size: 14px; font-weight: 700; color: #0d1117; margin-bottom: 3px; }
+.step-body p, .step-body li { font-size: 13px; color: #444d56; line-height: 1.7; }
+.step-body ul { padding-right: 18px; margin-top: 4px; }
+.step-body .hint {
+  font-size: 12px; color: #6b7fa3; margin-top: 4px;
+  background: #f6f8fa; border-radius: 6px; padding: 6px 10px;
+  border-right: 3px solid #d0d7de;
+}
+
+/* PAGES LIST */
+.page-item {
+  background: #f6f8fa; border: 1px solid #e1e4e8;
+  border-radius: 8px; padding: 14px 16px; margin-bottom: 10px;
+}
+.page-item:last-child { margin-bottom: 0; }
+.page-item .page-title { font-size: 14px; font-weight: 700; color: #0d1117; margin-bottom: 4px; }
+.page-item .page-desc  { font-size: 13px; color: #6b7fa3; line-height: 1.6; }
+.page-item .badge-required {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  background: #fff4ee; color: #d04a02; border: 1px solid #fbd8c3;
+  border-radius: 12px; padding: 2px 8px; margin-right: 6px;
+}
+.page-item .badge-optional {
+  display: inline-block; font-size: 10px; font-weight: 700;
+  background: #eafaf7; color: #0a7c5c; border: 1px solid #b6e9da;
+  border-radius: 12px; padding: 2px 8px; margin-right: 6px;
+}
+
+/* CODE BLOCK */
+.code-wrap {
+  background: #0d1117; border: 1px solid #30363d; border-radius: 10px;
+  margin: 16px 0; overflow: hidden; direction: ltr;
+}
+.code-label {
+  background: #161b22; border-bottom: 1px solid #30363d;
+  padding: 8px 16px; font-size: 11px; font-weight: 700;
+  color: #8b949e; font-family: 'Space Mono', monospace; letter-spacing: 1px;
+  text-align: left;
+}
+.code-wrap pre {
+  padding: 18px 20px; overflow-x: auto; margin: 0;
+  font-family: 'Space Mono', monospace; font-size: 13px;
+  line-height: 1.8; color: #e6edf3; white-space: pre; text-align: left;
+}
+.code-wrap .c  { color: #8b949e; }  /* comment */
+.code-wrap .t  { color: #58a6ff; }  /* tag */
+.code-wrap .a  { color: #f0b429; }  /* attribute */
+.code-wrap .s  { color: #3fb950; }  /* string */
+.code-wrap .tx { color: #e6edf3; }  /* text */
+
+/* INFO BOX */
+.info-box {
+  background: #f0f7ff; border: 1px solid #c8e1f9; border-right: 4px solid #0366d6;
+  border-radius: 8px; padding: 14px 18px; font-size: 13px;
+  color: #444d56; line-height: 1.7; margin: 12px 0;
+}
+.info-box strong { color: #0366d6; }
+
+.warn-box {
+  background: #fff8f0; border: 1px solid #fbd8c3; border-right: 4px solid #d04a02;
+  border-radius: 8px; padding: 14px 18px; font-size: 13px;
+  color: #5d3a1a; line-height: 1.7; margin: 12px 0;
+}
+.warn-box strong { color: #d04a02; }
+
+/* VIDEOS GRID */
+.video-range {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;
+}
+.video-item {
+  background: #f6f8fa; border: 1px solid #e1e4e8; border-radius: 8px; padding: 12px 14px;
+}
+.video-item .v-num {
+  font-size: 11px; font-weight: 700; color: #0366d6;
+  font-family: 'Space Mono', monospace; margin-bottom: 3px;
+}
+.video-item .v-title { font-size: 13px; font-weight: 700; color: #0d1117; }
+.video-item .v-note  { font-size: 12px; color: #6b7fa3; margin-top: 2px; }
+
+/* RESEARCH */
+.research-req {
+  background: #f6f8fa; border: 1px solid #e1e4e8;
+  border-radius: 8px; padding: 14px 16px; margin-bottom: 10px;
+}
+.research-req .req-title { font-size: 14px; font-weight: 700; color: #0d1117; margin-bottom: 4px; }
+.research-req .req-desc  { font-size: 13px; color: #444d56; line-height: 1.7; }
+
+.not-accepted {
+  display: flex; gap: 8px; align-items: flex-start;
+  background: #fff5f5; border: 1px solid #fecdd3; border-radius: 8px;
+  padding: 12px 14px; margin-top: 10px;
+}
+.not-accepted p { font-size: 13px; color: #9b1c1c; }
+.not-accepted strong { color: #991b1b; }
+
+/* SUBMIT */
+.submit-card {
+  background: #ffffff; border: 1px solid #e1e4e8; border-radius: 12px;
+  padding: 20px 24px; margin-top: 8px;
+}
+.submit-card h3 { font-size: 15px; font-weight: 700; color: #0d1117; margin-bottom: 14px; }
+.submit-row {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 0; border-bottom: 1px solid #f3f4f6;
+}
+.submit-row:last-child { border-bottom: none; }
+.submit-dot { font-size: 18px; flex-shrink: 0; line-height: 1.4; }
+.submit-row p { font-size: 13px; color: #444d56; line-height: 1.6; }
+.submit-row strong { color: #0d1117; }
+
+.divider { border: none; border-top: 1px solid #e1e4e8; margin: 28px 0; }
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <span class="top-bar-title">دورة ركيز للتقنية · إسطنبول</span>
+  <span class="top-bar-badge">🛡️ رصد</span>
+</div>
+
+<div class="container">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="label">HOMEWORK · HTML</div>
+    <h1>بناء صفحة رصد بـ HTML</h1>
+    <p class="deadline">طبّق ما تعلّمته وحوّل تصميمك الورقي إلى كود حقيقي</p>
+  </div>
+
+  <!-- DEPENDENCY BANNER -->
+  <div class="dep-banner">
+    <div class="dep-icon">🔗</div>
+    <div>
+      <h4>هذا الواجب يكمل الواجب السابق</h4>
+      <p>
+        في الواجب السابق صمّمت صفحات رصد على الورق أو Figma — 
+        <strong>اليوم ستحوّل تصميمك إلى كود HTML حقيقي.</strong><br>
+        إذا لم تُنجز تصميم الواجب السابق، أنجزه أولاً ثم عد لهذا الواجب.
+      </p>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════════════════
+       TASK 1: BUILD THE HOME PAGE
+  ══════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-icon icon-blue">🏗️</div>
+      <div class="task-header-text">
+        <h3>المهمة الأولى — بناء الصفحة الرئيسية بـ HTML</h3>
+        <span>بدون تنسيق CSS — الهيكل فقط</span>
+      </div>
+    </div>
+
+    <!-- PAGES TO CREATE -->
+    <h4 style="font-size:13px;font-weight:700;color:#6b7fa3;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase">الملفات التي ستبنيها</h4>
+
+    <div class="page-item">
+      <div class="page-title"><span class="badge-required">إلزامي</span> index.html — الصفحة الرئيسية</div>
+      <div class="page-desc">اللوحة الرئيسية لرصد: عنوان المشروع + بطاقات المجسات الأربعة (حرارة · رطوبة · مطر · تربة)</div>
+    </div>
+    <div class="page-item">
+      <div class="page-title"><span class="badge-optional">اختياري</span> about.html — صفحة عن المشروع</div>
+      <div class="page-desc">وصف رصد ومن بناه — إذا كنت صمّمتها في الواجب السابق</div>
+    </div>
+    <div class="page-item">
+      <div class="page-title"><span class="badge-optional">اختياري</span> alerts.html — صفحة التنبيهات</div>
+      <div class="page-desc">قائمة بالتنبيهات — إذا كانت ضمن تصميمك</div>
+    </div>
+
+    <hr class="divider" style="margin:20px 0">
+
+    <!-- HOW TO CREATE: STEPS -->
+    <h4 style="font-size:13px;font-weight:700;color:#6b7fa3;letter-spacing:1px;margin-bottom:12px;text-transform:uppercase">خطوات إنشاء ملف HTML</h4>
+
+    <ul class="steps-list">
+      <li class="step-item">
+        <div class="step-num num-blue">١</div>
+        <div class="step-body">
+          <h4>افتح Notepad أو أي محرر نصوص</h4>
+          <p>على Windows: ابحث عن Notepad في قائمة Start<br>
+             على Mac: افتح TextEdit ثم اختر Format → Make Plain Text</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-blue">٢</div>
+        <div class="step-body">
+          <h4>اكتب كود HTML الخاص بك</h4>
+          <p>ابدأ بهيكل الصفحة الأساسي كما تعلّمناه في الجلسة — راجع المثال أدناه</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-blue">٣</div>
+        <div class="step-body">
+          <h4>احفظ الملف كـ "index.txt" أولاً</h4>
+          <p>اضغط Ctrl+S (أو Cmd+S) واحفظه على سطح المكتب باسم <strong>index.txt</strong></p>
+          <div class="hint">💡 احفظه في مجلد جديد اسمه "rasd" حتى تجد ملفاتك بسهولة</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-amber">٤</div>
+        <div class="step-body">
+          <h4>غيّر امتداد الملف من .txt إلى .html</h4>
+          <p>على Windows: انقر بزر الماوس الأيمن على الملف ← إعادة التسمية ← احذف txt واكتب html<br>
+             على Mac: انقر بزر الماوس الأيمن ← Get Info ← غيّر الامتداد</p>
+          <div class="hint">⚠️ إذا سألك الكمبيوتر "هل تريد تغيير الامتداد؟" — اختر نعم / Use .html</div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-green">٥</div>
+        <div class="step-body">
+          <h4>افتح الملف في المتصفح</h4>
+          <p>انقر نقراً مزدوجاً على index.html — سيفتح تلقائياً في Chrome أو Edge<br>
+             أو اسحب الملف وأفلته على نافذة المتصفح</p>
+          <div class="hint">🎉 إذا رأيت صفحة بيضاء بنص — نجحت! الكود يعمل</div>
+        </div>
+      </li>
+    </ul>
+
+    <hr class="divider" style="margin:20px 0">
+
+    <!-- CODE EXAMPLE -->
+    <h4 style="font-size:13px;font-weight:700;color:#6b7fa3;letter-spacing:1px;margin-bottom:4px;text-transform:uppercase">مثال — هيكل الصفحة وبطاقة مجس الحرارة</h4>
+    <p style="font-size:13px;color:#6b7fa3;margin-bottom:12px">هذا مثال يُظهر لك النمط — لا تنسخه كما هو، بل أنشئ تصميمك الخاص بناءً على رسمتك</p>
+
+    <div class="code-wrap">
+      <div class="code-label">index.html</div>
+      <pre><span class="c">&lt;!-- هيكل أي صفحة HTML --&gt;</span>
+<span class="t">&lt;!DOCTYPE html&gt;</span>
+<span class="t">&lt;html</span> <span class="a">lang</span>=<span class="s">"ar"</span> <span class="a">dir</span>=<span class="s">"rtl"</span><span class="t">&gt;</span>
+
+<span class="t">&lt;head&gt;</span>
+  <span class="t">&lt;meta</span> <span class="a">charset</span>=<span class="s">"UTF-8"</span><span class="t">&gt;</span>
+  <span class="t">&lt;title&gt;</span><span class="tx">رصد — لوحة المراقبة</span><span class="t">&lt;/title&gt;</span>
+<span class="t">&lt;/head&gt;</span>
+
+<span class="t">&lt;body&gt;</span>
+
+  <span class="c">&lt;!-- عنوان الصفحة --&gt;</span>
+  <span class="t">&lt;h1&gt;</span><span class="tx">🛡️ رصد — لوحة المراقبة</span><span class="t">&lt;/h1&gt;</span>
+  <span class="t">&lt;p&gt;</span><span class="tx">مراقبة البيئة في الوقت الفعلي</span><span class="t">&lt;/p&gt;</span>
+
+  <span class="c">&lt;!-- بطاقة مجس الحرارة --&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">id</span>=<span class="s">"temp-card"</span><span class="t">&gt;</span>
+    <span class="t">&lt;p&gt;</span><span class="tx">🌡️</span><span class="t">&lt;/p&gt;</span>
+    <span class="t">&lt;h2&gt;</span><span class="tx">درجة الحرارة</span><span class="t">&lt;/h2&gt;</span>
+    <span class="t">&lt;p</span> <span class="a">id</span>=<span class="s">"temp"</span><span class="t">&gt;</span><span class="tx">28</span><span class="t">&lt;/p&gt;</span>
+    <span class="t">&lt;p&gt;</span><span class="tx">°C</span><span class="t">&lt;/p&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+
+  <span class="c">&lt;!-- ستضيف بطاقات الرطوبة والمطر والتربة بنفس النمط --&gt;</span>
+
+<span class="t">&lt;/body&gt;</span>
+<span class="t">&lt;/html&gt;</span></pre>
+    </div>
+
+    <div class="info-box">
+      <strong>لاحظ:</strong> كل بطاقة مجس = <code style="background:#dbeafe;padding:1px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:12px;direction:ltr">&lt;div&gt;</code> تحتوي على: رمز تعبيري + عنوان + قيمة + وحدة القياس.<br>
+      أضف <code style="background:#dbeafe;padding:1px 5px;border-radius:3px;font-family:'Space Mono',monospace;font-size:12px;direction:ltr">id="temp"</code> للقيمة — ستحتاجه لاحقاً عندما نربط JavaScript.
+    </div>
+
+    <div class="warn-box">
+      <strong>تذكّر:</strong> الواجب بدون CSS — لا تُضف أي style الآن. الصفحة ستبدو بسيطة وهذا طبيعي تماماً. التنسيق يأتي في الجلسة القادمة.
+    </div>
+
+    <!-- WHAT TO BUILD -->
+    <h4 style="font-size:13px;font-weight:700;color:#0d1117;margin:20px 0 12px">البطاقات الأربع التي ستبنيها في index.html</h4>
+
+    <div class="page-item">
+      <div class="page-title">🌡️ بطاقة درجة الحرارة — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="temp"</code></div>
+      <div class="page-desc">تعرض: رمز 🌡️ · النص "درجة الحرارة" · القيمة (مثلاً: 28) · الوحدة °C</div>
+    </div>
+    <div class="page-item">
+      <div class="page-title">💧 بطاقة الرطوبة — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="humid"</code></div>
+      <div class="page-desc">تعرض: رمز 💧 · النص "الرطوبة" · القيمة (مثلاً: 65) · الوحدة %</div>
+    </div>
+    <div class="page-item">
+      <div class="page-title">🌧️ بطاقة مجس المطر — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="water"</code></div>
+      <div class="page-desc">تعرض: رمز 🌧️ · النص "مستشعر المطر" · القيمة (مثلاً: 52000) · الوحدة ADC</div>
+    </div>
+    <div class="page-item">
+      <div class="page-title">🌱 بطاقة رطوبة التربة — <code style="font-family:'Space Mono',monospace;font-size:12px;color:#0366d6">id="soil"</code></div>
+      <div class="page-desc">تعرض: رمز 🌱 · النص "رطوبة التربة" · القيمة (مثلاً: 48000) · الوحدة ADC</div>
+    </div>
+
+  </div><!-- end task-card -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       TASK 2: WATCH 10 HTML VIDEOS
+  ══════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-icon icon-green">📺</div>
+      <div class="task-header-text">
+        <h3>المهمة الثانية — شاهد ١٠ دروس HTML جديدة</h3>
+        <span>تابع من حيث توقّفت في الواجب السابق</span>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:#444d56;margin-bottom:14px">
+      في الواجب السابق شاهدت دروس HTML من ١ إلى ٢٢ على قناة Elzero Web School.
+      الآن تابع الدروس التالية:
+    </p>
+
+    <div class="video-range">
+      <div class="video-item">
+        <div class="v-num">LESSON 23</div>
+        <div class="v-title">HTML Forms — الجزء الأول</div>
+        <div class="v-note">مدخلات النص والرقم</div>
+      </div>
+      <div class="video-item">
+        <div class="v-num">LESSON 24</div>
+        <div class="v-title">HTML Forms — الجزء الثاني</div>
+        <div class="v-note">أزرار الاختيار والقوائم</div>
+      </div>
+      <div class="video-item">
+        <div class="v-num">LESSON 25</div>
+        <div class="v-title">HTML Tables — الجزء الأول</div>
+        <div class="v-note">tr, td, th, colspan</div>
+      </div>
+      <div class="video-item">
+        <div class="v-num">LESSON 26</div>
+        <div class="v-title">HTML Tables — الجزء الثاني</div>
+        <div class="v-note">thead, tbody, tfoot</div>
+      </div>
+      <div class="video-item">
+        <div class="v-num">LESSON 27</div>
+        <div class="v-title">Semantic HTML</div>
+        <div class="v-note">header, nav, main, footer, section, article</div>
+      </div>
+      <div class="video-item">
+        <div class="v-num">LESSON 28</div>
+        <div class="v-title">HTML Audio &amp; Video</div>
+        <div class="v-note">تضمين الصوت والفيديو</div>
+      </div>
+      <div class="video-item">
+        <div class="v-num">LESSON 29</div>
+        <div class="v-title">HTML iFrame</div>
+        <div class="v-note">تضمين صفحات خارجية</div>
+      </div>
+      <div class="video-item">
+        <div class="v-num">LESSON 30</div>
+        <div class="v-title">HTML Meta Tags</div>
+        <div class="v-note">SEO وبيانات الصفحة</div>
+      </div>
+      <div class="video-item">
+        <div class="v-num">LESSON 31</div>
+        <div class="v-title">HTML Entities</div>
+        <div class="v-note">الرموز الخاصة &amp;amp; &amp;lt; &amp;gt;</div>
+      </div>
+      <div class="video-item">
+        <div class="v-num">LESSON 32</div>
+        <div class="v-title">HTML Best Practices</div>
+        <div class="v-note">أفضل الممارسات والأخطاء الشائعة</div>
+      </div>
+    </div>
+
+    <div class="info-box" style="margin-top:14px">
+      <strong>رابط القناة:</strong> ابحث عن "Elzero Web School HTML" على YouTube
+      — الدروس مجانية ومرتبة بالترتيب.
+    </div>
+
+  </div><!-- end task-card -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       TASK 3: RESEARCH — ROBOTICS & HARDWARE
+  ══════════════════════════════════════════════════════ -->
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-icon icon-purple">🤖</div>
+      <div class="task-header-text">
+        <h3>المهمة الثالثة — بحث: الروبوتات والأجهزة</h3>
+        <span>يُسلَّم كملف Word فقط</span>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:#444d56;margin-bottom:16px">
+      اختر موضوعاً واحداً مما يلي واكتب عنه بحثاً قصيراً باللغة العربية:
+    </p>
+
+    <div class="research-req">
+      <div class="req-title">🦾 الخيار أ — الروبوتات الصناعية</div>
+      <div class="req-desc">كيف تُستخدم الروبوتات في المصانع اليوم؟ ما أنواعها؟ كيف تُبرمَج؟ هل ستحل محل العمال؟</div>
+    </div>
+    <div class="research-req">
+      <div class="req-title">🚀 الخيار ب — الروبوتات الفضائية</div>
+      <div class="req-desc">مثال: Mars Rover أو روبوتات ناسا — كيف تعمل؟ كيف تُتحكم فيها من الأرض؟ ما التحديات؟</div>
+    </div>
+    <div class="research-req">
+      <div class="req-title">🏥 الخيار ج — الروبوتات الطبية</div>
+      <div class="req-desc">الروبوتات في غرف العمليات والمستشفيات — ما أشهر الأمثلة؟ كيف تساعد الأطباء؟</div>
+    </div>
+    <div class="research-req">
+      <div class="req-title">🔧 الخيار د — مكونات الأجهزة المدمجة</div>
+      <div class="req-desc">ما الفرق بين المعالج والمتحكم الدقيق؟ ما الفرق بين Arduino و Raspberry Pi و Pico W؟ متى نستخدم كلاً منها؟</div>
+    </div>
+
+    <hr class="divider" style="margin:16px 0">
+
+    <h4 style="font-size:13px;font-weight:700;color:#0d1117;margin-bottom:10px">محتوى البحث (صفحة إلى صفحتين):</h4>
+
+    <ul class="steps-list">
+      <li class="step-item">
+        <div class="step-num num-blue">١</div>
+        <div class="step-body">
+          <h4>مقدمة</h4>
+          <p>ما الموضوع وسبب اختيارك له (٣-٥ جمل)</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-blue">٢</div>
+        <div class="step-body">
+          <h4>المحتوى الرئيسي</h4>
+          <p>معلومات موضوعك مع أمثلة حقيقية وأرقام (إن وجدت)</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-blue">٣</div>
+        <div class="step-body">
+          <h4>رأيك الشخصي</h4>
+          <p>ما الذي أثار اهتمامك؟ هل تريد العمل في هذا المجال مستقبلاً؟</p>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-blue">٤</div>
+        <div class="step-body">
+          <h4>المصادر</h4>
+          <p>اذكر المواقع أو الكتب التي استخدمتها — مصدر واحد على الأقل</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="not-accepted">
+      <span style="font-size:20px;flex-shrink:0">🚫</span>
+      <p><strong>طرق التسليم غير المقبولة:</strong><br>
+      رسائل واتساب · صور ورقة مكتوبة بالقلم · ملف PDF · رسالة إيميل نصية<br><br>
+      <strong>التسليم المقبول الوحيد:</strong> ملف Word (.docx) مرفوع في مجلد Google Drive الخاص بك</p>
+    </div>
+
+  </div><!-- end task-card -->
+
+
+  <!-- ══════════════════════════════════════════════════════
+       SUBMISSION
+  ══════════════════════════════════════════════════════ -->
+  <div class="submit-card">
+    <h3>📤 ملخص التسليم</h3>
+    <div class="submit-row">
+      <span class="submit-dot">🏗️</span>
+      <p><strong>المهمة الأولى:</strong> ملف index.html (+ أي ملفات اختيارية) — ارفعه في Google Drive · مجلد "الجلسة الحالية"</p>
+    </div>
+    <div class="submit-row">
+      <span class="submit-dot">📺</span>
+      <p><strong>المهمة الثانية:</strong> لا يوجد تسليم — المشاهدة ستظهر في فهمك للجلسة القادمة</p>
+    </div>
+    <div class="submit-row">
+      <span class="submit-dot">🤖</span>
+      <p><strong>المهمة الثالثة:</strong> ملف Word (.docx) — ارفعه في نفس المجلد على Google Drive</p>
+    </div>
+    <div class="submit-row">
+      <span class="submit-dot">📅</span>
+      <p><strong>الموعد النهائي:</strong> قبل بداية الجلسة القادمة مباشرة</p>
+    </div>
+  </div>
+
+</div><!-- end container -->
+</body>
+</html>

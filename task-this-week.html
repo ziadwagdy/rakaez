@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مهام هذا الأسبوع — رصد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: #f6f8fa;
+  color: #1a1a2e;
+  line-height: 1.7;
+  padding: 0 0 60px;
+}
+
+/* TOP NOTICE */
+.top-notice {
+  background: #1a1a2e;
+  color: #e6edf3;
+  padding: 12px 32px;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.3px;
+}
+
+.top-bar {
+  background: #ffffff;
+  border-bottom: 1px solid #e1e4e8;
+  padding: 14px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.top-bar-title { font-size: 14px; font-weight: 700; color: #0d1117; }
+.top-bar-badge {
+  font-size: 12px;
+  background: #eafaf7;
+  color: #0a7c5c;
+  border: 1px solid #b6e9da;
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-weight: 600;
+}
+
+.container { max-width: 780px; margin: 0 auto; padding: 40px 24px 0; }
+
+/* PAGE HEADER */
+.page-header { margin-bottom: 32px; }
+.page-header .label {
+  font-size: 11px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: #6b7fa3; margin-bottom: 10px;
+}
+.page-header h1 { font-size: 28px; font-weight: 900; color: #0d1117; margin-bottom: 6px; }
+.page-header .deadline { font-size: 13px; color: #6b7fa3; }
+.page-header .deadline strong { color: #d04a02; }
+
+/* TEAMS SECTION */
+.teams-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.team-card {
+  border-radius: 12px;
+  padding: 20px;
+  border: 2px solid;
+}
+.team-blue {
+  background: #f0f7ff;
+  border-color: #0366d6;
+}
+.team-green {
+  background: #eafaf7;
+  border-color: #0a7c5c;
+}
+.team-label {
+  font-size: 10px; font-weight: 700; letter-spacing: 2px;
+  text-transform: uppercase; margin-bottom: 6px;
+}
+.team-blue  .team-label { color: #0366d6; }
+.team-green .team-label { color: #0a7c5c; }
+.team-leader {
+  font-size: 20px; font-weight: 900; color: #0d1117; margin-bottom: 4px;
+}
+.team-role {
+  font-size: 12px; font-weight: 600;
+  background: #fff;
+  border-radius: 20px;
+  padding: 2px 10px;
+  display: inline-block;
+}
+.team-blue  .team-role { color: #0366d6; border: 1px solid #c8e1f9; }
+.team-green .team-role { color: #0a7c5c; border: 1px solid #b6e9da; }
+.team-note {
+  font-size: 12px; color: #6b7fa3; margin-top: 10px;
+  padding-top: 10px; border-top: 1px solid rgba(0,0,0,0.08);
+}
+
+/* LEADER RESPONSIBILITY BANNER */
+.leader-banner {
+  background: #fff4ee;
+  border: 1px solid #fbd8c3;
+  border-right: 4px solid #d04a02;
+  border-radius: 10px;
+  padding: 16px 20px;
+  margin-bottom: 28px;
+  font-size: 13px;
+  color: #5d3a1a;
+  line-height: 1.8;
+}
+.leader-banner strong { color: #d04a02; font-weight: 700; }
+.leader-banner .leader-title {
+  font-size: 15px; font-weight: 900; color: #d04a02; margin-bottom: 6px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* TASK CARD */
+.task-card {
+  background: #ffffff;
+  border: 1px solid #e1e4e8;
+  border-radius: 12px;
+  padding: 24px;
+  margin-bottom: 20px;
+}
+.task-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 18px; padding-bottom: 16px; border-bottom: 1px solid #f0f0f0;
+}
+.task-icon {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; flex-shrink: 0;
+}
+.icon-blue   { background: #e8f4fd; }
+.icon-green  { background: #eafaf7; }
+.icon-amber  { background: #fef9e7; }
+.icon-purple { background: #f3effe; }
+.icon-red    { background: #fff5f5; }
+.task-header-text h3 { font-size: 16px; font-weight: 700; color: #0d1117; margin-bottom: 2px; }
+.task-header-text span { font-size: 12px; color: #6b7fa3; }
+
+/* STEPS */
+.steps-list { list-style: none; margin-top: 4px; }
+.step-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 14px 0; border-bottom: 1px solid #f3f4f6;
+}
+.step-item:last-child { border-bottom: none; padding-bottom: 0; }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; font-family: 'Space Mono', monospace;
+  margin-top: 2px;
+}
+.num-blue   { background: #e8f4fd; color: #0366d6; border: 1px solid #c8e1f9; }
+.num-green  { background: #eafaf7; color: #0a7c5c; border: 1px solid #b6e9da; }
+.num-amber  { background: #fef9e7; color: #b45309; border: 1px solid #f0cc5a; }
+.num-purple { background: #f3effe; color: #6f42c1; border: 1px solid #d8b4fe; }
+.step-body h4 { font-size: 14px; font-weight: 700; color: #0d1117; margin-bottom: 3px; }
+.step-body p, .step-body li { font-size: 13px; color: #444d56; line-height: 1.7; }
+.step-body ul { padding-right: 18px; margin-top: 4px; }
+.step-body .hint {
+  font-size: 12px; color: #6b7fa3; margin-top: 6px;
+  background: #f6f8fa; border-radius: 6px; padding: 6px 10px;
+  border-right: 3px solid #d0d7de;
+}
+
+/* INFO BOX */
+.info-box {
+  background: #f0f7ff; border: 1px solid #c8e1f9; border-right: 4px solid #0366d6;
+  border-radius: 8px; padding: 14px 18px; font-size: 13px;
+  color: #444d56; line-height: 1.7; margin: 12px 0;
+}
+.info-box strong { color: #0366d6; }
+
+.warn-box {
+  background: #fff8f0; border: 1px solid #fbd8c3; border-right: 4px solid #d04a02;
+  border-radius: 8px; padding: 14px 18px; font-size: 13px;
+  color: #5d3a1a; line-height: 1.7; margin: 12px 0;
+}
+.warn-box strong { color: #d04a02; }
+
+/* CODE BLOCK */
+.code-wrap {
+  background: #0d1117; border: 1px solid #30363d; border-radius: 10px;
+  margin: 14px 0; overflow: hidden; direction: ltr;
+}
+.code-label {
+  background: #161b22; border-bottom: 1px solid #30363d;
+  padding: 8px 16px; font-size: 11px; font-weight: 700;
+  color: #8b949e; font-family: 'Space Mono', monospace; letter-spacing: 1px;
+  text-align: left;
+}
+.code-wrap pre {
+  padding: 18px 20px; overflow-x: auto; margin: 0;
+  font-family: 'Space Mono', monospace; font-size: 13px;
+  line-height: 1.8; color: #e6edf3; white-space: pre; text-align: left;
+}
+.code-wrap .c  { color: #8b949e; }
+.code-wrap .t  { color: #58a6ff; }
+.code-wrap .a  { color: #f0b429; }
+.code-wrap .s  { color: #3fb950; }
+.code-wrap .tx { color: #e6edf3; }
+.code-wrap .p  { color: #f78166; }
+.code-wrap .v  { color: #d2a8ff; }
+
+/* TOPIC IDEAS */
+.topic-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;
+}
+.topic-item {
+  background: #f6f8fa; border: 1px solid #e1e4e8;
+  border-radius: 8px; padding: 12px 14px;
+}
+.topic-item .topic-emoji { font-size: 20px; margin-bottom: 4px; }
+.topic-item .topic-title { font-size: 13px; font-weight: 700; color: #0d1117; }
+.topic-item .topic-sub   { font-size: 12px; color: #6b7fa3; margin-top: 2px; }
+
+/* VIDEO LIST */
+.video-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px;
+}
+.video-item {
+  background: #f6f8fa; border: 1px solid #e1e4e8;
+  border-radius: 8px; padding: 10px 12px;
+  display: flex; align-items: flex-start; gap: 10px;
+  text-decoration: none; color: inherit;
+  transition: background 0.15s, border-color 0.15s;
+}
+.video-item:hover { background: #f0f7ff; border-color: #c8e1f9; }
+.video-item .v-num {
+  font-size: 11px; font-weight: 700; color: #0366d6;
+  font-family: 'Space Mono', monospace; white-space: nowrap; margin-top: 2px;
+}
+.video-item .v-info .v-title { font-size: 12px; font-weight: 700; color: #0d1117; }
+.video-item .v-info .v-dur   { font-size: 11px; color: #6b7fa3; margin-top: 1px; }
+
+/* DEADLINE BOX */
+.deadline-box {
+  background: #fff5f5;
+  border: 1px solid #fecdd3;
+  border-right: 4px solid #dc2626;
+  border-radius: 10px;
+  padding: 18px 20px;
+  margin-top: 32px;
+  text-align: center;
+}
+.deadline-box .dl-title { font-size: 17px; font-weight: 900; color: #dc2626; margin-bottom: 6px; }
+.deadline-box .dl-sub   { font-size: 13px; color: #7f1d1d; line-height: 1.7; }
+
+/* VSCODE BOX */
+.vscode-box {
+  background: #1e1e2e;
+  border-radius: 12px;
+  padding: 18px 22px;
+  margin-bottom: 28px;
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+}
+.vscode-logo {
+  font-size: 36px; flex-shrink: 0; margin-top: 2px;
+}
+.vscode-box h4 { font-size: 15px; font-weight: 900; color: #e6edf3; margin-bottom: 4px; }
+.vscode-box p  { font-size: 13px; color: #8b949e; line-height: 1.7; }
+.vscode-box strong { color: #58a6ff; }
+
+/* SENSOR CARD PREVIEW */
+.sensor-preview {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0;
+}
+.sensor-card-demo {
+  background: #f6f8fa; border: 1px solid #e1e4e8;
+  border-radius: 8px; padding: 14px;
+}
+.sensor-card-demo .sc-emoji  { font-size: 24px; margin-bottom: 4px; }
+.sensor-card-demo .sc-name   { font-size: 12px; font-weight: 700; color: #0d1117; }
+.sensor-card-demo .sc-value  { font-size: 11px; color: #6b7fa3; margin-top: 2px; font-family: 'Space Mono', monospace; }
+
+/* TASK NUMBER BADGE */
+.task-num {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  font-family: 'Space Mono', monospace;
+  background: #0d1117; color: #fff;
+  border-radius: 6px; padding: 2px 8px;
+  margin-left: 8px;
+}
+</style>
+</head>
+<body>
+
+<!-- COMPUTER NOTICE -->
+<div style="background:#1a1a2e;color:#e6edf3;padding:12px 32px;font-size:13px;font-weight:600;text-align:center;">
+  💻 افتح هذه الصفحة على الكمبيوتر أو اللابتوب — ليس على الجوال
+</div>
+
+<!-- TOP BAR -->
+<div class="top-bar">
+  <div class="top-bar-title">دورة رصد — مهام هذا الأسبوع</div>
+  <div class="top-bar-badge">الموعد النهائي: الجمعة منتصف الليل</div>
+</div>
+
+<div class="container">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="label">RAKAEZ COURSE · WEEKLY TASKS</div>
+    <h1>مهام الأسبوع 🎯</h1>
+    <p class="deadline">ثلاث مهام هذا الأسبوع — <strong>الموعد النهائي: الجمعة منتصف الليل</strong> · قائد كل مجموعة مسؤول عن التأكد من الإنجاز</p>
+  </div>
+
+  <!-- VS CODE NOTICE -->
+  <div class="vscode-box">
+    <div class="vscode-logo">🖥️</div>
+    <div>
+      <h4>جميع المهام تُنفَّذ داخل Visual Studio Code</h4>
+      <p>كل ما ستكتبه من HTML وCSS يجب أن يكون داخل VS Code على جهازك. لا يُقبل العمل داخل المتصفح مباشرةً أو في أي محرر آخر. إذا لم يكن VS Code مثبتاً على جهازك، حمّله من <strong>code.visualstudio.com</strong> وثبّته قبل البدء.</p>
+    </div>
+  </div>
+
+  <!-- TEAMS -->
+  <div style="margin-bottom:12px;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:3px;color:#6b7fa3;text-transform:uppercase;margin-bottom:12px;">المجموعتان هذا الأسبوع</div>
+    <div class="teams-grid">
+      <div class="team-card team-blue">
+        <div class="team-label">المجموعة الأولى</div>
+        <div class="team-leader">قائد: صهيب</div>
+        <div class="team-role">🔵 قائد المجموعة</div>
+        <div class="team-note">يتواصل صهيب مع بقية أفراد مجموعته ويتأكد أن الجميع أنهى المهام قبل الجمعة.</div>
+      </div>
+      <div class="team-card team-green">
+        <div class="team-label">المجموعة الثانية</div>
+        <div class="team-leader">قائد: خالد</div>
+        <div class="team-role">🟢 قائد المجموعة</div>
+        <div class="team-note">يتواصل خالد مع بقية أفراد مجموعته ويتأكد أن الجميع أنهى المهام قبل الجمعة.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEADER RESPONSIBILITY -->
+  <div class="leader-banner">
+    <div class="leader-title">⚠️ مسؤولية قائد المجموعة</div>
+    <strong>صهيب وخالد</strong> — أنتما مسؤولان عن متابعة أفراد مجموعتكما خلال الأسبوع. قبل منتصف ليلة الجمعة، تأكدا أن <strong>كل فرد في مجموعتك أنهى المهام الثلاث</strong>. من لم ينهِ حتى ذلك الوقت، يُعدّ واجبه غير مُسلَّم. التواصل مع أفراد المجموعة هو <strong>جزء من التقييم</strong>.
+  </div>
+
+  <!-- ==================== TASK 1 ==================== -->
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-icon icon-purple">🎤</div>
+      <div class="task-header-text">
+        <h3>المهمة الأولى — عرض تقني <span class="task-num">01</span></h3>
+        <span>اختيار موضوع تقني وتقديمه أمام الجميع</span>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>الهدف:</strong> كل مجموعة تختار موضوعاً يتعلق بالتقنية أو إنترنت الأشياء (IoT)، تبحث عنه وتقدّمه أمام الجميع في الجلسة القادمة.
+    </div>
+
+    <ul class="steps-list">
+      <li class="step-item">
+        <div class="step-num num-purple">1</div>
+        <div class="step-body">
+          <h4>اختاروا الموضوع معاً</h4>
+          <p>تشاور أفراد المجموعة واختاروا موضوعاً يثير اهتمام الجميع. الموضوع يجب أن يكون له علاقة بالتقنية، الروبوتات، أو إنترنت الأشياء (IoT). مثال على مواضيع ممكنة:</p>
+          <div class="topic-grid">
+            <div class="topic-item">
+              <div class="topic-emoji">🏠</div>
+              <div class="topic-title">المنازل الذكية</div>
+              <div class="topic-sub">Smart Home</div>
+            </div>
+            <div class="topic-item">
+              <div class="topic-emoji">🌱</div>
+              <div class="topic-title">الزراعة الذكية</div>
+              <div class="topic-sub">Smart Agriculture</div>
+            </div>
+            <div class="topic-item">
+              <div class="topic-emoji">🚗</div>
+              <div class="topic-title">السيارات ذاتية القيادة</div>
+              <div class="topic-sub">Self-Driving Cars</div>
+            </div>
+            <div class="topic-item">
+              <div class="topic-emoji">🏥</div>
+              <div class="topic-title">الصحة الرقمية</div>
+              <div class="topic-sub">Digital Health / Wearables</div>
+            </div>
+            <div class="topic-item">
+              <div class="topic-emoji">🤖</div>
+              <div class="topic-title">الروبوتات الصناعية</div>
+              <div class="topic-sub">Industrial Robots</div>
+            </div>
+            <div class="topic-item">
+              <div class="topic-emoji">🌍</div>
+              <div class="topic-title">المدن الذكية</div>
+              <div class="topic-sub">Smart Cities</div>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-purple">2</div>
+        <div class="step-body">
+          <h4>ابحثوا عن المعلومات</h4>
+          <p>ابحثوا عن الموضوع على الإنترنت وأجيبوا على هذه الأسئلة في عرضكم:</p>
+          <ul style="padding-right:16px;margin-top:6px;">
+            <li>ما هو هذا الموضوع وكيف يعمل؟</li>
+            <li>أين يُستخدم في الحياة اليومية؟</li>
+            <li>ما هي فائدته للناس أو للمجتمع؟</li>
+            <li>ما هو مثال حقيقي على منتج أو مشروع في هذا المجال؟</li>
+          </ul>
+        </div>
+      </li>
+      <li class="step-item">
+        <div class="step-num num-purple">3</div>
+        <div class="step-body">
+          <h4>جهّزوا العرض</h4>
+          <p>يمكنكم استخدام PowerPoint، أو Canva، أو حتى الكتابة على ورقة إذا احتجتم. المهم أن كل فرد في المجموعة يعرف الموضوع ويستطيع الشرح أمام الجميع.</p>
+          <div class="hint">⏱ مدة العرض: من 3 إلى 5 دقائق لكل مجموعة. ستعرضون في الجلسة القادمة.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <!-- ==================== TASK 2 ==================== -->
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-icon icon-blue">💻</div>
+      <div class="task-header-text">
+        <h3>المهمة الثانية — الصفحة الأولى لمشروع رصد <span class="task-num">02</span></h3>
+        <span>تطبيق HTML وCSS على واجهة مشروعك</span>
+      </div>
+    </div>
+
+    <div class="info-box">
+      <strong>الهدف:</strong> طبّق ما تعلمته (div، العناوين، ملف CSS، الألوان والخلفيات) لبناء <strong>الصفحة الرئيسية لمشروع رصد</strong> — بدون أي تصميم متقدم، فقط HTML + CSS أساسي.
+    </div>
+
+    <div class="warn-box">
+      <strong>تذكير بما تعلمناه حتى الآن:</strong> عناوين h1–h6، الفقرات p، الـ div، إنشاء ملف CSS منفصل وربطه بـ HTML، خاصية color لتلوين النص، خاصية background-color لتلوين الخلفية.
+    </div>
+
+    <ul class="steps-list">
+      <li class="step-item">
+        <div class="step-num num-blue">1</div>
+        <div class="step-body">
+          <h4>أنشئ مجلداً جديداً للمشروع</h4>
+          <p>أنشئ مجلداً جديداً اسمه <code style="background:#f6f8fa;border:1px solid #e1e4e8;border-radius:4px;padding:1px 6px;font-family:'Space Mono',monospace;font-size:12px;">rasd</code> على سطح المكتب (كليك يمين على سطح المكتب → New Folder على Windows، أو New Folder على Mac). داخله أنشئ ملفين:</p>
+          <ul>
+            <li>ملف HTML باسم <code style="background:#f6f8fa;border:1px solid #e1e4e8;border-radius:4px;padding:1px 6px;font-family:'Space Mono',monospace;font-size:12px;">index.html</code></li>
+            <li>ملف CSS باسم <code style="background:#f6f8fa;border:1px solid #e1e4e8;border-radius:4px;padding:1px 6px;font-family:'Space Mono',monospace;font-size:12px;">style.css</code></li>
+          </ul>
+          <div class="hint">📁 افتح VS Code ثم: File → Open Folder → اختر مجلد rasd من سطح المكتب. بعدها أنشئ الملفين بالضغط على أيقونة الملف الجديد (New File) في الشريط الجانبي على اليسار.</div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num num-blue">2</div>
+        <div class="step-body">
+          <h4>ابنِ الهيكل الأساسي في index.html</h4>
+          <p>الصفحة تحتاج ثلاثة أقسام رئيسية:</p>
+          <div class="code-wrap">
+            <div class="code-label">index.html — الهيكل الأساسي</div>
+            <pre><span class="t">&lt;!DOCTYPE html&gt;</span>
+<span class="t">&lt;html</span> <span class="a">lang</span>=<span class="s">"ar"</span> <span class="a">dir</span>=<span class="s">"rtl"</span><span class="t">&gt;</span>
+<span class="t">&lt;head&gt;</span>
+  <span class="t">&lt;meta</span> <span class="a">charset</span>=<span class="s">"UTF-8"</span><span class="t">&gt;</span>
+  <span class="t">&lt;title&gt;</span><span class="tx">رصد — مراقبة البيئة</span><span class="t">&lt;/title&gt;</span>
+  <span class="t">&lt;link</span> <span class="a">rel</span>=<span class="s">"stylesheet"</span> <span class="a">href</span>=<span class="s">"style.css"</span><span class="t">&gt;</span>
+<span class="t">&lt;/head&gt;</span>
+<span class="t">&lt;body&gt;</span>
+
+  <span class="c">&lt;!-- الرأس --&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"header"</span><span class="t">&gt;</span>
+    <span class="t">&lt;h1&gt;</span><span class="tx">🛡 رصد</span><span class="t">&lt;/h1&gt;</span>
+    <span class="t">&lt;p&gt;</span><span class="tx">نظام مراقبة البيئة</span><span class="t">&lt;/p&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+
+  <span class="c">&lt;!-- بطاقات الحساسات --&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"cards"</span><span class="t">&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">🌡️ درجة الحرارة</span><span class="t">&lt;/h2&gt;</span>
+      <span class="t">&lt;p&gt;</span><span class="tx">Sensor: Temperature</span><span class="t">&lt;/p&gt;</span>
+      <span class="t">&lt;h3&gt;</span><span class="tx">-- °C</span><span class="t">&lt;/h3&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">💧 الرطوبة</span><span class="t">&lt;/h2&gt;</span>
+      <span class="t">&lt;p&gt;</span><span class="tx">Sensor: Humidity</span><span class="t">&lt;/p&gt;</span>
+      <span class="t">&lt;h3&gt;</span><span class="tx">-- %</span><span class="t">&lt;/h3&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">🌧️ مستوى المطر</span><span class="t">&lt;/h2&gt;</span>
+      <span class="t">&lt;p&gt;</span><span class="tx">Sensor: Rain</span><span class="t">&lt;/p&gt;</span>
+      <span class="t">&lt;h3&gt;</span><span class="tx">--</span><span class="t">&lt;/h3&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">🌱 رطوبة التربة</span><span class="t">&lt;/h2&gt;</span>
+      <span class="t">&lt;p&gt;</span><span class="tx">Sensor: Soil Moisture</span><span class="t">&lt;/p&gt;</span>
+      <span class="t">&lt;h3&gt;</span><span class="tx">--</span><span class="t">&lt;/h3&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+  <span class="t">&lt;/div&gt;</span>
+
+<span class="t">&lt;/body&gt;</span>
+<span class="t">&lt;/html&gt;</span></pre>
+          </div>
+          <div class="hint">لا تنسَ <code style="font-family:'Space Mono',monospace;font-size:11px;">dir="rtl"</code> في عنصر html لأن موقعنا بالعربية.</div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num num-blue">3</div>
+        <div class="step-body">
+          <h4>أضف التصميم في style.css</h4>
+          <p>الآن طبّق الألوان والخلفيات على الأقسام. يمكنك تغيير الألوان لما يعجبك — هذا مجرد مثال للبدء:</p>
+          <div class="code-wrap">
+            <div class="code-label">style.css — التصميم الأساسي</div>
+            <pre><span class="c">/* ---- الصفحة كلها ---- */</span>
+<span class="p">body</span> {
+  <span class="a">background-color</span>: <span class="s">#f0f4f8</span><span class="tx">;</span>
+  <span class="a">color</span>: <span class="s">#1a1a2e</span><span class="tx">;</span>
+}
+
+<span class="c">/* ---- الرأس ---- */</span>
+<span class="p">.header</span> {
+  <span class="a">background-color</span>: <span class="s">#1a1a2e</span><span class="tx">;</span>
+  <span class="a">color</span>: <span class="s">#ffffff</span><span class="tx">;</span>
+}
+
+<span class="c">/* ---- قسم البطاقات ---- */</span>
+<span class="p">.cards</span> {
+  <span class="a">background-color</span>: <span class="s">#e8f4fd</span><span class="tx">;</span>
+}
+
+<span class="c">/* ---- كل بطاقة حساس ---- */</span>
+<span class="p">.card</span> {
+  <span class="a">background-color</span>: <span class="s">#ffffff</span><span class="tx">;</span>
+  <span class="a">color</span>: <span class="s">#0d1117</span><span class="tx">;</span>
+}</pre>
+          </div>
+          <div class="hint">🎨 اختر ألوانك الخاصة! يمكنك استخدام الاسم (مثل <code style="font-family:'Space Mono',monospace;font-size:11px;">red</code>, <code style="font-family:'Space Mono',monospace;font-size:11px;">blue</code>) أو كود الـ HEX (مثل <code style="font-family:'Space Mono',monospace;font-size:11px;">#ff6b6b</code>). ابحث في Google عن "color picker" لتختار اللون الذي يعجبك.</div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num num-blue">4</div>
+        <div class="step-body">
+          <h4>افتح الملف في المتصفح وشوف النتيجة</h4>
+          <p>اضغط كليك يمين على ملف <code style="background:#f6f8fa;border:1px solid #e1e4e8;border-radius:4px;padding:1px 6px;font-family:'Space Mono',monospace;font-size:12px;">index.html</code> في VS Code → اختر <strong>Open with Live Server</strong>. إذا لم تجد هذا الخيار، افتح مجلد <code style="background:#f6f8fa;border:1px solid #e1e4e8;border-radius:4px;padding:1px 6px;font-family:'Space Mono',monospace;font-size:12px;">rasd</code> في File Explorer (على Windows) أو Finder (على Mac)، ثم اضغط مرتين على الملف وسيفتح في المتصفح.</p>
+          <div class="hint">💡 في كل مرة تحفظ فيها التعديلات (Ctrl+S على Windows · Cmd+S على Mac) ستُحدَّث الصفحة تلقائياً إذا استخدمت Live Server.</div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num num-blue">5</div>
+        <div class="step-body">
+          <h4>التسليم — ارفع المجلد على Drive</h4>
+          <p>بعد الانتهاء، ارفع <strong>مجلد rasd كاملاً</strong> (يحتوي على index.html و style.css) داخل مجلدك الخاص في Google Drive.</p>
+          <div style="margin-top:10px;">
+            <a href="https://drive.google.com/drive/folders/1MqnjuumptJzHfxkyL98x_-1ri_2DnKHq?usp=sharing" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#0366d6;color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;">
+              📁 افتح مجلد واجبات رصد على Drive
+            </a>
+          </div>
+          <div class="hint" style="margin-top:8px;">ابحث عن مجلد اسمه اسمك (مثل "أحمد" أو "سارة") وارفع المجلد بالكامل بداخله.</div>
+        </div>
+      </li>
+    </ul>
+
+    <!-- WHAT THE PAGE SHOULD LOOK LIKE -->
+    <div style="margin-top:16px;padding-top:16px;border-top:1px solid #f0f0f0;">
+      <div style="font-size:12px;font-weight:700;color:#6b7fa3;margin-bottom:10px;">كيف ستبدو الصفحة (مثال مبسّط):</div>
+      <div style="background:#1a1a2e;border-radius:8px;padding:14px;margin-bottom:10px;text-align:center;">
+        <div style="font-size:18px;font-weight:900;color:#fff;">🛡 رصد</div>
+        <div style="font-size:12px;color:#8b949e;">نظام مراقبة البيئة</div>
+      </div>
+      <div class="sensor-preview">
+        <div class="sensor-card-demo">
+          <div class="sc-emoji">🌡️</div>
+          <div class="sc-name">درجة الحرارة</div>
+          <div class="sc-value">-- °C</div>
+        </div>
+        <div class="sensor-card-demo">
+          <div class="sc-emoji">💧</div>
+          <div class="sc-name">الرطوبة</div>
+          <div class="sc-value">-- %</div>
+        </div>
+        <div class="sensor-card-demo">
+          <div class="sc-emoji">🌧️</div>
+          <div class="sc-name">مستوى المطر</div>
+          <div class="sc-value">--</div>
+        </div>
+        <div class="sensor-card-demo">
+          <div class="sc-emoji">🌱</div>
+          <div class="sc-name">رطوبة التربة</div>
+          <div class="sc-value">--</div>
+        </div>
+      </div>
+      <div class="hint" style="margin-top:10px;">هذا مجرد مثال — تصميمك الخاص يمكن أن يكون مختلفاً تماماً. غيّر الألوان والنصوص بما يعجبك!</div>
+    </div>
+  </div>
+
+  <!-- ==================== TASK 3 ==================== -->
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-icon icon-amber">▶️</div>
+      <div class="task-header-text">
+        <h3>المهمة الثالثة — مراجعة فيديوهات HTML <span class="task-num">03</span></h3>
+        <span>شاهد الدروس من 1 إلى 22 من قناة Elzero Web School</span>
+      </div>
+    </div>
+
+    <div class="warn-box">
+      <strong>مهم:</strong> معظمكم لم يكمل مشاهدة الفيديوهات السابقة، ولهذا نطلب منكم الأسبوع هذا مراجعة الدروس من 1 إلى 22 كاملةً. هذه الفيديوهات هي الأساس الذي تقوم عليه المهمة الثانية.
+    </div>
+
+    <div class="info-box">
+      <strong>أثناء المشاهدة:</strong> افتح VS Code وطبّق ما تراه في كل درس مباشرةً. لا تكتفِ بالمشاهدة — جرّب الكود بنفسك.
+    </div>
+
+    <div class="video-grid">
+      <a href="https://www.youtube.com/watch?v=6QAELgirvjs&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=1" target="_blank" class="video-item">
+        <div class="v-num">01</div>
+        <div class="v-info">
+          <div class="v-title">Learn HTML In Arabic</div>
+          <div class="v-dur">مقدمة الكورس</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=1_kqCFe0Suk&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=2" target="_blank" class="video-item">
+        <div class="v-num">02</div>
+        <div class="v-info">
+          <div class="v-title">What Is HTML</div>
+          <div class="v-dur">ما هو HTML</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=yt8d3gSCVhE&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=3" target="_blank" class="video-item">
+        <div class="v-num">03</div>
+        <div class="v-info">
+          <div class="v-title">Create HTML File</div>
+          <div class="v-dur">إنشاء ملف HTML</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=Duqep4lnMaU&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=4" target="_blank" class="video-item">
+        <div class="v-num">04</div>
+        <div class="v-info">
+          <div class="v-title">DOCTYPE And Basic Tags</div>
+          <div class="v-dur">DOCTYPE والوسوم الأساسية</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=H4sSBVeSqEI&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=5" target="_blank" class="video-item">
+        <div class="v-num">05</div>
+        <div class="v-info">
+          <div class="v-title">Headings And Paragraph</div>
+          <div class="v-dur">العناوين والفقرات</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=z0M_RlkqxVM&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=6" target="_blank" class="video-item">
+        <div class="v-num">06</div>
+        <div class="v-info">
+          <div class="v-title">Element Attributes</div>
+          <div class="v-dur">خصائص العناصر</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=4gJVPRJLBoI&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=7" target="_blank" class="video-item">
+        <div class="v-num">07</div>
+        <div class="v-info">
+          <div class="v-title">Formatting Text</div>
+          <div class="v-dur">تنسيق النص</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=v9HCkMBdUCc&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=8" target="_blank" class="video-item">
+        <div class="v-num">08</div>
+        <div class="v-info">
+          <div class="v-title">Links</div>
+          <div class="v-dur">الروابط</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=EhyFbWwXH_4&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=9" target="_blank" class="video-item">
+        <div class="v-num">09</div>
+        <div class="v-info">
+          <div class="v-title">Image</div>
+          <div class="v-dur">الصور</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=lRKjQgBLVHA&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=10" target="_blank" class="video-item">
+        <div class="v-num">10</div>
+        <div class="v-info">
+          <div class="v-title">Lists</div>
+          <div class="v-dur">القوائم</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=K5nkbMHKBvM&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=11" target="_blank" class="video-item">
+        <div class="v-num">11</div>
+        <div class="v-info">
+          <div class="v-title">Table</div>
+          <div class="v-dur">الجداول</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=cz6_mGNMJgc&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=12" target="_blank" class="video-item">
+        <div class="v-num">12</div>
+        <div class="v-info">
+          <div class="v-title">Span And Div</div>
+          <div class="v-dur">Span والـ Div</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=LdAD-bsBfEk&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=13" target="_blank" class="video-item">
+        <div class="v-num">13</div>
+        <div class="v-info">
+          <div class="v-title">HTML Entities</div>
+          <div class="v-dur">الكيانات الخاصة</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=hnR1lx-GhHQ&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=14" target="_blank" class="video-item">
+        <div class="v-num">14</div>
+        <div class="v-info">
+          <div class="v-title">Semantic Elements</div>
+          <div class="v-dur">العناصر الدلالية</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=eoOQhLHqOkc&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=15" target="_blank" class="video-item">
+        <div class="v-num">15</div>
+        <div class="v-info">
+          <div class="v-title">CSS In HTML</div>
+          <div class="v-dur">CSS داخل HTML</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=RnGRKSrqJuE&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=16" target="_blank" class="video-item">
+        <div class="v-num">16</div>
+        <div class="v-info">
+          <div class="v-title">CSS Selectors</div>
+          <div class="v-dur">محددات CSS</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=oq3xOkMiAFo&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=17" target="_blank" class="video-item">
+        <div class="v-num">17</div>
+        <div class="v-info">
+          <div class="v-title">Colors</div>
+          <div class="v-dur">الألوان</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=vcMD3hv8_y0&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=18" target="_blank" class="video-item">
+        <div class="v-num">18</div>
+        <div class="v-info">
+          <div class="v-title">Background</div>
+          <div class="v-dur">الخلفيات</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=pY-7o2PMXKY&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=19" target="_blank" class="video-item">
+        <div class="v-num">19</div>
+        <div class="v-info">
+          <div class="v-title">External CSS File</div>
+          <div class="v-dur">ملف CSS منفصل</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=zS2a-FHI0Io&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=20" target="_blank" class="video-item">
+        <div class="v-num">20</div>
+        <div class="v-info">
+          <div class="v-title">Box Model</div>
+          <div class="v-dur">نموذج الصندوق</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=KAgHEFNqmlo&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=21" target="_blank" class="video-item">
+        <div class="v-num">21</div>
+        <div class="v-info">
+          <div class="v-title">Width And Height</div>
+          <div class="v-dur">العرض والارتفاع</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=7p2dI34PsYE&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=22" target="_blank" class="video-item">
+        <div class="v-num">22</div>
+        <div class="v-info">
+          <div class="v-title">Margin And Padding</div>
+          <div class="v-dur">الهوامش والحشو</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="hint" style="margin-top:14px;">🎯 هذه الفيديوهات قصيرة — لا تتجاوز مدتها بضع دقائق كل واحدة. إذا شاهدت منها أي شيء سابقاً فراجعه بسرعة وانتقل للتالي.</div>
+  </div>
+
+  <!-- DEADLINE -->
+  <div class="deadline-box">
+    <div class="dl-title">⏰ الموعد النهائي — الجمعة منتصف الليل</div>
+    <div class="dl-sub">
+      أي تسليم بعد هذا الوقت لن يُقبل ولن يُصحَّح.<br>
+      <strong>صهيب وخالد</strong> — تأكدا أن جميع أفراد مجموعتكما أنهوا المهام قبل الموعد.
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>واجب — البطاقات وCSS</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: #f6f8fa;
+  color: #1a1a2e;
+  line-height: 1.7;
+  padding: 0 0 80px;
+}
+
+.top-notice {
+  background: #1a1a2e; color: #e6edf3;
+  padding: 12px 32px; font-size: 13px;
+  font-weight: 600; text-align: center;
+}
+.top-bar {
+  background: #ffffff; border-bottom: 1px solid #e1e4e8;
+  padding: 14px 32px; display: flex;
+  align-items: center; justify-content: space-between;
+}
+.top-bar-title { font-size: 14px; font-weight: 700; color: #0d1117; }
+.top-bar-badge {
+  font-size: 12px; background: #eafaf7; color: #0a7c5c;
+  border: 1px solid #b6e9da; border-radius: 20px;
+  padding: 3px 12px; font-weight: 600;
+}
+
+.container { max-width: 780px; margin: 0 auto; padding: 40px 24px 0; }
+
+.page-header { margin-bottom: 32px; }
+.page-header .label {
+  font-size: 11px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: #6b7fa3; margin-bottom: 10px;
+}
+.page-header h1 { font-size: 28px; font-weight: 900; color: #0d1117; margin-bottom: 6px; }
+.page-header .sub { font-size: 13px; color: #6b7fa3; }
+
+/* VSCODE BOX */
+.vscode-box {
+  background: #1e1e2e; border-radius: 12px;
+  padding: 16px 20px; margin-bottom: 28px;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.vscode-box h4 { font-size: 14px; font-weight: 900; color: #e6edf3; margin-bottom: 3px; }
+.vscode-box p  { font-size: 13px; color: #8b949e; line-height: 1.6; }
+.vscode-box strong { color: #58a6ff; }
+
+/* SECTION HEADER */
+.section-header {
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 18px;
+}
+.section-num {
+  width: 40px; height: 40px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; font-weight: 900; font-family: 'Space Mono', monospace;
+  flex-shrink: 0;
+}
+.num-bg-blue   { background: #e8f4fd; color: #0366d6; }
+.num-bg-green  { background: #eafaf7; color: #0a7c5c; }
+.num-bg-amber  { background: #fef9e7; color: #b45309; }
+.num-bg-purple { background: #f3effe; color: #6f42c1; }
+.section-header-text h2 { font-size: 18px; font-weight: 900; color: #0d1117; }
+.section-header-text span { font-size: 12px; color: #6b7fa3; }
+
+/* DEADLINE BADGE */
+.deadline-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; border-radius: 20px;
+  padding: 4px 14px; margin-bottom: 20px; border: 1px solid;
+}
+.dl-tuesday  { background: #e8f4fd; color: #0366d6; border-color: #c8e1f9; }
+.dl-wednesday{ background: #fef9e7; color: #b45309; border-color: #f0cc5a; }
+.dl-thursday { background: #eafaf7; color: #0a7c5c; border-color: #b6e9da; }
+.dl-friday   { background: #fff5f5; color: #dc2626; border-color: #fecdd3; }
+
+/* TASK CARD */
+.task-card {
+  background: #ffffff; border: 1px solid #e1e4e8;
+  border-radius: 12px; padding: 24px; margin-bottom: 20px;
+}
+
+/* STEPS */
+.steps-list { list-style: none; }
+.step-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 14px 0; border-bottom: 1px solid #f3f4f6;
+}
+.step-item:last-child { border-bottom: none; padding-bottom: 0; }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; font-family: 'Space Mono', monospace;
+  margin-top: 2px;
+}
+.num-blue   { background: #e8f4fd; color: #0366d6; border: 1px solid #c8e1f9; }
+.num-green  { background: #eafaf7; color: #0a7c5c; border: 1px solid #b6e9da; }
+.num-amber  { background: #fef9e7; color: #b45309; border: 1px solid #f0cc5a; }
+.num-purple { background: #f3effe; color: #6f42c1; border: 1px solid #d8b4fe; }
+.step-body { flex: 1; min-width: 0; }
+.step-body h4 { font-size: 14px; font-weight: 700; color: #0d1117; margin-bottom: 4px; }
+.step-body p, .step-body li { font-size: 13px; color: #444d56; line-height: 1.7; }
+.step-body ul { padding-right: 18px; margin-top: 4px; }
+
+/* HINT */
+.hint {
+  font-size: 12px; color: #6b7fa3; margin-top: 8px;
+  background: #f6f8fa; border-radius: 6px; padding: 7px 11px;
+  border-right: 3px solid #d0d7de;
+}
+
+/* INFO / WARN BOXES */
+.info-box {
+  background: #f0f7ff; border: 1px solid #c8e1f9; border-right: 4px solid #0366d6;
+  border-radius: 8px; padding: 13px 16px; font-size: 13px;
+  color: #444d56; line-height: 1.7; margin: 10px 0;
+}
+.info-box strong { color: #0366d6; }
+
+.warn-box {
+  background: #fff8f0; border: 1px solid #fbd8c3; border-right: 4px solid #d04a02;
+  border-radius: 8px; padding: 13px 16px; font-size: 13px;
+  color: #5d3a1a; line-height: 1.7; margin: 10px 0;
+}
+.warn-box strong { color: #d04a02; }
+
+.green-box {
+  background: #eafaf7; border: 1px solid #b6e9da; border-right: 4px solid #0a7c5c;
+  border-radius: 8px; padding: 13px 16px; font-size: 13px;
+  color: #1a4731; line-height: 1.7; margin: 10px 0;
+}
+.green-box strong { color: #0a7c5c; }
+
+/* CODE BLOCK */
+.code-wrap {
+  background: #0d1117; border: 1px solid #30363d; border-radius: 10px;
+  margin: 14px 0; overflow: hidden; direction: ltr;
+}
+.code-label {
+  background: #161b22; border-bottom: 1px solid #30363d;
+  padding: 8px 16px; font-size: 11px; font-weight: 700;
+  color: #8b949e; font-family: 'Space Mono', monospace;
+  letter-spacing: 1px; text-align: left;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.code-label .copy-btn {
+  background: #21262d; border: 1px solid #30363d; color: #8b949e;
+  font-size: 11px; border-radius: 5px; padding: 2px 10px; cursor: pointer;
+  font-family: 'Cairo', sans-serif; direction: rtl;
+  transition: background 0.15s;
+}
+.copy-btn:hover { background: #30363d; color: #e6edf3; }
+.code-wrap pre {
+  padding: 18px 20px; overflow-x: auto; margin: 0;
+  font-family: 'Space Mono', monospace; font-size: 13px;
+  line-height: 1.8; color: #e6edf3; white-space: pre; text-align: left;
+}
+.c  { color: #8b949e; }
+.t  { color: #58a6ff; }
+.a  { color: #f0b429; }
+.s  { color: #3fb950; }
+.tx { color: #e6edf3; }
+.p  { color: #f78166; }
+.v  { color: #d2a8ff; }
+.kw { color: #ff7b72; }
+
+/* PRACTICE BOX */
+.practice-box {
+  background: #f3effe; border: 1px solid #d8b4fe;
+  border-right: 4px solid #6f42c1; border-radius: 10px;
+  padding: 18px 20px; margin-top: 18px;
+}
+.practice-box .pr-title {
+  font-size: 14px; font-weight: 900; color: #4c1d95; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.practice-box p, .practice-box li { font-size: 13px; color: #3b1f6e; line-height: 1.7; }
+.practice-box ul { padding-right: 18px; margin-top: 6px; }
+
+/* PREVIEW CARDS */
+.profile-preview {
+  background: #1a1a2e; border-radius: 10px;
+  padding: 20px; margin: 14px 0; text-align: center;
+}
+.profile-preview .pv-name { font-size: 22px; font-weight: 900; color: #58a6ff; }
+.profile-preview .pv-tag  { font-size: 13px; color: #8b949e; margin-bottom: 10px; }
+.profile-preview .pv-bio  { font-size: 12px; color: #c9d1d9; margin-bottom: 14px; line-height: 1.6; }
+.pv-cards { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.pv-card  {
+  background: #0f3460; border-radius: 8px; padding: 10px;
+  color: #e6edf3; font-size: 12px;
+}
+.pv-card .pv-emoji { font-size: 18px; margin-bottom: 3px; }
+.pv-card .pv-card-title { font-weight: 700; font-size: 12px; }
+.pv-card .pv-card-val { font-size: 11px; color: #8b949e; }
+
+/* RASD SENSOR PREVIEW */
+.sensor-grid-preview {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0;
+}
+.sc { border-radius: 8px; padding: 14px; color: #fff; }
+.sc-temp  { background: #e03131; }
+.sc-humid { background: #1971c2; }
+.sc-rain  { background: #0ca678; }
+.sc-soil  { background: #2f9e44; }
+.sc h3 { font-size: 15px; font-weight: 700; margin-bottom: 3px; }
+.sc p  { font-size: 11px; opacity: 0.85; }
+.sc .sc-val { font-size: 20px; font-weight: 900; margin-top: 6px; font-family: 'Space Mono', monospace; }
+
+/* FONT SIZE DEMO */
+.fontsize-demo {
+  background: #f6f8fa; border: 1px solid #e1e4e8;
+  border-radius: 8px; padding: 16px 20px; margin: 12px 0;
+}
+.fontsize-demo .fs-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  padding: 6px 0; border-bottom: 1px solid #f0f0f0;
+}
+.fontsize-demo .fs-row:last-child { border-bottom: none; }
+.fontsize-demo .fs-code { font-family: 'Space Mono', monospace; font-size: 12px; color: #0366d6; }
+.fontsize-demo .fs-preview { color: #0d1117; }
+
+/* VIDEO CARDS */
+.video-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px;
+}
+.video-item {
+  background: #f6f8fa; border: 1px solid #e1e4e8; border-radius: 8px;
+  padding: 14px; text-decoration: none; color: inherit;
+  display: flex; gap: 12px; align-items: flex-start;
+  transition: background 0.15s, border-color 0.15s;
+}
+.video-item:hover { background: #f0f7ff; border-color: #c8e1f9; }
+.video-item .v-play {
+  width: 36px; height: 36px; border-radius: 8px; background: #0d1117;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; flex-shrink: 0;
+}
+.video-item .v-num { font-size: 10px; font-weight: 700; color: #0366d6; font-family: 'Space Mono', monospace; margin-bottom: 2px; }
+.video-item .v-title { font-size: 13px; font-weight: 700; color: #0d1117; }
+.video-item .v-sub   { font-size: 12px; color: #6b7fa3; margin-top: 2px; }
+
+/* DEADLINE BOX */
+.deadline-box {
+  background: #fff5f5; border: 1px solid #fecdd3;
+  border-right: 4px solid #dc2626; border-radius: 10px;
+  padding: 18px 22px; margin-top: 36px; text-align: center;
+}
+.deadline-box .dl-title { font-size: 17px; font-weight: 900; color: #dc2626; margin-bottom: 8px; }
+.deadline-box .dl-rows  { font-size: 13px; color: #7f1d1d; line-height: 2; }
+.deadline-box .dl-rows strong { color: #dc2626; }
+
+/* DIVIDER */
+.section-divider {
+  border: none; border-top: 2px dashed #e1e4e8;
+  margin: 32px 0;
+}
+
+/* inline code */
+code {
+  background: #f6f8fa; border: 1px solid #e1e4e8;
+  border-radius: 4px; padding: 1px 6px;
+  font-family: 'Space Mono', monospace; font-size: 12px;
+  color: #d04a02;
+}
+</style>
+</head>
+<body>
+
+<div class="top-notice">💻 افتح هذه الصفحة على الكمبيوتر أو اللابتوب — ليس على الجوال</div>
+
+<div class="top-bar">
+  <div class="top-bar-title">دورة رصد — واجب البطاقات وCSS</div>
+  <div class="top-bar-badge">3 أنشطة · هذا الأسبوع</div>
+</div>
+
+<div class="container">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="label">RAKAEZ COURSE · HOMEWORK</div>
+    <h1>واجب الأسبوع — البطاقات والتصميم 🎨</h1>
+    <p class="sub">ثلاثة أنشطة هذا الأسبوع — نشاطان تطبيقيان بالكود + مشاهدة فيديوهات جديدة. كل نشاط له موعده الخاص.</p>
+  </div>
+
+  <!-- VSCODE -->
+  <div class="vscode-box">
+    <div style="font-size:32px;flex-shrink:0;margin-top:2px;">🖥️</div>
+    <div>
+      <h4>كل شيء يُكتب داخل Visual Studio Code</h4>
+      <p>افتح VS Code قبل أي شيء. أنشئ ملفاتك بداخله وشاهد النتيجة بالمتصفح. إذا لم يكن مثبتاً: <strong>code.visualstudio.com</strong> — حجمه صغير وتثبيته سريع.</p>
+    </div>
+  </div>
+
+  <!-- ===================== ACTIVITY 1 ===================== -->
+  <div class="section-header">
+    <div class="section-num num-bg-blue">01</div>
+    <div class="section-header-text">
+      <h2>بطاقتي التعريفية</h2>
+      <span>HTML + CSS — تطبيق ما تعلمناه</span>
+    </div>
+  </div>
+  <div class="deadline-badge dl-tuesday">⏰ الموعد النهائي: الثلاثاء منتصف الليل</div>
+
+  <!-- WHAT YOU'LL BUILD -->
+  <div class="task-card">
+    <div style="font-size:13px;font-weight:700;color:#6b7fa3;margin-bottom:12px;">ما ستبنيه — مثال للنتيجة النهائية:</div>
+    <div class="profile-preview">
+      <div class="pv-name">محمد أحمد</div>
+      <div class="pv-tag">🛡 طالب في دورة رصد</div>
+      <div class="pv-bio">أنا طالب عمري 14 سنة، أحب التقنية والبرمجة.<br>أتعلم حالياً كيف أبني مواقع ويب وأنظمة ذكية.</div>
+      <div class="pv-cards">
+        <div class="pv-card"><div class="pv-emoji">🎮</div><div class="pv-card-title">هوايتي</div><div class="pv-card-val">ألعاب الفيديو</div></div>
+        <div class="pv-card"><div class="pv-emoji">📚</div><div class="pv-card-title">مادتي المفضلة</div><div class="pv-card-val">الرياضيات</div></div>
+        <div class="pv-card"><div class="pv-emoji">🚀</div><div class="pv-card-title">حلمي</div><div class="pv-card-val">مهندس AI</div></div>
+      </div>
+    </div>
+    <div class="hint" style="margin-top:8px;">🎨 غيّر الألوان واكتب معلوماتك الحقيقية — هذا تصميمك الخاص.</div>
+  </div>
+
+  <div class="task-card">
+    <ul class="steps-list">
+
+      <li class="step-item">
+        <div class="step-num num-blue">1</div>
+        <div class="step-body">
+          <h4>أنشئ مجلد المشروع</h4>
+          <p>على سطح المكتب، أنشئ مجلداً اسمه <code>my-profile</code>. داخله أنشئ ملفين:</p>
+          <ul>
+            <li><code>index.html</code> — صفحة HTML</li>
+            <li><code>style.css</code> — ملف التصميم</li>
+          </ul>
+          <div class="hint">📁 افتح VS Code ← File ← Open Folder ← اختر مجلد my-profile. ثم أنشئ الملفين من الشريط الجانبي بأيقونة New File.</div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num num-blue">2</div>
+        <div class="step-body">
+          <h4>اكتب الهيكل في index.html</h4>
+          <p>انسخ الكود التالي، ثم <strong>غيّر الاسم والمعلومات</strong> بمعلوماتك الحقيقية:</p>
+          <div class="code-wrap">
+            <div class="code-label">
+              <span>index.html</span>
+              <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+            </div>
+            <pre><span class="t">&lt;!DOCTYPE html&gt;</span>
+<span class="t">&lt;html</span> <span class="a">lang</span>=<span class="s">"ar"</span> <span class="a">dir</span>=<span class="s">"rtl"</span><span class="t">&gt;</span>
+<span class="t">&lt;head&gt;</span>
+  <span class="t">&lt;meta</span> <span class="a">charset</span>=<span class="s">"UTF-8"</span><span class="t">&gt;</span>
+  <span class="t">&lt;title&gt;</span><span class="tx">بطاقتي التعريفية</span><span class="t">&lt;/title&gt;</span>
+  <span class="t">&lt;link</span> <span class="a">rel</span>=<span class="s">"stylesheet"</span> <span class="a">href</span>=<span class="s">"style.css"</span><span class="t">&gt;</span>
+<span class="t">&lt;/head&gt;</span>
+<span class="t">&lt;body&gt;</span>
+
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"profile-card"</span><span class="t">&gt;</span>
+
+    <span class="c">&lt;!-- اسمك ولقبك --&gt;</span>
+    <span class="t">&lt;h1&gt;</span><span class="tx">محمد أحمد</span><span class="t">&lt;/h1&gt;</span>
+    <span class="t">&lt;h3&gt;</span><span class="tx">🛡 طالب في دورة رصد</span><span class="t">&lt;/h3&gt;</span>
+
+    <span class="c">&lt;!-- نبذة عنك --&gt;</span>
+    <span class="t">&lt;p&gt;</span><span class="tx">اكتب هنا جملتين أو ثلاث عن نفسك.
+    اهتماماتك، عمرك، ماذا تحب أن تتعلم.</span><span class="t">&lt;/p&gt;</span>
+
+    <span class="c">&lt;!-- البطاقات الصغيرة --&gt;</span>
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"info-card"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">🎮 هوايتي</span><span class="t">&lt;/h2&gt;</span>
+      <span class="t">&lt;p&gt;</span><span class="tx">اكتب هوايتك هنا</span><span class="t">&lt;/p&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"info-card"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">📚 مادتي المفضلة</span><span class="t">&lt;/h2&gt;</span>
+      <span class="t">&lt;p&gt;</span><span class="tx">اكتب مادتك المفضلة هنا</span><span class="t">&lt;/p&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"info-card"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">🚀 حلمي المستقبلي</span><span class="t">&lt;/h2&gt;</span>
+      <span class="t">&lt;p&gt;</span><span class="tx">اكتب حلمك هنا</span><span class="t">&lt;/p&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+  <span class="t">&lt;/div&gt;</span>
+
+<span class="t">&lt;/body&gt;</span>
+<span class="t">&lt;/html&gt;</span></pre>
+          </div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num num-blue">3</div>
+        <div class="step-body">
+          <h4>صمّم الصفحة في style.css</h4>
+          <p>انسخ الكود التالي كنقطة بداية، ثم <strong>غيّر الألوان</strong> كما تريد:</p>
+          <div class="code-wrap">
+            <div class="code-label">
+              <span>style.css</span>
+              <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+            </div>
+            <pre><span class="c">/* ---- خلفية الصفحة كلها ---- */</span>
+<span class="p">body</span> {
+  <span class="a">background-color</span>: <span class="s">#1a1a2e</span>;
+}
+
+<span class="c">/* ---- البطاقة الرئيسية ---- */</span>
+<span class="p">.profile-card</span> {
+  <span class="a">background-color</span>: <span class="s">#16213e</span>;
+  <span class="a">color</span>: <span class="s">#ffffff</span>;
+}
+
+<span class="c">/* ---- البطاقات الصغيرة ---- */</span>
+<span class="p">.info-card</span> {
+  <span class="a">background-color</span>: <span class="s">#0f3460</span>;
+  <span class="a">color</span>: <span class="s">#e6edf3</span>;
+}
+
+<span class="c">/* ---- حجم الخط ---- */</span>
+<span class="p">h1</span> { <span class="a">font-size</span>: <span class="s">32px</span>; }
+<span class="p">h2</span> { <span class="a">font-size</span>: <span class="s">20px</span>; }
+<span class="p">h3</span> { <span class="a">font-size</span>: <span class="s">16px</span>; <span class="a">color</span>: <span class="s">#8b949e</span>; }
+<span class="p">p</span>  { <span class="a">font-size</span>: <span class="s">14px</span>; }</pre>
+          </div>
+          <div class="hint">🎨 اختر ألوانك: ابحث في Google عن <strong>"color picker hex"</strong> لتختار اللون الذي تريده وتنسخ الكود (#xxxxxx).</div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num num-blue">4</div>
+        <div class="step-body">
+          <h4>افتح الصفحة وشوف النتيجة</h4>
+          <p>كليك يمين على <code>index.html</code> في VS Code ← <strong>Open with Live Server</strong>. إذا لم يظهر هذا الخيار، ابحث في VS Code Extensions عن "Live Server" وثبّته أولاً.</p>
+          <div class="hint">💾 احفظ الملف بـ Ctrl+S (Windows) · Cmd+S (Mac) وستتحدث الصفحة تلقائياً.</div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num num-blue">5</div>
+        <div class="step-body">
+          <h4>ارفع المجلد على Drive</h4>
+          <p>بعد الانتهاء، ارفع مجلد <code>my-profile</code> كاملاً داخل مجلدك على Google Drive.</p>
+          <div style="margin-top:10px;">
+            <a href="https://drive.google.com/drive/folders/1MqnjuumptJzHfxkyL98x_-1ri_2DnKHq?usp=sharing" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#0366d6;color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;">📁 افتح مجلد واجبات رصد</a>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+
+    <!-- PRACTICE CHALLENGE -->
+    <div class="practice-box">
+      <div class="pr-title">🏋️ تحدي إضافي — إذا انتهيت مبكراً</div>
+      <p>أضف بطاقة رابعة داخل الـ <code>.profile-card</code> عن أي شيء تحبه — مثل: لعبتي المفضلة، فيلمي المفضل، بلدي، هدفي هذا العام. اختر لها لون مختلف عن البطاقات الأخرى.</p>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ===================== ACTIVITY 2 ===================== -->
+  <div class="section-header">
+    <div class="section-num num-bg-amber">02</div>
+    <div class="section-header-text">
+      <h2>بطاقات مشروع رصد — لون لكل حساس</h2>
+      <span>CSS Classes — كل بطاقة بلونها الخاص</span>
+    </div>
+  </div>
+  <div class="deadline-badge dl-wednesday">⏰ الموعد النهائي: الأربعاء منتصف الليل</div>
+
+  <!-- WHAT YOU'LL BUILD -->
+  <div class="task-card">
+    <div style="font-size:13px;font-weight:700;color:#6b7fa3;margin-bottom:12px;">الهدف — كل حساس ببطاقته الملونة:</div>
+    <div class="sensor-grid-preview">
+      <div class="sc sc-temp"><h3>🌡️ درجة الحرارة</h3><p>Temperature Sensor</p><div class="sc-val">28 °C</div></div>
+      <div class="sc sc-humid"><h3>💧 الرطوبة</h3><p>Humidity Sensor</p><div class="sc-val">65 %</div></div>
+      <div class="sc sc-rain"><h3>🌧️ مستوى المطر</h3><p>Rain Sensor</p><div class="sc-val">جاف</div></div>
+      <div class="sc sc-soil"><h3>🌱 رطوبة التربة</h3><p>Soil Moisture Sensor</p><div class="sc-val">جيد</div></div>
+    </div>
+    <div class="hint" style="margin-top:8px;">ستستخدم هنا مفهوماً جديداً: <strong>كلاس مزدوج</strong> — يعني كل بطاقة تأخذ كلاسين في نفس الوقت: الأساسي (.card) + الخاص بها (.card-temp).</div>
+  </div>
+
+  <div class="task-card">
+
+    <div class="info-box">
+      <strong>مفهوم جديد — الكلاسان معاً:</strong><br>
+      يمكنك إعطاء عنصر HTML أكثر من كلاس واحد في نفس الوقت. فصلها بمسافة داخل الـ <code>class=""</code>:<br><br>
+      <code style="background:#fff;color:#d04a02;">&lt;div class="card card-temp"&gt;</code><br><br>
+      هذا يعني: طبّق تصميم <code>.card</code> + طبّق تصميم <code>.card-temp</code> معاً على هذا العنصر.
+    </div>
+
+    <ul class="steps-list" style="margin-top:16px;">
+
+      <li class="step-item">
+        <div class="step-num num-amber">1</div>
+        <div class="step-body">
+          <h4>افتح مشروع رصد السابق</h4>
+          <p>افتح VS Code ← File ← Open Folder ← اختر مجلد <code>rasd</code> الذي أنشأته الأسبوع الماضي. ستعدّل على نفس الملفين <code>index.html</code> و <code>style.css</code>.</p>
+          <div class="hint">إذا لم يكن عندك المجلد، أنشئ مجلداً جديداً اسمه <code>rasd</code> وابدأ من الصفر بالكود أدناه.</div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num num-amber">2</div>
+        <div class="step-body">
+          <h4>عدّل بطاقات الحساسات في index.html</h4>
+          <p>أضف كلاساً خاصاً لكل بطاقة بجانب الكلاس <code>card</code>:</p>
+          <div class="code-wrap">
+            <div class="code-label">
+              <span>index.html — قسم البطاقات</span>
+              <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+            </div>
+            <pre><span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"cards"</span><span class="t">&gt;</span>
+
+  <span class="c">&lt;!-- بطاقة درجة الحرارة --&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card card-temp"</span><span class="t">&gt;</span>
+    <span class="t">&lt;h2&gt;</span><span class="tx">🌡️ درجة الحرارة</span><span class="t">&lt;/h2&gt;</span>
+    <span class="t">&lt;p&gt;</span><span class="tx">Temperature Sensor</span><span class="t">&lt;/p&gt;</span>
+    <span class="t">&lt;h3&gt;</span><span class="tx">-- °C</span><span class="t">&lt;/h3&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+
+  <span class="c">&lt;!-- بطاقة الرطوبة --&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card card-humid"</span><span class="t">&gt;</span>
+    <span class="t">&lt;h2&gt;</span><span class="tx">💧 الرطوبة</span><span class="t">&lt;/h2&gt;</span>
+    <span class="t">&lt;p&gt;</span><span class="tx">Humidity Sensor</span><span class="t">&lt;/p&gt;</span>
+    <span class="t">&lt;h3&gt;</span><span class="tx">-- %</span><span class="t">&lt;/h3&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+
+  <span class="c">&lt;!-- بطاقة المطر --&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card card-rain"</span><span class="t">&gt;</span>
+    <span class="t">&lt;h2&gt;</span><span class="tx">🌧️ مستوى المطر</span><span class="t">&lt;/h2&gt;</span>
+    <span class="t">&lt;p&gt;</span><span class="tx">Rain Sensor</span><span class="t">&lt;/p&gt;</span>
+    <span class="t">&lt;h3&gt;</span><span class="tx">--</span><span class="t">&lt;/h3&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+
+  <span class="c">&lt;!-- بطاقة رطوبة التربة --&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card card-soil"</span><span class="t">&gt;</span>
+    <span class="t">&lt;h2&gt;</span><span class="tx">🌱 رطوبة التربة</span><span class="t">&lt;/h2&gt;</span>
+    <span class="t">&lt;p&gt;</span><span class="tx">Soil Moisture Sensor</span><span class="t">&lt;/p&gt;</span>
+    <span class="t">&lt;h3&gt;</span><span class="tx">--</span><span class="t">&lt;/h3&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+
+<span class="t">&lt;/div&gt;</span></pre>
+          </div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num num-amber">3</div>
+        <div class="step-body">
+          <h4>أضف الألوان في style.css</h4>
+          <p>الكلاس <code>.card</code> يضبط التصميم المشترك لكل البطاقات، والكلاسات الخاصة تضبط لون كل واحدة:</p>
+          <div class="code-wrap">
+            <div class="code-label">
+              <span>style.css — ألوان البطاقات</span>
+              <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+            </div>
+            <pre><span class="c">/* ---- التصميم المشترك لكل البطاقات ---- */</span>
+<span class="p">.card</span> {
+  <span class="a">color</span>: <span class="s">#ffffff</span>;
+  <span class="a">font-size</span>: <span class="s">16px</span>;
+}
+
+<span class="c">/* ---- لون خاص لكل حساس ---- */</span>
+<span class="p">.card-temp</span>  { <span class="a">background-color</span>: <span class="s">#e03131</span>; } <span class="c">/* أحمر  */</span>
+<span class="p">.card-humid</span> { <span class="a">background-color</span>: <span class="s">#1971c2</span>; } <span class="c">/* أزرق  */</span>
+<span class="p">.card-rain</span>  { <span class="a">background-color</span>: <span class="s">#0ca678</span>; } <span class="c">/* أخضر  */</span>
+<span class="p">.card-soil</span>  { <span class="a">background-color</span>: <span class="s">#2f9e44</span>; } <span class="c">/* أخضر غامق */</span></pre>
+          </div>
+          <div class="hint">🖌 غيّر الألوان كما تحب! جرّب ألواناً مختلفة لكل حساس.</div>
+        </div>
+      </li>
+
+    </ul>
+
+    <!-- PRACTICE CHALLENGE -->
+    <div class="practice-box">
+      <div class="pr-title">🏋️ تحدي إضافي</div>
+      <p>أضف لون مختلف لنص الأرقام داخل كل بطاقة. مثلاً، اجعل رقم درجة الحرارة أصفر اللون. تلميح: أضف داخل <code>.card-temp</code> خاصية <code>color</code> لعنصر <code>h3</code> باستخدام CSS Selector داخلي:</p>
+      <div class="code-wrap" style="margin-top:10px;">
+        <div class="code-label"><span>تلميح</span></div>
+        <pre><span class="p">.card-temp h3</span> {
+  <span class="a">color</span>: <span class="s">#ffd43b</span>;
+}</pre>
+      </div>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ===================== FONT SIZE CONCEPT ===================== -->
+  <div class="section-header">
+    <div class="section-num num-bg-green" style="font-size:14px;">💡</div>
+    <div class="section-header-text">
+      <h2>مفهوم جديد — font-size حجم الخط</h2>
+      <span>تعلّمه الآن، ستحتاجه في كل مشروع</span>
+    </div>
+  </div>
+
+  <div class="task-card">
+    <p style="font-size:13px;color:#444d56;margin-bottom:14px;">خاصية <code>font-size</code> تتحكم في حجم النص. الوحدة المستخدمة هي <strong>px (بيكسل)</strong>. كلما كان الرقم أكبر، كان النص أكبر.</p>
+
+    <div class="fontsize-demo">
+      <div class="fs-row">
+        <span class="fs-code">font-size: 36px</span>
+        <span class="fs-preview" style="font-size:36px;font-weight:900;">عنوان</span>
+      </div>
+      <div class="fs-row">
+        <span class="fs-code">font-size: 28px</span>
+        <span class="fs-preview" style="font-size:28px;font-weight:700;">عنوان فرعي</span>
+      </div>
+      <div class="fs-row">
+        <span class="fs-code">font-size: 20px</span>
+        <span class="fs-preview" style="font-size:20px;">عنوان صغير</span>
+      </div>
+      <div class="fs-row">
+        <span class="fs-code">font-size: 14px</span>
+        <span class="fs-preview" style="font-size:14px;">نص عادي — مناسب للفقرات</span>
+      </div>
+      <div class="fs-row">
+        <span class="fs-code">font-size: 11px</span>
+        <span class="fs-preview" style="font-size:11px;">نص صغير — للتفاصيل والملاحظات</span>
+      </div>
+    </div>
+
+    <div class="code-wrap" style="margin-top:14px;">
+      <div class="code-label"><span>مثال — كيف تستخدمها في CSS</span></div>
+      <pre><span class="p">h1</span> { <span class="a">font-size</span>: <span class="s">36px</span>; }  <span class="c">/* عنوان الصفحة */</span>
+<span class="p">h2</span> { <span class="a">font-size</span>: <span class="s">24px</span>; }  <span class="c">/* عنوان القسم */</span>
+<span class="p">h3</span> { <span class="a">font-size</span>: <span class="s">18px</span>; }
+<span class="p">p</span>  { <span class="a">font-size</span>: <span class="s">14px</span>; }  <span class="c">/* نص الفقرات */</span></pre>
+    </div>
+
+    <div class="practice-box" style="margin-top:16px;">
+      <div class="pr-title">🏋️ جرّب الآن</div>
+      <p>في كلا المشروعين (my-profile و rasd)، عدّل أحجام الخطوط لتبدو الصفحة أجمل. اجعل h1 كبيراً وجذاباً، وp صغيرة ومريحة للقراءة.</p>
+    </div>
+  </div>
+
+  <hr class="section-divider">
+
+  <!-- ===================== VIDEOS ===================== -->
+  <div class="section-header">
+    <div class="section-num num-bg-purple">▶</div>
+    <div class="section-header-text">
+      <h2>فيديوهات هذا الأسبوع</h2>
+      <span>مفاهيم جديدة ستحتاجها قريباً</span>
+    </div>
+  </div>
+  <div class="deadline-badge dl-thursday">⏰ الموعد النهائي: الخميس منتصف الليل</div>
+
+  <div class="task-card">
+    <div class="warn-box">
+      <strong>مهم:</strong> شاهد كل فيديو وأنت جالس أمام VS Code. جرّب الكود مباشرةً أثناء المشاهدة — لا تكتفِ بالمشاهدة فقط.
+    </div>
+
+    <div style="margin-top:16px;margin-bottom:8px;font-size:13px;font-weight:700;color:#0d1117;">📎 روابط وصور في HTML — مفاهيم جديدة:</div>
+    <div class="video-grid">
+      <a href="https://www.youtube.com/watch?v=v9HCkMBdUCc&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=8" target="_blank" class="video-item">
+        <div class="v-play">🔗</div>
+        <div>
+          <div class="v-num">LESSON 08</div>
+          <div class="v-title">Links — الروابط</div>
+          <div class="v-sub">كيف تضيف رابطاً يفتح صفحة أخرى</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=EhyFbWwXH_4&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=9" target="_blank" class="video-item">
+        <div class="v-play">🖼️</div>
+        <div>
+          <div class="v-num">LESSON 09</div>
+          <div class="v-title">Image — الصور</div>
+          <div class="v-sub">كيف تضيف صورة داخل صفحتك</div>
+        </div>
+      </a>
+    </div>
+
+    <div style="margin-top:16px;margin-bottom:8px;font-size:13px;font-weight:700;color:#0d1117;">🎨 CSS — ألوان ومحددات:</div>
+    <div class="video-grid">
+      <a href="https://www.youtube.com/watch?v=oq3xOkMiAFo&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=17" target="_blank" class="video-item">
+        <div class="v-play">🎨</div>
+        <div>
+          <div class="v-num">LESSON 17</div>
+          <div class="v-title">Colors — الألوان بالتفصيل</div>
+          <div class="v-sub">أنواع الألوان: name / hex / rgb</div>
+        </div>
+      </a>
+      <a href="https://www.youtube.com/watch?v=RnGRKSrqJuE&list=PLDoPjvoNmBAw_t_XWUFbBX-c9MafPk9ji&index=16" target="_blank" class="video-item">
+        <div class="v-play">🎯</div>
+        <div>
+          <div class="v-num">LESSON 16</div>
+          <div class="v-title">CSS Selectors — المحددات</div>
+          <div class="v-sub">كيف تستهدف أي عنصر بدقة في CSS</div>
+        </div>
+      </a>
+    </div>
+
+    <div class="green-box" style="margin-top:16px;">
+      <strong>بعد المشاهدة — جرّب هذا:</strong><br>
+      بعد درس الروابط، أضف رابطاً في صفحة my-profile يفتح صفحة رصد.<br>
+      بعد درس الصور، أضف صورة اخترتها من الإنترنت داخل بطاقتك التعريفية.
+    </div>
+  </div>
+
+  <!-- DEADLINE SUMMARY -->
+  <div class="deadline-box">
+    <div class="dl-title">📅 جدول المواعيد النهائية</div>
+    <div class="dl-rows">
+      <strong>الثلاثاء منتصف الليل</strong> — النشاط الأول: بطاقتي التعريفية<br>
+      <strong>الأربعاء منتصف الليل</strong> — النشاط الثاني: بطاقات مشروع رصد<br>
+      <strong>الخميس منتصف الليل</strong> — الفيديوهات الأربعة<br>
+      أي تسليم بعد موعده لن يُقبل ولن يُصحَّح
+    </div>
+  </div>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.closest('.code-wrap').querySelector('pre');
+  const text = pre.innerText;
+  navigator.clipboard.writeText(text).then(() => {
+    btn.textContent = '✓ تم النسخ';
+    setTimeout(() => btn.textContent = 'نسخ', 2000);
+  });
+}
+</script>
+</body>
+</html>

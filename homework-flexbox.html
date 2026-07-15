@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>واجب — Flexbox وبطاقات رصد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: #f6f8fa;
+  color: #1a1a2e;
+  line-height: 1.7;
+  padding: 0 0 80px;
+}
+
+.top-notice {
+  background: #1a1a2e; color: #e6edf3;
+  padding: 12px 32px; font-size: 13px;
+  font-weight: 600; text-align: center;
+}
+.top-bar {
+  background: #fff; border-bottom: 1px solid #e1e4e8;
+  padding: 14px 32px; display: flex;
+  align-items: center; justify-content: space-between;
+}
+.top-bar-title { font-size: 14px; font-weight: 700; color: #0d1117; }
+.top-bar-badge {
+  font-size: 12px; background: #eafaf7; color: #0a7c5c;
+  border: 1px solid #b6e9da; border-radius: 20px;
+  padding: 3px 12px; font-weight: 600;
+}
+
+.container { max-width: 820px; margin: 0 auto; padding: 40px 24px 0; }
+
+.page-header { margin-bottom: 32px; }
+.page-header .label {
+  font-size: 11px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: #6b7fa3; margin-bottom: 10px;
+}
+.page-header h1 { font-size: 28px; font-weight: 900; color: #0d1117; margin-bottom: 6px; }
+.page-header .sub { font-size: 13px; color: #6b7fa3; }
+
+/* VS CODE BOX */
+.vscode-box {
+  background: #1e1e2e; border-radius: 12px;
+  padding: 16px 20px; margin-bottom: 28px;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.vscode-box h4 { font-size: 14px; font-weight: 900; color: #e6edf3; margin-bottom: 3px; }
+.vscode-box p  { font-size: 13px; color: #8b949e; line-height: 1.6; }
+.vscode-box strong { color: #58a6ff; }
+
+/* SECTION HEADER */
+.section-header {
+  display: flex; align-items: center; gap: 14px; margin-bottom: 18px;
+}
+.section-num {
+  width: 44px; height: 44px; border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 900; font-family: 'Space Mono', monospace;
+  flex-shrink: 0;
+}
+.n-blue   { background: #e8f4fd; color: #0366d6; }
+.n-amber  { background: #fef9e7; color: #b45309; }
+.n-green  { background: #eafaf7; color: #0a7c5c; }
+.n-purple { background: #f3effe; color: #6f42c1; }
+.section-header h2 { font-size: 19px; font-weight: 900; color: #0d1117; margin-bottom: 2px; }
+.section-header span { font-size: 12px; color: #6b7fa3; display: block; }
+
+/* DEADLINE BADGE */
+.dl-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12px; font-weight: 700; border-radius: 20px;
+  padding: 4px 14px; margin-bottom: 20px; border: 1px solid;
+}
+.dl-tue { background:#e8f4fd; color:#0366d6; border-color:#c8e1f9; }
+.dl-wed { background:#fef9e7; color:#b45309; border-color:#f0cc5a; }
+.dl-thu { background:#eafaf7; color:#0a7c5c; border-color:#b6e9da; }
+
+/* TASK CARD */
+.task-card {
+  background: #fff; border: 1px solid #e1e4e8;
+  border-radius: 12px; padding: 24px; margin-bottom: 20px;
+}
+
+/* STEPS */
+.steps-list { list-style: none; }
+.step-item {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 14px 0; border-bottom: 1px solid #f3f4f6;
+}
+.step-item:last-child { border-bottom: none; padding-bottom: 0; }
+.step-num {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 13px; font-family: 'Space Mono', monospace;
+  margin-top: 2px;
+}
+.sn-blue   { background:#e8f4fd; color:#0366d6; border:1px solid #c8e1f9; }
+.sn-amber  { background:#fef9e7; color:#b45309; border:1px solid #f0cc5a; }
+.sn-green  { background:#eafaf7; color:#0a7c5c; border:1px solid #b6e9da; }
+.step-body { flex: 1; min-width: 0; }
+.step-body h4 { font-size: 14px; font-weight: 700; color: #0d1117; margin-bottom: 4px; }
+.step-body p, .step-body li { font-size: 13px; color: #444d56; line-height: 1.7; }
+.step-body ul { padding-right: 18px; margin-top: 4px; }
+
+/* HINT */
+.hint {
+  font-size: 12px; color: #6b7fa3; margin-top: 8px;
+  background: #f6f8fa; border-radius: 6px; padding: 7px 11px;
+  border-right: 3px solid #d0d7de;
+}
+
+/* INFO / WARN / GREEN BOXES */
+.info-box {
+  background: #f0f7ff; border: 1px solid #c8e1f9; border-right: 4px solid #0366d6;
+  border-radius: 8px; padding: 13px 16px; font-size: 13px; color: #444d56; line-height: 1.7; margin: 10px 0;
+}
+.info-box strong { color: #0366d6; }
+.green-box {
+  background: #eafaf7; border: 1px solid #b6e9da; border-right: 4px solid #0a7c5c;
+  border-radius: 8px; padding: 13px 16px; font-size: 13px; color: #1a4731; line-height: 1.7; margin: 10px 0;
+}
+.green-box strong { color: #0a7c5c; }
+
+/* CODE BLOCK */
+.code-wrap {
+  background: #0d1117; border: 1px solid #30363d; border-radius: 10px;
+  margin: 14px 0; overflow: hidden; direction: ltr;
+}
+.code-label {
+  background: #161b22; border-bottom: 1px solid #30363d;
+  padding: 8px 16px; font-size: 11px; font-weight: 700;
+  color: #8b949e; font-family: 'Space Mono', monospace; letter-spacing: 1px;
+  text-align: left; display: flex; justify-content: space-between; align-items: center;
+}
+.copy-btn {
+  background: #21262d; border: 1px solid #30363d; color: #8b949e;
+  font-size: 11px; border-radius: 5px; padding: 2px 10px; cursor: pointer;
+  font-family: 'Cairo', sans-serif; direction: rtl; transition: background 0.15s;
+}
+.copy-btn:hover { background: #30363d; color: #e6edf3; }
+.code-wrap pre {
+  padding: 18px 20px; overflow-x: auto; margin: 0;
+  font-family: 'Space Mono', monospace; font-size: 13px;
+  line-height: 1.9; color: #e6edf3; white-space: pre; text-align: left;
+}
+.c  { color: #8b949e; }
+.t  { color: #58a6ff; }
+.a  { color: #f0b429; }
+.s  { color: #3fb950; }
+.tx { color: #e6edf3; }
+.p  { color: #f78166; }
+.v  { color: #d2a8ff; }
+
+/* PRACTICE BOX */
+.practice-box {
+  background: #f3effe; border: 1px solid #d8b4fe;
+  border-right: 4px solid #6f42c1; border-radius: 10px;
+  padding: 18px 20px; margin-top: 18px;
+}
+.practice-box .pr-title {
+  font-size: 14px; font-weight: 900; color: #4c1d95; margin-bottom: 8px;
+  display: flex; align-items: center; gap: 8px;
+}
+.practice-box p, .practice-box li { font-size: 13px; color: #3b1f6e; line-height: 1.7; }
+
+/* ===== FLEX CONCEPT CARD ===== */
+.flex-concept {
+  background: #fff; border: 2px solid #0366d6;
+  border-radius: 14px; padding: 24px; margin-bottom: 28px;
+}
+.flex-concept h3 {
+  font-size: 16px; font-weight: 900; color: #0366d6; margin-bottom: 18px;
+  display: flex; align-items: center; gap: 8px;
+}
+.flex-props { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.flex-prop {
+  background: #f6f8fa; border: 1px solid #e1e4e8; border-radius: 8px; padding: 12px 14px;
+}
+.flex-prop .fp-name {
+  font-family: 'Space Mono', monospace; font-size: 12px; font-weight: 700;
+  color: #0366d6; margin-bottom: 4px;
+}
+.flex-prop .fp-val  { font-family: 'Space Mono', monospace; font-size: 11px; color: #3fb950; margin-bottom: 4px; }
+.flex-prop .fp-desc { font-size: 12px; color: #6b7fa3; }
+
+/* ===== LIVE TRAINING DEMO ===== */
+.live-demo {
+  background: #0d1117; border: 1px solid #30363d;
+  border-radius: 12px; padding: 20px; margin: 14px 0;
+}
+.live-demo .demo-label {
+  font-size: 11px; font-weight: 700; color: #8b949e;
+  letter-spacing: 2px; text-transform: uppercase;
+  font-family: 'Space Mono', monospace; margin-bottom: 14px;
+}
+/* training demo: 3 boxes */
+.demo-boxes {
+  display: flex;
+  justify-content: space-evenly;
+}
+.demo-box {
+  background: #0366d6; color: #fff;
+  text-align: center; font-size: 15px; font-weight: 700;
+  padding: 20px 24px; border-radius: 8px; min-width: 120px;
+}
+
+/* ===== TARGET PREVIEW ===== */
+.target-frame {
+  border: 3px solid #0a7c5c; border-radius: 14px; overflow: hidden;
+  margin: 14px 0; background: #f0f4f8;
+}
+.target-label {
+  background: #0a7c5c; color: #fff;
+  font-size: 12px; font-weight: 700; padding: 8px 16px;
+  letter-spacing: 1px; text-align: center;
+  font-family: 'Space Mono', monospace;
+}
+/* The actual target page layout rendered live */
+.target-page { padding: 0; background: #f0f4f8; direction: rtl; }
+.target-header {
+  background: #1a1a2e; padding: 20px 32px;
+  text-align: center;
+}
+.target-header h1 {
+  font-family: 'Cairo', sans-serif;
+  font-size: 28px; font-weight: 900; color: #ffffff;
+}
+.target-header p {
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px; color: #8b949e; margin-top: 4px;
+}
+.target-cards {
+  display: flex;
+  justify-content: space-evenly;
+  padding: 24px 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.target-card {
+  background: #ffffff; border-radius: 12px;
+  padding: 20px 16px; min-width: 140px;
+  text-align: center; border: 1px solid #e1e4e8;
+  flex: 1;
+}
+.target-card .tc-emoji { font-size: 28px; margin-bottom: 6px; }
+.target-card .tc-name  {
+  font-family: 'Cairo', sans-serif;
+  font-size: 13px; font-weight: 700; color: #0d1117; margin-bottom: 4px;
+}
+.target-card .tc-sub {
+  font-family: 'Cairo', sans-serif;
+  font-size: 11px; color: #6b7fa3; margin-bottom: 10px;
+}
+.target-card .tc-val {
+  font-family: 'Space Mono', monospace;
+  font-size: 22px; font-weight: 700; color: #0366d6;
+}
+.target-card.tc-temp  .tc-val { color: #e03131; }
+.target-card.tc-humid .tc-val { color: #1971c2; }
+.target-card.tc-rain  .tc-val { color: #0ca678; }
+.target-card.tc-soil  .tc-val { color: #2f9e44; }
+
+/* DIVIDER */
+hr.divider {
+  border: none; border-top: 2px dashed #e1e4e8; margin: 36px 0;
+}
+
+/* DEADLINE SUMMARY */
+.deadline-box {
+  background: #fff5f5; border: 1px solid #fecdd3;
+  border-right: 4px solid #dc2626; border-radius: 10px;
+  padding: 18px 22px; margin-top: 36px; text-align: center;
+}
+.deadline-box .dl-title { font-size: 17px; font-weight: 900; color: #dc2626; margin-bottom: 8px; }
+.deadline-box .dl-rows  { font-size: 13px; color: #7f1d1d; line-height: 2.2; }
+.deadline-box .dl-rows strong { color: #dc2626; }
+
+/* inline code */
+code {
+  background: #f6f8fa; border: 1px solid #e1e4e8;
+  border-radius: 4px; padding: 1px 6px;
+  font-family: 'Space Mono', monospace; font-size: 12px; color: #d04a02;
+}
+</style>
+</head>
+<body>
+
+<div class="top-notice">💻 افتح هذه الصفحة على الكمبيوتر أو اللابتوب — ليس على الجوال</div>
+
+<div class="top-bar">
+  <div class="top-bar-title">دورة رصد — واجب Flexbox</div>
+  <div class="top-bar-badge">جلستان · هذا الأسبوع</div>
+</div>
+
+<div class="container">
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="label">RAKAEZ COURSE · HOMEWORK</div>
+    <h1>واجب الأسبوع — Flexbox وبطاقات رصد 🃏</h1>
+    <p class="sub">تعلّمنا display:flex وjustify-content وtext-align وfont-size وfont-weight — الواجب يطبّق كل هذا على صفحة مشروع رصد الحقيقية.</p>
+  </div>
+
+  <!-- VSCODE -->
+  <div class="vscode-box">
+    <div style="font-size:32px;flex-shrink:0;margin-top:2px;">🖥️</div>
+    <div>
+      <h4>كل شيء يُكتب داخل Visual Studio Code</h4>
+      <p>افتح VS Code أولاً، أنشئ الملفات بداخله، وافتح النتيجة بالمتصفح بـ Live Server. إذا لم يكن مثبتاً: <strong>code.visualstudio.com</strong></p>
+    </div>
+  </div>
+
+  <!-- ===== FLEX CONCEPT REFERENCE ===== -->
+  <div class="flex-concept">
+    <h3>📌 مرجع سريع — الخصائص التي تعلّمناها</h3>
+    <div class="flex-props">
+      <div class="flex-prop">
+        <div class="fp-name">display</div>
+        <div class="fp-val">flex</div>
+        <div class="fp-desc">يحوّل الـ div إلى حاوية Flex — عناصرها تصطف في صف</div>
+      </div>
+      <div class="flex-prop">
+        <div class="fp-name">justify-content</div>
+        <div class="fp-val">space-evenly</div>
+        <div class="fp-desc">يوزّع العناصر بمسافات متساوية بين كل واحدة والأخرى</div>
+      </div>
+      <div class="flex-prop">
+        <div class="fp-name">text-align</div>
+        <div class="fp-val">center</div>
+        <div class="fp-desc">يمركز النص داخل العنصر أفقياً</div>
+      </div>
+      <div class="flex-prop">
+        <div class="fp-name">font-size</div>
+        <div class="fp-val">24px</div>
+        <div class="fp-desc">يتحكم في حجم الخط — كلما زاد الرقم كبر النص</div>
+      </div>
+      <div class="flex-prop">
+        <div class="fp-name">font-weight</div>
+        <div class="fp-val">700 / 900</div>
+        <div class="fp-desc">سماكة الخط — 400 عادي، 700 bold، 900 أسمك</div>
+      </div>
+      <div class="flex-prop">
+        <div class="fp-name">background-color</div>
+        <div class="fp-val">#1a1a2e</div>
+        <div class="fp-desc">لون خلفية العنصر</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== PART 1: TRAINING ===== -->
+  <div class="section-header">
+    <div class="section-num n-blue">01</div>
+    <div>
+      <h2>التدريب — ثلاثة صناديق بـ Flexbox</h2>
+      <span>قبل الواجب الحقيقي، دُرِّب أصابعك على Flex أولاً</span>
+    </div>
+  </div>
+  <div class="dl-badge dl-tue">⏰ أنهِ هذا التدريب: الثلاثاء منتصف الليل</div>
+
+  <!-- Live Demo -->
+  <div class="live-demo">
+    <div class="demo-label">▶ النتيجة التي ستحصل عليها</div>
+    <div class="demo-boxes">
+      <div class="demo-box">📦<br>صندوق 1</div>
+      <div class="demo-box" style="background:#0a7c5c;">📦<br>صندوق 2</div>
+      <div class="demo-box" style="background:#b45309;">📦<br>صندوق 3</div>
+    </div>
+  </div>
+
+  <div class="task-card">
+    <div class="info-box">
+      <strong>الهدف:</strong> أنشئ صفحة بها ثلاثة صناديق ملونة تصطف في صف واحد باستخدام <code>display: flex</code>. هذا التدريب يُعدّك للواجب الحقيقي.
+    </div>
+
+    <ul class="steps-list" style="margin-top:16px;">
+      <li class="step-item">
+        <div class="step-num sn-blue">1</div>
+        <div class="step-body">
+          <h4>أنشئ المجلد والملفات</h4>
+          <p>مجلد جديد اسمه <code>flex-training</code> على سطح المكتب. داخله ملفان: <code>index.html</code> و <code>style.css</code></p>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num sn-blue">2</div>
+        <div class="step-body">
+          <h4>اكتب الـ HTML</h4>
+          <div class="code-wrap">
+            <div class="code-label">
+              <span>index.html</span>
+              <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+            </div>
+            <pre><span class="t">&lt;!DOCTYPE html&gt;</span>
+<span class="t">&lt;html</span> <span class="a">lang</span>=<span class="s">"ar"</span> <span class="a">dir</span>=<span class="s">"rtl"</span><span class="t">&gt;</span>
+<span class="t">&lt;head&gt;</span>
+  <span class="t">&lt;meta</span> <span class="a">charset</span>=<span class="s">"UTF-8"</span><span class="t">&gt;</span>
+  <span class="t">&lt;title&gt;</span><span class="tx">تدريب Flex</span><span class="t">&lt;/title&gt;</span>
+  <span class="t">&lt;link</span> <span class="a">rel</span>=<span class="s">"stylesheet"</span> <span class="a">href</span>=<span class="s">"style.css"</span><span class="t">&gt;</span>
+<span class="t">&lt;/head&gt;</span>
+<span class="t">&lt;body&gt;</span>
+
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"container"</span><span class="t">&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"box box-blue"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">📦 صندوق 1</span><span class="t">&lt;/h2&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"box box-green"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">📦 صندوق 2</span><span class="t">&lt;/h2&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"box box-amber"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">📦 صندوق 3</span><span class="t">&lt;/h2&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+  <span class="t">&lt;/div&gt;</span>
+
+<span class="t">&lt;/body&gt;</span>
+<span class="t">&lt;/html&gt;</span></pre>
+          </div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num sn-blue">3</div>
+        <div class="step-body">
+          <h4>اكتب الـ CSS</h4>
+          <div class="code-wrap">
+            <div class="code-label">
+              <span>style.css</span>
+              <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+            </div>
+            <pre><span class="c">/* الحاوية — هنا تُفعَّل الـ Flex */</span>
+<span class="p">.container</span> {
+  <span class="a">display</span>: <span class="v">flex</span>;
+  <span class="a">justify-content</span>: <span class="v">space-evenly</span>;
+}
+
+<span class="c">/* تصميم مشترك لكل الصناديق */</span>
+<span class="p">.box</span> {
+  <span class="a">color</span>: <span class="s">#ffffff</span>;
+  <span class="a">text-align</span>: <span class="v">center</span>;
+  <span class="a">font-size</span>: <span class="s">18px</span>;
+  <span class="a">font-weight</span>: <span class="s">700</span>;
+  <span class="a">padding</span>: <span class="s">30px 24px</span>;
+  <span class="a">border-radius</span>: <span class="s">10px</span>;
+  <span class="a">min-width</span>: <span class="s">140px</span>;
+}
+
+<span class="c">/* لون خاص لكل صندوق */</span>
+<span class="p">.box-blue</span>  { <span class="a">background-color</span>: <span class="s">#0366d6</span>; }
+<span class="p">.box-green</span> { <span class="a">background-color</span>: <span class="s">#0a7c5c</span>; }
+<span class="p">.box-amber</span> { <span class="a">background-color</span>: <span class="s">#b45309</span>; }</pre>
+          </div>
+          <div class="hint">🔍 لاحظ أن <code>display: flex</code> و <code>justify-content</code> يُكتبان على <strong>الحاوية (.container)</strong> وليس على الصناديق نفسها.</div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num sn-blue">4</div>
+        <div class="step-body">
+          <h4>شوف النتيجة وجرّب التعديل</h4>
+          <p>افتح الصفحة بـ Live Server. بعد ما تشوف الصناديق الثلاثة مصطفّة، جرّب تغيير <code>justify-content</code> من <code>space-evenly</code> إلى <code>center</code> أو <code>space-between</code> وشوف الفرق.</p>
+        </div>
+      </li>
+    </ul>
+
+    <div class="practice-box">
+      <div class="pr-title">🏋️ تحدي التدريب</div>
+      <p>أضف صندوقاً رابعاً بلون مختلف، واجعل النص داخله أكبر بـ <code>font-size: 24px</code> وأسمك بـ <code>font-weight: 900</code>.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ===== PART 2: HOMEWORK ===== -->
+  <div class="section-header">
+    <div class="section-num n-green">02</div>
+    <div>
+      <h2>الواجب — صفحة مشروع رصد بـ Flex</h2>
+      <span>ابنِ الصفحة حتى تصبح مثل الهدف أدناه</span>
+    </div>
+  </div>
+  <div class="dl-badge dl-wed">⏰ الموعد النهائي: الأربعاء منتصف الليل</div>
+
+  <!-- TARGET PREVIEW -->
+  <div style="font-size:13px;font-weight:700;color:#0a7c5c;margin-bottom:12px;">🎯 الهدف — اجعل صفحتك تبدو هكذا:</div>
+  <div class="target-frame">
+    <div class="target-label">⬇ TARGET — هذا ما تريد بناءه</div>
+    <div class="target-page">
+      <div class="target-header">
+        <h1>🛡 رصد</h1>
+        <p>نظام مراقبة البيئة</p>
+      </div>
+      <div class="target-cards">
+        <div class="target-card tc-temp">
+          <div class="tc-emoji">🌡️</div>
+          <div class="tc-name">درجة الحرارة</div>
+          <div class="tc-sub">Temperature</div>
+          <div class="tc-val">28 °C</div>
+        </div>
+        <div class="target-card tc-humid">
+          <div class="tc-emoji">💧</div>
+          <div class="tc-name">الرطوبة</div>
+          <div class="tc-sub">Humidity</div>
+          <div class="tc-val">65 %</div>
+        </div>
+        <div class="target-card tc-rain">
+          <div class="tc-emoji">🌧️</div>
+          <div class="tc-name">مستوى المطر</div>
+          <div class="tc-sub">Rain</div>
+          <div class="tc-val">جاف</div>
+        </div>
+        <div class="target-card tc-soil">
+          <div class="tc-emoji">🌱</div>
+          <div class="tc-name">رطوبة التربة</div>
+          <div class="tc-sub">Soil</div>
+          <div class="tc-val">جيد</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hint" style="margin-bottom:20px;">🎨 الألوان والأرقام مجرد مثال — اختر ألوانك الخاصة واستخدم نفس التصميم العام.</div>
+
+  <div class="task-card">
+    <ul class="steps-list">
+
+      <li class="step-item">
+        <div class="step-num sn-green">1</div>
+        <div class="step-body">
+          <h4>أنشئ مجلد المشروع</h4>
+          <p>مجلد جديد اسمه <code>rasd-flex</code> على سطح المكتب، بداخله ملفان: <code>index.html</code> و <code>style.css</code>، ثم افتحه في VS Code.</p>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num sn-green">2</div>
+        <div class="step-body">
+          <h4>ابنِ هيكل الصفحة في index.html</h4>
+          <p>الصفحة مكوّنة من قسمين: الرأس (<code>.header</code>) ومنطقة البطاقات (<code>.cards</code>). بطاقات الحساسات الأربع تذهب بداخل <code>.cards</code>:</p>
+          <div class="code-wrap">
+            <div class="code-label">
+              <span>index.html — الهيكل الكامل</span>
+              <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+            </div>
+            <pre><span class="t">&lt;!DOCTYPE html&gt;</span>
+<span class="t">&lt;html</span> <span class="a">lang</span>=<span class="s">"ar"</span> <span class="a">dir</span>=<span class="s">"rtl"</span><span class="t">&gt;</span>
+<span class="t">&lt;head&gt;</span>
+  <span class="t">&lt;meta</span> <span class="a">charset</span>=<span class="s">"UTF-8"</span><span class="t">&gt;</span>
+  <span class="t">&lt;title&gt;</span><span class="tx">رصد — مراقبة البيئة</span><span class="t">&lt;/title&gt;</span>
+  <span class="t">&lt;link</span> <span class="a">rel</span>=<span class="s">"stylesheet"</span> <span class="a">href</span>=<span class="s">"style.css"</span><span class="t">&gt;</span>
+<span class="t">&lt;/head&gt;</span>
+<span class="t">&lt;body&gt;</span>
+
+  <span class="c">&lt;!-- ===== الرأس ===== --&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"header"</span><span class="t">&gt;</span>
+    <span class="t">&lt;h1&gt;</span><span class="tx">🛡 رصد</span><span class="t">&lt;/h1&gt;</span>
+    <span class="t">&lt;p&gt;</span><span class="tx">نظام مراقبة البيئة</span><span class="t">&lt;/p&gt;</span>
+  <span class="t">&lt;/div&gt;</span>
+
+  <span class="c">&lt;!-- ===== البطاقات ===== --&gt;</span>
+  <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"cards"</span><span class="t">&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card card-temp"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">🌡️</span><span class="t">&lt;/h2&gt;</span>
+      <span class="t">&lt;h3&gt;</span><span class="tx">درجة الحرارة</span><span class="t">&lt;/h3&gt;</span>
+      <span class="t">&lt;p&gt;</span><span class="tx">Temperature</span><span class="t">&lt;/p&gt;</span>
+      <span class="t">&lt;h1&gt;</span><span class="tx">28 °C</span><span class="t">&lt;/h1&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card card-humid"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">💧</span><span class="t">&lt;/h2&gt;</span>
+      <span class="t">&lt;h3&gt;</span><span class="tx">الرطوبة</span><span class="t">&lt;/h3&gt;</span>
+      <span class="t">&lt;p&gt;</span><span class="tx">Humidity</span><span class="t">&lt;/p&gt;</span>
+      <span class="t">&lt;h1&gt;</span><span class="tx">65 %</span><span class="t">&lt;/h1&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card card-rain"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">🌧️</span><span class="t">&lt;/h2&gt;</span>
+      <span class="t">&lt;h3&gt;</span><span class="tx">مستوى المطر</span><span class="t">&lt;/h3&gt;</span>
+      <span class="t">&lt;p&gt;</span><span class="tx">Rain</span><span class="t">&lt;/p&gt;</span>
+      <span class="t">&lt;h1&gt;</span><span class="tx">جاف</span><span class="t">&lt;/h1&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+    <span class="t">&lt;div</span> <span class="a">class</span>=<span class="s">"card card-soil"</span><span class="t">&gt;</span>
+      <span class="t">&lt;h2&gt;</span><span class="tx">🌱</span><span class="t">&lt;/h2&gt;</span>
+      <span class="t">&lt;h3&gt;</span><span class="tx">رطوبة التربة</span><span class="t">&lt;/h3&gt;</span>
+      <span class="t">&lt;p&gt;</span><span class="tx">Soil</span><span class="t">&lt;/p&gt;</span>
+      <span class="t">&lt;h1&gt;</span><span class="tx">جيد</span><span class="t">&lt;/h1&gt;</span>
+    <span class="t">&lt;/div&gt;</span>
+
+  <span class="t">&lt;/div&gt;</span>
+
+<span class="t">&lt;/body&gt;</span>
+<span class="t">&lt;/html&gt;</span></pre>
+          </div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num sn-green">3</div>
+        <div class="step-body">
+          <h4>صمّم الصفحة في style.css</h4>
+          <p>هنا يحدث السحر — <code>display: flex</code> على <code>.cards</code> يجعل البطاقات الأربع تصطف في صف واحد:</p>
+          <div class="code-wrap">
+            <div class="code-label">
+              <span>style.css — التصميم الكامل</span>
+              <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+            </div>
+            <pre><span class="c">/* ===== الصفحة ===== */</span>
+<span class="p">body</span> {
+  <span class="a">background-color</span>: <span class="s">#f0f4f8</span>;
+  <span class="a">margin</span>: <span class="s">0</span>;
+}
+
+<span class="c">/* ===== الرأس ===== */</span>
+<span class="p">.header</span> {
+  <span class="a">background-color</span>: <span class="s">#1a1a2e</span>;
+  <span class="a">text-align</span>: <span class="v">center</span>;
+  <span class="a">padding</span>: <span class="s">24px</span>;
+}
+
+<span class="p">.header h1</span> {
+  <span class="a">color</span>: <span class="s">#ffffff</span>;
+  <span class="a">font-size</span>: <span class="s">32px</span>;
+  <span class="a">font-weight</span>: <span class="s">900</span>;
+}
+
+<span class="p">.header p</span> {
+  <span class="a">color</span>: <span class="s">#8b949e</span>;
+  <span class="a">font-size</span>: <span class="s">14px</span>;
+}
+
+<span class="c">/* ===== حاوية البطاقات — هنا Flex ===== */</span>
+<span class="p">.cards</span> {
+  <span class="a">display</span>: <span class="v">flex</span>;
+  <span class="a">justify-content</span>: <span class="v">space-evenly</span>;
+  <span class="a">padding</span>: <span class="s">32px 16px</span>;
+}
+
+<span class="c">/* ===== كل بطاقة ===== */</span>
+<span class="p">.card</span> {
+  <span class="a">background-color</span>: <span class="s">#ffffff</span>;
+  <span class="a">text-align</span>: <span class="v">center</span>;
+  <span class="a">padding</span>: <span class="s">24px 20px</span>;
+  <span class="a">border-radius</span>: <span class="s">12px</span>;
+  <span class="a">min-width</span>: <span class="s">150px</span>;
+}
+
+<span class="p">.card h2</span> { <span class="a">font-size</span>: <span class="s">32px</span>; }           <span class="c">/* الإيموجي */</span>
+<span class="p">.card h3</span> { <span class="a">font-size</span>: <span class="s">14px</span>; <span class="a">font-weight</span>: <span class="s">700</span>; }
+<span class="p">.card p</span>  { <span class="a">font-size</span>: <span class="s">11px</span>; <span class="a">color</span>: <span class="s">#6b7fa3</span>; }
+<span class="p">.card h1</span> { <span class="a">font-size</span>: <span class="s">28px</span>; <span class="a">font-weight</span>: <span class="s">900</span>; }
+
+<span class="c">/* ===== لون القراءة لكل بطاقة ===== */</span>
+<span class="p">.card-temp  h1</span> { <span class="a">color</span>: <span class="s">#e03131</span>; }
+<span class="p">.card-humid h1</span> { <span class="a">color</span>: <span class="s">#1971c2</span>; }
+<span class="p">.card-rain  h1</span> { <span class="a">color</span>: <span class="s">#0ca678</span>; }
+<span class="p">.card-soil  h1</span> { <span class="a">color</span>: <span class="s">#2f9e44</span>; }</pre>
+          </div>
+          <div class="hint">💡 <code>display: flex</code> على <code>.cards</code> يجعل أبناءها المباشرين (البطاقات الأربع) يصطفون تلقائياً في صف. بدونه ستكون البطاقات فوق بعضها.</div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num sn-green">4</div>
+        <div class="step-body">
+          <h4>قارن نتيجتك بالهدف أعلاه</h4>
+          <p>افتح صفحتك بـ Live Server وقارنها بالمثال الأخضر أعلاه. هل البطاقات الأربع في صف واحد؟ هل النص مركّز؟ هل الأرقام ظهرت بألوان مختلفة؟</p>
+          <div class="green-box">
+            <strong>تذكير:</strong> ما يهم ليس أن تكون الألوان نفسها بالضبط — المهم أن يكون التصميم <strong>بنفس الهيكل</strong>: رأس في الأعلى + أربع بطاقات في صف واحد.
+          </div>
+        </div>
+      </li>
+
+      <li class="step-item">
+        <div class="step-num sn-green">5</div>
+        <div class="step-body">
+          <h4>ارفع المجلد على Drive</h4>
+          <p>ارفع مجلد <code>rasd-flex</code> كاملاً داخل مجلدك الخاص على Google Drive.</p>
+          <div style="margin-top:10px;">
+            <a href="https://drive.google.com/drive/folders/1MqnjuumptJzHfxkyL98x_-1ri_2DnKHq?usp=sharing" target="_blank" style="display:inline-flex;align-items:center;gap:8px;background:#0a7c5c;color:#fff;text-decoration:none;padding:10px 18px;border-radius:8px;font-size:13px;font-weight:700;">📁 افتح مجلد واجبات رصد</a>
+          </div>
+        </div>
+      </li>
+
+    </ul>
+
+    <div class="practice-box">
+      <div class="pr-title">🏋️ تحدي إضافي — إذا انتهيت مبكراً</div>
+      <p>أضف خاصية <code>background-color</code> خفيفة لكل بطاقة حساس — مثلاً احمر فاتح جداً (#fff5f5) لبطاقة الحرارة، وأزرق فاتح (#f0f7ff) للرطوبة. ثم جرّب تغيير <code>justify-content</code> إلى <code>space-between</code> وشوف الفرق.</p>
+    </div>
+  </div>
+
+  <!-- DEADLINE SUMMARY -->
+  <div class="deadline-box">
+    <div class="dl-title">📅 المواعيد النهائية</div>
+    <div class="dl-rows">
+      <strong>الثلاثاء منتصف الليل</strong> — التدريب: ثلاثة صناديق بـ Flexbox<br>
+      <strong>الأربعاء منتصف الليل</strong> — الواجب: صفحة رصد بـ Flex<br>
+      أي تسليم بعد موعده لن يُقبل ولن يُصحَّح
+    </div>
+  </div>
+
+</div>
+
+<script>
+function copyCode(btn) {
+  const pre = btn.closest('.code-wrap').querySelector('pre');
+  navigator.clipboard.writeText(pre.innerText).then(() => {
+    btn.textContent = '✓ تم النسخ';
+    setTimeout(() => btn.textContent = 'نسخ', 2000);
+  });
+}
+</script>
+</body>
+</html>

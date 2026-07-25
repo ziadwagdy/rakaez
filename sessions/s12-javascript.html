@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>S12 — مقدمة JavaScript وربط رصد</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:     #0d1117;
+  --bg2:    #161b22;
+  --bg3:    #21262d;
+  --border: #30363d;
+  --text:   #e6edf3;
+  --muted:  #8b949e;
+  --accent: #f0b429;   /* JS yellow */
+  --blue:   #58a6ff;
+  --green:  #3fb950;
+  --red:    #f85149;
+  --purple: #d2a8ff;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { height: 100%; overflow: hidden; }
+
+body {
+  font-family: 'Cairo', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  display: flex; flex-direction: column;
+}
+
+/* PROGRESS BAR */
+#progress {
+  position: fixed; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--border); z-index: 100;
+}
+#progress-fill {
+  height: 100%; background: var(--accent);
+  transition: width 0.3s ease;
+}
+
+/* TOP UI */
+#top-ui {
+  position: fixed; top: 8px; left: 0; right: 0;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 0 24px; z-index: 99; pointer-events: none;
+}
+#slide-counter {
+  font-family: 'Space Mono', monospace; font-size: 12px; color: var(--muted);
+}
+#session-badge {
+  font-size: 11px; font-weight: 700; letter-spacing: 1px;
+  background: var(--accent); color: #0d1117;
+  border-radius: 20px; padding: 3px 12px;
+}
+
+/* SLIDES WRAPPER */
+#slides { flex: 1; position: relative; overflow: hidden; }
+
+.slide {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  justify-content: center; align-items: center;
+  padding: 60px 48px 48px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.35s ease;
+  text-align: right;
+}
+.slide.active { opacity: 1; pointer-events: all; }
+
+/* SLIDE LABEL */
+.slide-label {
+  font-size: 11px; font-weight: 700; letter-spacing: 3px;
+  text-transform: uppercase; color: var(--accent); margin-bottom: 14px;
+}
+
+/* HEADINGS */
+.slide h1 {
+  font-size: clamp(28px, 4vw, 48px); font-weight: 900;
+  line-height: 1.25; margin-bottom: 16px; color: var(--text);
+}
+.slide h2 {
+  font-size: clamp(20px, 3vw, 34px); font-weight: 900;
+  margin-bottom: 14px; color: var(--text);
+}
+.slide p, .slide li {
+  font-size: clamp(14px, 1.6vw, 18px); color: var(--muted);
+  line-height: 1.8; max-width: 700px;
+}
+.slide ul { list-style: none; width: 100%; max-width: 720px; }
+.slide ul li { padding: 6px 0; }
+.slide ul li::before { content: "→ "; color: var(--accent); font-weight: 700; }
+
+/* ACCENT TEXT */
+.acc { color: var(--accent); }
+.blue { color: var(--blue); }
+.green { color: var(--green); }
+.red { color: var(--red); }
+.purple { color: var(--purple); }
+.white { color: var(--text); }
+
+/* CODE BLOCK */
+.code {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 10px; padding: 18px 22px; margin: 14px 0;
+  font-family: 'Space Mono', monospace; font-size: clamp(12px, 1.4vw, 15px);
+  line-height: 1.9; direction: ltr; text-align: left;
+  width: 100%; max-width: 720px; overflow-x: auto;
+}
+.code .cm  { color: #8b949e; }
+.code .kw  { color: #ff7b72; }
+.code .fn  { color: #d2a8ff; }
+.code .str { color: #3fb950; }
+.code .num { color: #f0b429; }
+.code .id  { color: #79c0ff; }
+.code .dot { color: #e6edf3; }
+
+/* CARDS GRID */
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; width: 100%; max-width: 720px; }
+.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; width: 100%; max-width: 720px; }
+
+.card {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-radius: 12px; padding: 20px 18px;
+}
+.card .c-icon { font-size: 28px; margin-bottom: 8px; }
+.card .c-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+.card .c-body  { font-size: 13px; color: var(--muted); line-height: 1.6; }
+.card.accent-border { border-color: var(--accent); }
+.card.blue-border   { border-color: var(--blue); }
+.card.green-border  { border-color: var(--green); }
+
+/* HIGHLIGHT BOX */
+.hl-box {
+  background: var(--bg2); border: 1px solid var(--border);
+  border-right: 4px solid var(--accent);
+  border-radius: 10px; padding: 16px 20px;
+  font-size: clamp(13px, 1.4vw, 16px); color: var(--muted);
+  line-height: 1.8; width: 100%; max-width: 720px; margin: 10px 0;
+}
+.hl-box.blue-hl  { border-right-color: var(--blue); }
+.hl-box.green-hl { border-right-color: var(--green); }
+
+/* STEP LIST */
+.steps { list-style: none; width: 100%; max-width: 720px; }
+.steps li {
+  display: flex; gap: 14px; align-items: flex-start;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  font-size: clamp(13px, 1.4vw, 16px); color: var(--muted); line-height: 1.7;
+}
+.steps li:last-child { border-bottom: none; }
+.steps li::before { content: none; }
+.step-n {
+  width: 28px; height: 28px; border-radius: 50%; flex-shrink: 0;
+  background: var(--bg3); border: 1px solid var(--accent);
+  color: var(--accent); font-family: 'Space Mono', monospace;
+  font-size: 12px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin-top: 2px;
+}
+
+/* LIVE DEMO — mini رصد page */
+.rasd-demo {
+  width: 100%; max-width: 720px; border-radius: 12px;
+  overflow: hidden; border: 1px solid var(--border);
+}
+.rasd-demo .rd-header {
+  background: #1a1a2e; padding: 14px 20px; text-align: center;
+}
+.rasd-demo .rd-header h1 {
+  font-size: 22px; font-weight: 900; color: #fff; margin-bottom: 0;
+}
+.rasd-demo .rd-cards {
+  display: flex; justify-content: space-evenly;
+  background: #f0f4f8; padding: 16px 12px; gap: 10px;
+  flex-wrap: wrap;
+}
+.rasd-demo .rd-card {
+  background: #fff; border-radius: 10px; padding: 14px;
+  text-align: center; flex: 1; min-width: 100px; border: 1px solid #e1e4e8;
+}
+.rd-card .rc-emoji { font-size: 22px; }
+.rd-card .rc-name  { font-size: 11px; font-weight: 700; color: #0d1117; margin: 3px 0; }
+.rd-card .rc-val   { font-size: 18px; font-weight: 900; font-family: 'Space Mono', monospace; }
+.rc-temp  { color: #e03131; }
+.rc-humid { color: #1971c2; }
+.rc-rain  { color: #0ca678; }
+.rc-soil  { color: #2f9e44; }
+
+/* JS/HTML/CSS TRIO */
+.trio { display: flex; gap: 14px; width: 100%; max-width: 720px; }
+.trio-item {
+  flex: 1; border-radius: 12px; padding: 18px 16px; text-align: center;
+}
+.trio-item .tr-lang { font-size: 11px; font-weight: 700; letter-spacing: 2px; margin-bottom: 6px; }
+.trio-item .tr-icon { font-size: 28px; margin-bottom: 6px; }
+.trio-item .tr-role { font-size: 14px; font-weight: 900; margin-bottom: 4px; }
+.trio-item .tr-desc { font-size: 12px; line-height: 1.6; }
+
+.t-html { background: #1f1210; border: 1px solid #f85149; }
+.t-html .tr-lang { color: #f85149; }
+.t-html .tr-role { color: #f85149; }
+.t-html .tr-desc { color: #9b6660; }
+
+.t-css  { background: #10141f; border: 1px solid #58a6ff; }
+.t-css  .tr-lang { color: #58a6ff; }
+.t-css  .tr-role { color: #58a6ff; }
+.t-css  .tr-desc { color: #607080; }
+
+.t-js   { background: #1a160a; border: 2px solid #f0b429; }
+.t-js   .tr-lang { color: #f0b429; }
+.t-js   .tr-role { color: #f0b429; }
+.t-js   .tr-desc { color: #8b7540; }
+
+/* CONSOLE DEMO */
+.console-box {
+  background: #000; border: 1px solid #333; border-radius: 10px;
+  padding: 16px 20px; direction: ltr; text-align: left;
+  font-family: 'Space Mono', monospace; font-size: 14px;
+  width: 100%; max-width: 720px; line-height: 2;
+}
+.console-box .c-prompt { color: #8b949e; }
+.console-box .c-in     { color: #e6edf3; }
+.console-box .c-out    { color: #3fb950; }
+.console-box .c-out2   { color: #f0b429; }
+
+/* JSON BLOCK */
+.json-box {
+  background: var(--bg2); border: 1px solid var(--blue);
+  border-radius: 10px; padding: 16px 22px; direction: ltr; text-align: left;
+  font-family: 'Space Mono', monospace; font-size: clamp(12px, 1.3vw, 14px);
+  line-height: 1.9; width: 100%; max-width: 720px;
+}
+.json-key   { color: #79c0ff; }
+.json-val-n { color: #f0b429; }
+.json-val-s { color: #3fb950; }
+
+/* BIG NUMBER TICKER */
+.ticker {
+  font-family: 'Space Mono', monospace;
+  font-size: clamp(40px, 6vw, 72px); font-weight: 700;
+  color: var(--accent); margin: 8px 0;
+}
+
+/* NAVIGATION */
+#nav {
+  position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 12px; z-index: 100;
+}
+.nav-btn {
+  background: var(--bg2); border: 1px solid var(--border);
+  color: var(--muted); border-radius: 8px; padding: 8px 18px;
+  font-family: 'Cairo', sans-serif; font-size: 13px; font-weight: 700;
+  cursor: pointer; transition: all 0.15s;
+}
+.nav-btn:hover { background: var(--bg3); color: var(--text); }
+.nav-btn.primary {
+  background: var(--accent); color: #0d1117; border-color: var(--accent);
+}
+.nav-btn.primary:hover { opacity: 0.9; }
+
+/* DOTS */
+#dots {
+  position: fixed; bottom: 28px; right: 28px;
+  display: flex; gap: 6px; z-index: 100;
+}
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--border); cursor: pointer; transition: background 0.2s;
+}
+.dot.active { background: var(--accent); }
+</style>
+</head>
+<body>
+
+<div id="progress"><div id="progress-fill"></div></div>
+
+<div id="top-ui">
+  <div id="slide-counter">01 / 10</div>
+  <div id="session-badge">S12 · JavaScript + رصد</div>
+</div>
+
+<div id="slides">
+
+  <!-- ==================== SLIDE 1 ==================== -->
+  <div class="slide active">
+    <div class="slide-label">الجلسة الثانية عشرة</div>
+    <h1>الصفحة <span class="acc">تتنفس</span> الآن 🫀</h1>
+    <p style="max-width:600px;margin-bottom:24px;">حتى الآن صفحة رصد جميلة — لكن الأرقام فيها ثابتة لا تتغير.<br>اليوم نربطها بالبيانات الحقيقية باستخدام <span class="acc">JavaScript</span>.</p>
+
+    <div class="rasd-demo">
+      <div class="rd-header"><h1>🛡 رصد</h1></div>
+      <div class="rd-cards">
+        <div class="rd-card"><div class="rc-emoji">🌡️</div><div class="rc-name">درجة الحرارة</div><div class="rc-val rc-temp" id="demo-temp">28.4 °C</div></div>
+        <div class="rd-card"><div class="rc-emoji">💧</div><div class="rc-name">الرطوبة</div><div class="rc-val rc-humid" id="demo-humid">63 %</div></div>
+        <div class="rd-card"><div class="rc-emoji">🌧️</div><div class="rc-name">المطر</div><div class="rc-val rc-rain" id="demo-rain">جاف</div></div>
+        <div class="rd-card"><div class="rc-emoji">🌱</div><div class="rc-name">التربة</div><div class="rc-val rc-soil" id="demo-soil">جيد</div></div>
+      </div>
+    </div>
+    <p style="margin-top:14px;font-size:13px;">هذه البيانات <span class="green">تتحدث كل 3 ثوانٍ</span> — ستبنيها بنفسك اليوم.</p>
+  </div>
+
+  <!-- ==================== SLIDE 2 ==================== -->
+  <div class="slide">
+    <div class="slide-label">الثلاثة معاً</div>
+    <h2>HTML + CSS + <span class="acc">JavaScript</span></h2>
+    <p style="margin-bottom:20px;">كل لغة لها دور واحد لا تشاركه مع غيرها.</p>
+
+    <div class="trio">
+      <div class="trio-item t-html">
+        <div class="tr-lang">HTML</div>
+        <div class="tr-icon">🏗️</div>
+        <div class="tr-role">الهيكل</div>
+        <div class="tr-desc">يحدد المحتوى والعناصر — div، h1، p</div>
+      </div>
+      <div class="trio-item t-css">
+        <div class="tr-lang">CSS</div>
+        <div class="tr-icon">🎨</div>
+        <div class="tr-role">التصميم</div>
+        <div class="tr-desc">يتحكم في الشكل — الألوان، الحجم، Flex</div>
+      </div>
+      <div class="trio-item t-js">
+        <div class="tr-lang">JS</div>
+        <div class="tr-icon">⚡</div>
+        <div class="tr-role">الحياة</div>
+        <div class="tr-desc">يجعل الصفحة تتفاعل وتجلب البيانات</div>
+      </div>
+    </div>
+
+    <div class="hl-box" style="margin-top:18px;">
+      بدون JavaScript صفحتنا صورة ثابتة. بها تصبح <span class="acc">تطبيقاً حياً</span> يتحدث مع الخادم ويعرض بيانات حقيقية.
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 3 ==================== -->
+  <div class="slide">
+    <div class="slide-label">المفهوم الأول</div>
+    <h2>المتغيرات — <span class="acc">Variables</span></h2>
+    <p style="margin-bottom:18px;">صناديق لتخزين البيانات. نستخدم <span class="acc">let</span> أو <span class="acc">const</span>.</p>
+
+    <div class="code">
+<span class="cm">// let — يمكن تغيير قيمته لاحقاً</span>
+<span class="kw">let</span> <span class="id">temperature</span> = <span class="num">28</span>;
+<span class="id">temperature</span> = <span class="num">30</span>;   <span class="cm">// تغيير مسموح</span>
+
+<span class="cm">// const — لا يتغير أبداً</span>
+<span class="kw">const</span> <span class="id">projectName</span> = <span class="str">"رصد"</span>;
+
+<span class="cm">// console.log — لطباعة الناتج في المتصفح</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="id">temperature</span>);    <span class="cm">// 30</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="id">projectName</span>);    <span class="cm">// رصد</span>
+    </div>
+
+    <div class="grid2" style="margin-top:10px;">
+      <div class="card">
+        <div class="c-title"><span class="acc">let</span></div>
+        <div class="c-body">للمتغيرات التي قد تتغير — مثل قراءة الحساس</div>
+      </div>
+      <div class="card">
+        <div class="c-title"><span class="blue">const</span></div>
+        <div class="c-body">للثوابت — مثل اسم المشروع أو رابط الـ API</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 4 ==================== -->
+  <div class="slide">
+    <div class="slide-label">أداة المطور</div>
+    <h2>الـ Console — <span class="acc">مختبرنا</span></h2>
+    <p style="margin-bottom:18px;">المتصفح يحتوي على Console تكتب فيه JS مباشرةً. افتحه بـ <span class="acc">F12</span> ثم اختر Console.</p>
+
+    <div class="console-box">
+<span class="c-prompt">&gt;</span> <span class="c-in">let x = 5;</span>
+<span class="c-prompt">&gt;</span> <span class="c-in">let y = 10;</span>
+<span class="c-prompt">&gt;</span> <span class="c-in">console.log(x + y);</span>
+<span class="c-out">15</span>
+<span class="c-prompt">&gt;</span> <span class="c-in">let name = "رصد";</span>
+<span class="c-prompt">&gt;</span> <span class="c-in">console.log("مرحباً من مشروع " + name);</span>
+<span class="c-out">مرحباً من مشروع رصد</span>
+<span class="c-prompt">&gt;</span> <span class="c-in">console.log(28 * 2);</span>
+<span class="c-out2">56</span>
+    </div>
+
+    <div class="hl-box" style="margin-top:14px;">
+      🎯 <strong style="color:var(--text);">تجربة الآن:</strong> افتح المتصفح ← F12 ← Console ← اكتب <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:13px;">console.log("مرحبا")</code> واضغط Enter.
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 5 ==================== -->
+  <div class="slide">
+    <div class="slide-label">المفهوم الثاني</div>
+    <h2>الدوال — <span class="acc">Functions</span></h2>
+    <p style="margin-bottom:18px;">مجموعة أوامر نسمّيها ونستدعيها متى أردنا. بدلاً من تكرار الكود، نكتبه مرة واحدة ونستخدمه كثيراً.</p>
+
+    <div class="code">
+<span class="cm">// تعريف الدالة</span>
+<span class="kw">function</span> <span class="fn">sayHello</span>() {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"مرحباً من رصد!"</span>);
+}
+
+<span class="cm">// استدعاء الدالة</span>
+<span class="fn">sayHello</span>();    <span class="cm">// مرحباً من رصد!</span>
+<span class="fn">sayHello</span>();    <span class="cm">// مرحباً من رصد!</span>
+
+<span class="cm">// دالة تأخذ قيمة وتعمل بها</span>
+<span class="kw">function</span> <span class="fn">showTemp</span>(<span class="id">temp</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">"درجة الحرارة: "</span> + <span class="id">temp</span> + <span class="str">" °C"</span>);
+}
+
+<span class="fn">showTemp</span>(<span class="num">28</span>);   <span class="cm">// درجة الحرارة: 28 °C</span>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 6 ==================== -->
+  <div class="slide">
+    <div class="slide-label">التحكم في الصفحة</div>
+    <h2>الـ <span class="acc">DOM</span> — غيّر أي نص في صفحتك</h2>
+    <p style="margin-bottom:16px;">DOM = الطريق بين JavaScript وعناصر الـ HTML. نصل لأي عنصر عن طريق <span class="acc">id</span>.</p>
+
+    <div class="code">
+<span class="cm">/* في HTML */</span>
+<span class="cm">// &lt;h1 id="temp-display"&gt;-- °C&lt;/h1&gt;</span>
+
+<span class="cm">/* في JS — نمسك العنصر ونغيّر نصه */</span>
+<span class="kw">const</span> <span class="id">el</span> = <span class="id">document</span>.<span class="fn">getElementById</span>(<span class="str">"temp-display"</span>);
+<span class="id">el</span>.<span class="id">innerHTML</span> = <span class="str">"28 °C"</span>;
+
+<span class="cm">/* الآن الصفحة تُظهر: 28 °C */</span>
+    </div>
+
+    <div class="grid2" style="margin-top:10px;">
+      <div class="card">
+        <div class="c-title"><span class="acc">getElementById()</span></div>
+        <div class="c-body">تمسك العنصر الذي له هذا الـ id في HTML</div>
+      </div>
+      <div class="card">
+        <div class="c-title"><span class="blue">.innerHTML</span></div>
+        <div class="c-body">تغيّر ما يظهر داخل العنصر من نص أو HTML</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 7 ==================== -->
+  <div class="slide">
+    <div class="slide-label">كيف يعمل رصد</div>
+    <h2>الـ <span class="acc">API</span> — باب بيانات رصد</h2>
+    <p style="margin-bottom:16px;">مشروع رصد عنده خادم Python/Flask يعطيك البيانات الحية عند الطلب. كل ما عليك هو أن تطلب.</p>
+
+    <div class="hl-box blue-hl" style="margin-bottom:14px;">
+      الرابط: <span style="font-family:'Space Mono',monospace;color:var(--blue);font-size:14px;">http://localhost:8080/api/latest</span>
+    </div>
+
+    <div style="font-size:12px;font-weight:700;color:var(--muted);margin-bottom:8px;letter-spacing:1px;">RESPONSE — ما يُعيده الخادم (JSON):</div>
+    <div class="json-box">
+{
+  <span class="json-key">"temperature"</span>:  <span class="json-val-n">28.4</span>,
+  <span class="json-key">"humidity"</span>:      <span class="json-val-n">63</span>,
+  <span class="json-key">"water_level"</span>:   <span class="json-val-n">41230</span>,
+  <span class="json-key">"soil_moisture"</span>: <span class="json-val-n">37800</span>
+}
+    </div>
+
+    <div class="hl-box" style="margin-top:12px;">
+      JSON = بيانات منظمة يفهمها JavaScript مباشرةً. كل رقم في مكانه باسم واضح.
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 8 ==================== -->
+  <div class="slide">
+    <div class="slide-label">طلب البيانات</div>
+    <h2><span class="acc">fetch()</span> — اطلب وخذ</h2>
+    <p style="margin-bottom:16px;"><code style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:14px;">fetch()</code> ترسل طلباً للخادم وتنتظر الرد. نستخدم <span class="acc">.then()</span> لما يصل الرد.</p>
+
+    <div class="code">
+<span class="fn">fetch</span>(<span class="str">"http://localhost:8080/api/latest"</span>)
+
+  .<span class="fn">then</span>(<span class="kw">function</span>(<span class="id">response</span>) {
+    <span class="kw">return</span> <span class="id">response</span>.<span class="fn">json</span>();   <span class="cm">// حوّل الرد إلى بيانات</span>
+  })
+
+  .<span class="fn">then</span>(<span class="kw">function</span>(<span class="id">data</span>) {
+    <span class="cm">// data الآن تحتوي أرقام الحساسات</span>
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="id">data</span>.<span class="id">temperature</span>);   <span class="cm">// 28.4</span>
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="id">data</span>.<span class="id">humidity</span>);      <span class="cm">// 63</span>
+  });
+    </div>
+
+    <ul class="steps" style="margin-top:10px;">
+      <li><div class="step-n">1</div><div>fetch() ترسل الطلب إلى رابط الـ API</div></li>
+      <li><div class="step-n">2</div><div>الخادم يرد بـ JSON</div></li>
+      <li><div class="step-n">3</div><div>response.json() تحوّل الرد لبيانات JS</div></li>
+      <li><div class="step-n">4</div><div>data.temperature وdata.humidity تعطيك الأرقام</div></li>
+    </ul>
+  </div>
+
+  <!-- ==================== SLIDE 9 ==================== -->
+  <div class="slide">
+    <div class="slide-label">الكود الكامل</div>
+    <h2>اربط <span class="acc">رصد</span> بالبيانات الحية</h2>
+    <p style="margin-bottom:14px;">أضف هذا الكود داخل <code style="background:var(--bg3);padding:2px 6px;border-radius:4px;font-family:'Space Mono',monospace;font-size:13px;">&lt;script&gt;</code> في نهاية صفحتك.</p>
+
+    <div class="code">
+<span class="kw">function</span> <span class="fn">updateData</span>() {
+  <span class="fn">fetch</span>(<span class="str">"http://localhost:8080/api/latest"</span>)
+    .<span class="fn">then</span>(<span class="kw">function</span>(<span class="id">r</span>) { <span class="kw">return</span> <span class="id">r</span>.<span class="fn">json</span>(); })
+    .<span class="fn">then</span>(<span class="kw">function</span>(<span class="id">data</span>) {
+
+      <span class="id">document</span>.<span class="fn">getElementById</span>(<span class="str">"temp"</span>).<span class="id">innerHTML</span>
+        = <span class="id">data</span>.<span class="id">temperature</span> + <span class="str">" °C"</span>;
+
+      <span class="id">document</span>.<span class="fn">getElementById</span>(<span class="str">"humid"</span>).<span class="id">innerHTML</span>
+        = <span class="id">data</span>.<span class="id">humidity</span> + <span class="str">" %"</span>;
+
+      <span class="id">document</span>.<span class="fn">getElementById</span>(<span class="str">"rain"</span>).<span class="id">innerHTML</span>
+        = <span class="id">data</span>.<span class="id">water_level</span>;
+
+      <span class="id">document</span>.<span class="fn">getElementById</span>(<span class="str">"soil"</span>).<span class="id">innerHTML</span>
+        = <span class="id">data</span>.<span class="id">soil_moisture</span>;
+    });
+}
+
+<span class="fn">updateData</span>();                      <span class="cm">// شغّل فوراً</span>
+<span class="fn">setInterval</span>(<span class="id">updateData</span>, <span class="num">3000</span>);   <span class="cm">// كل 3 ثوانٍ</span>
+    </div>
+
+    <div class="hl-box green-hl" style="margin-top:10px;">
+      <span class="green">setInterval(updateData, 3000)</span> تعني: كرّر هذه الدالة كل 3000 مللي ثانية (3 ثوانٍ). هذا ما يجعل الأرقام تتحدث تلقائياً.
+    </div>
+  </div>
+
+  <!-- ==================== SLIDE 10 ==================== -->
+  <div class="slide">
+    <div class="slide-label">نهاية الجلسة</div>
+    <h2>ما بنيناه اليوم 🎉</h2>
+
+    <div class="grid2" style="margin-bottom:18px;">
+      <div class="card accent-border">
+        <div class="c-icon">⚡</div>
+        <div class="c-title">JavaScript الأساسيات</div>
+        <div class="c-body">let/const، console.log، functions، getElementById</div>
+      </div>
+      <div class="card blue-border">
+        <div class="c-icon">🔗</div>
+        <div class="c-title">fetch() + JSON</div>
+        <div class="c-body">طلب البيانات من API وتحويلها لأرقام نستخدمها</div>
+      </div>
+      <div class="card green-border">
+        <div class="c-icon">♻️</div>
+        <div class="c-title">setInterval</div>
+        <div class="c-body">تحديث تلقائي كل 3 ثوانٍ — الصفحة تتنفس</div>
+      </div>
+      <div class="card">
+        <div class="c-icon">🛡</div>
+        <div class="c-title">رصد حي</div>
+        <div class="c-body">ربطنا الصفحة بالخادم — الأرقام الحقيقية تظهر الآن</div>
+      </div>
+    </div>
+
+    <div class="hl-box">
+      🏠 <strong style="color:var(--text);">الواجب:</strong> أضف كود fetch إلى صفحة <span class="acc">rasd-flex</span> التي بنيتها. أعطِ كل رقم <span class="acc">id</span> مناسباً في HTML، ثم ضع كود الـ script في نهاية الصفحة.
+    </div>
+  </div>
+
+</div><!-- end slides -->
+
+<!-- NAVIGATION -->
+<div id="nav">
+  <button class="nav-btn" id="btn-prev" onclick="changeSlide(-1)">→ السابق</button>
+  <button class="nav-btn primary" id="btn-next" onclick="changeSlide(1)">التالي ←</button>
+</div>
+
+<div id="dots"></div>
+
+<script>
+let current = 0;
+const slides = document.querySelectorAll('.slide');
+const total  = slides.length;
+const dotsEl = document.getElementById('dots');
+
+// BUILD DOTS
+slides.forEach((_, i) => {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' active' : '');
+  d.onclick = () => goTo(i);
+  dotsEl.appendChild(d);
+});
+
+function goTo(n) {
+  slides[current].classList.remove('active');
+  dotsEl.children[current].classList.remove('active');
+  current = Math.max(0, Math.min(n, total - 1));
+  slides[current].classList.add('active');
+  dotsEl.children[current].classList.add('active');
+  document.getElementById('slide-counter').textContent =
+    String(current + 1).padStart(2,'0') + ' / ' + String(total).padStart(2,'0');
+  document.getElementById('progress-fill').style.width =
+    ((current + 1) / total * 100) + '%';
+  document.getElementById('btn-prev').style.opacity = current === 0 ? '0.3' : '1';
+  document.getElementById('btn-next').textContent =
+    current === total - 1 ? '✓ نهاية الجلسة' : 'التالي ←';
+}
+
+function changeSlide(dir) { goTo(current + dir); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowDown')  changeSlide(1);
+  if (e.key === 'ArrowRight' || e.key === 'ArrowUp')    changeSlide(-1);
+});
+
+// Touch swipe
+let tx = 0;
+document.addEventListener('touchstart', e => tx = e.touches[0].clientX);
+document.addEventListener('touchend',   e => {
+  const dx = e.changedTouches[0].clientX - tx;
+  if (Math.abs(dx) > 40) changeSlide(dx < 0 ? 1 : -1);
+});
+
+goTo(0);
+
+// ANIMATE DEMO NUMBERS on slide 1
+const temps  = [27.8, 28.4, 29.1, 28.7, 30.2];
+const humids = [61, 63, 65, 62, 64];
+let ti = 0;
+setInterval(() => {
+  ti = (ti + 1) % temps.length;
+  const t = document.getElementById('demo-temp');
+  const h = document.getElementById('demo-humid');
+  if (t) t.innerHTML = temps[ti] + ' °C';
+  if (h) h.innerHTML = humids[ti] + ' %';
+}, 3000);
+</script>
+</body>
+</html>

@@ -1,2 +1,2 @@
 # rakaez
-Rakaez Course
+Rakaez TECH Course

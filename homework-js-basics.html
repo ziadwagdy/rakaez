@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>واجب JavaScript — تحديد العناصر والمتغيرات</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Cairo', sans-serif;
+      background: #f6f8fa;
+      color: #1a1a2e;
+      min-height: 100vh;
+      padding-bottom: 60px;
+    }
+
+    /* ── Header ── */
+    .hero {
+      background: linear-gradient(135deg, #f7b731 0%, #f0932b 100%);
+      color: #fff;
+      padding: 40px 24px 32px;
+      text-align: center;
+    }
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.25);
+      border-radius: 20px;
+      padding: 4px 16px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      letter-spacing: 0.5px;
+    }
+    .hero h1 { font-size: 28px; font-weight: 900; margin-bottom: 6px; }
+    .hero p  { font-size: 15px; opacity: 0.92; }
+
+    /* ── Deadline banner ── */
+    .deadline-banner {
+      background: #fff3cd;
+      border-right: 4px solid #f0932b;
+      border-radius: 8px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 15px;
+      color: #7d4e00;
+      max-width: 800px;
+      margin: 24px auto 0;
+    }
+    .deadline-banner .icon { font-size: 20px; }
+
+    /* ── Layout ── */
+    .container { max-width: 800px; margin: 0 auto; padding: 24px 16px; }
+
+    /* ── VS Code notice ── */
+    .vscode-notice {
+      background: #e8f4fd;
+      border-right: 4px solid #3498db;
+      border-radius: 8px;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1a6fa8;
+      margin-bottom: 24px;
+    }
+    .vscode-notice .icon { font-size: 22px; flex-shrink: 0; }
+
+    /* ── Section title ── */
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: #888;
+      margin-bottom: 12px;
+    }
+
+    /* ── Task cards ── */
+    .task-card {
+      background: #fff;
+      border-radius: 14px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .task-header {
+      padding: 18px 24px 14px;
+      border-bottom: 1px solid #f0f0f0;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .task-num {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 900; flex-shrink: 0;
+    }
+    .task-num.orange { background: #fff3e0; color: #f0932b; }
+    .task-num.blue   { background: #e3f2fd; color: #2196f3; }
+    .task-num.green  { background: #e8f5e9; color: #43a047; }
+    .task-title { font-size: 17px; font-weight: 900; }
+    .task-subtitle { font-size: 13px; color: #888; margin-top: 2px; }
+    .task-body { padding: 20px 24px; }
+
+    /* ── Steps ── */
+    .step-item {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 18px;
+      align-items: flex-start;
+    }
+    .step-item:last-child { margin-bottom: 0; }
+    .step-num {
+      width: 26px; height: 26px; border-radius: 50%;
+      background: #f0f0f0; color: #555;
+      font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .step-text { font-size: 14px; line-height: 1.8; }
+    .step-text strong { color: #f0932b; }
+    .step-text code {
+      background: #f0f0f0;
+      border-radius: 4px;
+      padding: 1px 6px;
+      font-size: 13px;
+      font-family: 'Courier New', monospace;
+      direction: ltr;
+      display: inline-block;
+    }
+
+    /* ── Hint ── */
+    .hint {
+      background: #f0fdf4;
+      border-right: 3px solid #43a047;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #2e7d32;
+      margin-top: 12px;
+      line-height: 1.7;
+    }
+    .hint-warn {
+      background: #fff8f0;
+      border-right: 3px solid #f0932b;
+      border-radius: 6px;
+      padding: 10px 14px;
+      font-size: 13px;
+      color: #7d4e00;
+      margin-top: 12px;
+      line-height: 1.7;
+    }
+
+    /* ── Code block ── */
+    .code-wrap {
+      background: #0d1117;
+      border-radius: 10px;
+      margin: 14px 0;
+      overflow: hidden;
+      position: relative;
+    }
+    .code-wrap .code-label {
+      background: #161b22;
+      color: #8b949e;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 7px 14px;
+      letter-spacing: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .copy-btn {
+      background: #30363d;
+      color: #c9d1d9;
+      border: none;
+      border-radius: 5px;
+      padding: 3px 10px;
+      font-size: 11px;
+      cursor: pointer;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 600;
+    }
+    .copy-btn:hover { background: #3d444d; }
+    .code-wrap pre {
+      padding: 16px;
+      color: #c9d1d9;
+      font-size: 13px;
+      line-height: 1.7;
+      font-family: 'Courier New', Courier, monospace;
+      direction: ltr;
+      text-align: left;
+      overflow-x: auto;
+      white-space: pre;
+    }
+    .kw  { color: #ff7b72; }   /* keyword */
+    .fn  { color: #d2a8ff; }   /* function */
+    .str { color: #a5d6ff; }   /* string */
+    .num { color: #79c0ff; }   /* number */
+    .cmt { color: #8b949e; }   /* comment */
+    .var { color: #ffa657; }   /* variable */
+    .prop{ color: #79c0ff; }   /* property */
+
+    /* ── Observe box ── */
+    .observe-box {
+      background: #fafafa;
+      border: 2px dashed #ddd;
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-top: 14px;
+    }
+    .observe-box .observe-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #666;
+      margin-bottom: 10px;
+    }
+    .observe-line {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+    }
+    .observe-line .q { color: #444; flex: 1; }
+    .observe-line .ans-box {
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      padding: 4px 10px;
+      background: #fff;
+      min-width: 120px;
+      color: #aaa;
+      font-size: 12px;
+    }
+
+    /* ── Video cards ── */
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 14px;
+      margin-top: 4px;
+    }
+    .video-card {
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      display: block;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+    .video-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.12); }
+    .video-thumb {
+      width: 100%;
+      height: 130px;
+      object-fit: cover;
+      background: #1a1a2e;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 36px;
+      position: relative;
+    }
+    .video-thumb img { width: 100%; height: 130px; object-fit: cover; }
+    .yt-play {
+      position: absolute;
+      width: 44px; height: 44px;
+      background: rgba(255,0,0,0.85);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .yt-play::after {
+      content: '';
+      border-left: 16px solid #fff;
+      border-top: 9px solid transparent;
+      border-bottom: 9px solid transparent;
+      margin-right: -3px;
+    }
+    .video-info { padding: 12px 14px; }
+    .video-num  { font-size: 11px; font-weight: 700; color: #f0932b; margin-bottom: 3px; }
+    .video-title { font-size: 13px; font-weight: 700; line-height: 1.5; }
+
+    /* ── Upload banner ── */
+    .upload-banner {
+      background: linear-gradient(135deg, #2c3e50, #3498db);
+      border-radius: 14px;
+      padding: 24px;
+      text-align: center;
+      color: #fff;
+      margin-top: 8px;
+    }
+    .upload-banner h3 { font-size: 18px; font-weight: 900; margin-bottom: 8px; }
+    .upload-banner p  { font-size: 13px; opacity: 0.85; margin-bottom: 18px; }
+    .upload-btn {
+      display: inline-block;
+      background: #fff;
+      color: #2c3e50;
+      font-family: 'Cairo', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 10px 28px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+    .upload-btn:hover { background: #f0f0f0; }
+
+    /* ── Divider ── */
+    .divider { height: 1px; background: #eee; margin: 28px 0; }
+
+    /* ── Live demo box (inside page) ── */
+    .demo-box {
+      background: #1a1a2e;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 14px 0;
+      text-align: center;
+    }
+    .demo-box .demo-label {
+      font-size: 11px;
+      color: #666;
+      font-weight: 700;
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+    #demo-h1 {
+      font-size: 28px;
+      font-weight: 900;
+      margin-bottom: 4px;
+      transition: color 0.3s;
+    }
+    #demo-h2 {
+      font-size: 20px;
+      font-weight: 700;
+      transition: color 0.3s;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="hero-badge">الحصة الثانية عشرة — JavaScript</div>
+  <h1>واجب: أساسيات JavaScript</h1>
+  <p>تحديد العناصر · المتغيرات · الشروط · setInterval</p>
+</div>
+
+<div class="container">
+
+  <!-- Deadline -->
+  <div class="deadline-banner">
+    <span class="icon">⏰</span>
+    الموعد النهائي للتسليم: <strong>السبت صباحاً</strong>
+  </div>
+
+  <div style="height: 24px;"></div>
+
+  <!-- VS Code notice -->
+  <div class="vscode-notice">
+    <span class="icon">💻</span>
+    <span>استخدم <strong>Visual Studio Code</strong> لكتابة الكود، وافتح الملف في المتصفح لترى النتيجة</span>
+  </div>
+
+  <!-- ─────────── REVIEW ─────────── -->
+  <div class="section-title">مراجعة — كود الحصة</div>
+
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-num orange">📖</div>
+      <div>
+        <div class="task-title">ما الذي تعلمناه في الحصة؟</div>
+        <div class="task-subtitle">راجع الكود الذي كتبناه معاً</div>
+      </div>
+    </div>
+    <div class="task-body">
+      <p style="font-size:14px; line-height:1.8; margin-bottom:14px;">في الحصة تعلمنا كيف يتواصل JavaScript مع صفحة HTML — نختار عنصراً، ثم نغيّر مظهره أو محتواه.</p>
+
+      <div class="code-wrap">
+        <div class="code-label">
+          <span>script.js — كود الحصة</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+        </div>
+        <pre><span class="cmt">// تحديد عناصر من الصفحة</span>
+<span class="kw">const</span> <span class="var">h1</span> = <span class="fn">document.querySelector</span>(<span class="str">'h1'</span>);
+<span class="var">h1</span>.<span class="prop">style</span>.<span class="prop">color</span> = <span class="str">'blue'</span>;
+
+<span class="kw">const</span> <span class="var">h2</span> = <span class="fn">document.querySelector</span>(<span class="str">'h2'</span>);
+<span class="var">h2</span>.<span class="prop">style</span>.<span class="prop">color</span> = <span class="str">'purple'</span>;
+
+<span class="cmt">// متغيرات وعمليات حسابية</span>
+<span class="kw">let</span> <span class="var">x</span> = <span class="num">5.5</span>;
+<span class="kw">let</span> <span class="var">y</span> = <span class="num">9</span>;
+<span class="kw">let</span> <span class="var">z</span> = <span class="var">x</span> / <span class="var">y</span>;
+
+<span class="cmt">// متغيرات منطقية (boolean)</span>
+<span class="kw">let</span> <span class="var">isOn</span>  = <span class="num">true</span>;
+<span class="kw">let</span> <span class="var">isOff</span> = <span class="num">false</span>;
+
+<span class="cmt">// شرط if — يغيّر النص إذا كان isOn يساوي true</span>
+<span class="kw">if</span> (<span class="var">isOn</span>) {
+    <span class="var">h2</span>.<span class="prop">textContent</span> = <span class="str">`<span class="num">${z}</span>`</span>;
+}</pre>
+      </div>
+
+      <div class="hint">
+        💡 <strong>querySelector</strong> تبحث عن أوّل عنصر يطابق المحدّد (مثل CSS).<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<strong>getElementById</strong> تبحث بالـ id مباشرةً وهي أسرع.
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── ACTIVITY 1 ─────────── -->
+  <div class="divider"></div>
+  <div class="section-title">النشاطات</div>
+
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-num orange">١</div>
+      <div>
+        <div class="task-title">نشاط ١ — جرّب وغيّر</div>
+        <div class="task-subtitle">اكتب الكود بنفسك وراقب ما يحدث</div>
+      </div>
+    </div>
+    <div class="task-body">
+
+      <div class="step-item">
+        <div class="step-num">١</div>
+        <div class="step-text">
+          أنشئ مجلداً جديداً اسمه <strong>js-practice</strong>، وبداخله ملفين:
+          <code>index.html</code> و <code>script.js</code>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">٢</div>
+        <div class="step-text">في <code>index.html</code> اكتب هذا الكود:</div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-label">
+          <span>index.html</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+        </div>
+        <pre><span class="kw">&lt;!DOCTYPE html&gt;</span>
+<span class="fn">&lt;html</span> lang=<span class="str">"ar"</span> dir=<span class="str">"rtl"</span><span class="fn">&gt;</span>
+<span class="fn">&lt;head&gt;</span>
+  <span class="fn">&lt;meta</span> charset=<span class="str">"UTF-8"</span><span class="fn">&gt;</span>
+  <span class="fn">&lt;title&gt;</span>JS Practice<span class="fn">&lt;/title&gt;</span>
+<span class="fn">&lt;/head&gt;</span>
+<span class="fn">&lt;body&gt;</span>
+  <span class="fn">&lt;h1&gt;</span>مرحباً بالعالم<span class="fn">&lt;/h1&gt;</span>
+  <span class="fn">&lt;h2&gt;</span>هذا نص ثانوي<span class="fn">&lt;/h2&gt;</span>
+  <span class="fn">&lt;h3&gt;</span>عنوان ثالث<span class="fn">&lt;/h3&gt;</span>
+
+  <span class="cmt">&lt;!-- اربط ملف JS قبل إغلاق body --&gt;</span>
+  <span class="fn">&lt;script</span> src=<span class="str">"script.js"</span><span class="fn">&gt;&lt;/script&gt;</span>
+<span class="fn">&lt;/body&gt;</span>
+<span class="fn">&lt;/html&gt;</span></pre>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">٣</div>
+        <div class="step-text">في <code>script.js</code> اكتب كود الحصة بالكامل من فوق (الكود البرتقالي), ثم افتح الصفحة في المتصفح وراقب ما تغيّر.</div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">٤</div>
+        <div class="step-text">
+          <strong>تحدّيات صغيرة — غيّر وراقب:</strong>
+        </div>
+      </div>
+
+      <!-- Observe box -->
+      <div class="observe-box">
+        <div class="observe-title">🔍 جرّب كل تغيير واكتب ما لاحظته:</div>
+
+        <div style="margin-bottom:14px;">
+          <div class="observe-line">
+            <span class="q">① غيّر <code>'blue'</code> إلى <code>'red'</code> — ماذا حدث لـ h1؟</span>
+          </div>
+          <div style="border:1px dashed #ddd; border-radius:6px; background:#fff; padding:8px 12px; font-size:13px; color:#aaa; margin-top:4px;">اكتب ملاحظتك هنا...</div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div class="observe-line">
+            <span class="q">② أضف سطراً: <code>h2.style.fontSize = '40px'</code> — ماذا حدث؟</span>
+          </div>
+          <div style="border:1px dashed #ddd; border-radius:6px; background:#fff; padding:8px 12px; font-size:13px; color:#aaa; margin-top:4px;">اكتب ملاحظتك هنا...</div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div class="observe-line">
+            <span class="q">③ غيّر <code>isOn = true</code> إلى <code>isOn = false</code> — هل تغيّر نص h2؟ لماذا؟</span>
+          </div>
+          <div style="border:1px dashed #ddd; border-radius:6px; background:#fff; padding:8px 12px; font-size:13px; color:#aaa; margin-top:4px;">اكتب ملاحظتك هنا...</div>
+        </div>
+
+        <div>
+          <div class="observe-line">
+            <span class="q">④ حدّد <code>h3</code> بنفس الطريقة وغيّر لونه إلى أي لون تختاره</span>
+          </div>
+          <div style="border:1px dashed #ddd; border-radius:6px; background:#fff; padding:8px 12px; font-size:13px; color:#aaa; margin-top:4px;">ماذا كتبت؟</div>
+        </div>
+      </div>
+
+      <div class="hint-warn">
+        📌 احفظ ملاحظاتك في ملف Word أو كورقة ورقية — ستشاركها مع المجموعة في الحصة القادمة.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────── ACTIVITY 2 ─────────── -->
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-num blue">٢</div>
+      <div>
+        <div class="task-title">نشاط ٢ — العداد التلقائي</div>
+        <div class="task-subtitle">setInterval · getElementById · if / else if / else</div>
+      </div>
+    </div>
+    <div class="task-body">
+
+      <p style="font-size:14px; line-height:1.8; margin-bottom:16px;">
+        في الحصة رأينا كيف يُحدّث رصد درجة الحرارة كل ثانية تلقائياً.
+        الكود أسفله هو نفس الكود الذي شاهدناه معاً — اقرأه أولاً وافهم كل سطر.
+      </p>
+
+      <div class="code-wrap">
+        <div class="code-label">
+          <span>نموذج رصد — script.js</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+        </div>
+        <pre><span class="cmt">// نختار العنصر بالـ id</span>
+<span class="kw">const</span> <span class="var">myTemp</span> = <span class="fn">document.getElementById</span>(<span class="str">"temp"</span>);
+
+<span class="cmt">// setInterval تكرّر الكود كل 1000 ميلي ثانية (= 1 ثانية)</span>
+<span class="fn">setInterval</span>(() => {
+    <span class="kw">let</span> <span class="var">temp</span> = <span class="fn">Math.floor</span>(<span class="fn">Math.random</span>() * <span class="num">50</span>);
+    <span class="kw">let</span> <span class="var">text</span> = <span class="str">""</span>;
+
+    <span class="kw">if</span> (<span class="var">temp</span> > <span class="num">30</span>) {
+        <span class="var">text</span> = <span class="str">"حار 🔥"</span>;
+    } <span class="kw">else if</span> (<span class="var">temp</span> > <span class="num">20</span>) {
+        <span class="var">text</span> = <span class="str">"معتدل ☀️"</span>;
+    } <span class="kw">else</span> {
+        <span class="var">text</span> = <span class="str">"بارد ❄️"</span>;
+    }
+
+    <span class="var">myTemp</span>.<span class="prop">textContent</span> = <span class="var">temp</span> + <span class="str">" °C — "</span> + <span class="var">text</span>;
+}, <span class="num">1000</span>);
+</pre>
+      </div>
+
+      <p style="font-size:14px; font-weight:700; margin-bottom:10px;">خطوات النشاط:</p>
+
+      <div class="step-item">
+        <div class="step-num">١</div>
+        <div class="step-text">
+          أنشئ مجلداً جديداً اسمه <strong>rasd-js</strong>، وبداخله <code>index.html</code> و <code>script.js</code>
+        </div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">٢</div>
+        <div class="step-text">في <code>index.html</code> أضف عنصراً بـ id يساوي <code>"temp"</code>:</div>
+      </div>
+
+      <div class="code-wrap">
+        <div class="code-label">
+          <span>index.html</span>
+          <button class="copy-btn" onclick="copyCode(this)">نسخ</button>
+        </div>
+        <pre><span class="fn">&lt;h1</span> id=<span class="str">"temp"</span><span class="fn">&gt;</span>جاري التحميل...<span class="fn">&lt;/h1&gt;</span>
+<span class="fn">&lt;script</span> src=<span class="str">"script.js"</span><span class="fn">&gt;&lt;/script&gt;</span></pre>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">٣</div>
+        <div class="step-text">انسخ كود النموذج إلى <code>script.js</code> وافتح الصفحة في المتصفح — راقب العداد وهو يتغيّر.</div>
+      </div>
+
+      <div class="step-item">
+        <div class="step-num">٤</div>
+        <div class="step-text">
+          <strong>تحدّيات التعديل:</strong>
+        </div>
+      </div>
+
+      <div class="observe-box">
+        <div class="observe-title">✏️ عدّل الكود وراقب النتيجة:</div>
+
+        <div style="background:#fff; border-radius:8px; padding:12px 16px; margin-bottom:12px; border:1px solid #eee;">
+          <div style="font-size:13px; font-weight:700; color:#2196f3; margin-bottom:6px;">تحدي ①</div>
+          <div style="font-size:13px; line-height:1.8;">
+            غيّر <code>1000</code> إلى <code>3000</code> — بكم ثانية يتغيّر الرقم الآن؟
+          </div>
+        </div>
+
+        <div style="background:#fff; border-radius:8px; padding:12px 16px; margin-bottom:12px; border:1px solid #eee;">
+          <div style="font-size:13px; font-weight:700; color:#2196f3; margin-bottom:6px;">تحدي ②</div>
+          <div style="font-size:13px; line-height:1.8;">
+            أضف شرطاً رابعاً: إذا كانت الحرارة أقل من <strong>10</strong> → النص يصبح <code>"بارد جداً 🥶"</code>
+            <br><span style="color:#888;">(힌트: ضعه قبل الـ else الأخير)</span>
+          </div>
+        </div>
+
+        <div style="background:#fff; border-radius:8px; padding:12px 16px; border:1px solid #eee;">
+          <div style="font-size:13px; font-weight:700; color:#f0932b; margin-bottom:6px;">تحدي ③ — إضافي 🌟</div>
+          <div style="font-size:13px; line-height:1.8;">
+            أضف عنصراً ثانياً في HTML بـ id = <code>"humidity"</code> وأنشئ عداداً منفصلاً للرطوبة (0–100) داخل نفس setInterval.
+          </div>
+        </div>
+      </div>
+
+      <div class="hint">
+        ✅ لا يوجد إجابة خاطئة — المهم أنك جرّبت وعرفت ماذا يفعل كل سطر.
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ─────────── VIDEOS ─────────── -->
+  <div class="divider"></div>
+  <div class="section-title">فيديوهات للمشاهدة</div>
+
+  <div class="task-card">
+    <div class="task-header">
+      <div class="task-num green">▶</div>
+      <div>
+        <div class="task-title">دروس الزيرو — JavaScript Bootcamp</div>
+        <div class="task-subtitle">شاهد هذه الدروس بالترتيب لتترسّخ المفاهيم</div>
+      </div>
+    </div>
+    <div class="task-body">
+      <div class="video-grid">
+
+        <a class="video-card" href="https://www.youtube.com/watch?v=NgLgguhL2to" target="_blank">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/NgLgguhL2to/hqdefault.jpg" alt="Variables" onerror="this.style.display='none'">
+            <div class="yt-play"></div>
+          </div>
+          <div class="video-info">
+            <div class="video-num">درس ١١</div>
+            <div class="video-title">المتغيرات — Variables Introduction</div>
+          </div>
+        </a>
+
+        <a class="video-card" href="https://www.youtube.com/watch?v=gyWwPypW4OU" target="_blank">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/gyWwPypW4OU/hqdefault.jpg" alt="var let const" onerror="this.style.display='none'">
+            <div class="yt-play"></div>
+          </div>
+          <div class="video-info">
+            <div class="video-num">درس ١٣</div>
+            <div class="video-title">الفرق بين var و let و const</div>
+          </div>
+        </a>
+
+        <a class="video-card" href="https://www.youtube.com/watch?v=rUa4NQQn7Zc" target="_blank">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/rUa4NQQn7Zc/hqdefault.jpg" alt="if condition" onerror="this.style.display='none'">
+            <div class="yt-play"></div>
+          </div>
+          <div class="video-info">
+            <div class="video-num">درس ٣٣</div>
+            <div class="video-title">شرط if — If Condition</div>
+          </div>
+        </a>
+
+        <a class="video-card" href="https://www.youtube.com/watch?v=AOabnOI4vOQ" target="_blank">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/AOabnOI4vOQ/hqdefault.jpg" alt="DOM" onerror="this.style.display='none'">
+            <div class="yt-play"></div>
+          </div>
+          <div class="video-info">
+            <div class="video-num">درس ٨٦</div>
+            <div class="video-title">ما هو DOM وكيف نختار العناصر؟</div>
+          </div>
+        </a>
+
+        <a class="video-card" href="https://www.youtube.com/watch?v=-4tIbTx55nQ" target="_blank">
+          <div class="video-thumb">
+            <img src="https://img.youtube.com/vi/-4tIbTx55nQ/hqdefault.jpg" alt="setInterval" onerror="this.style.display='none'">
+            <div class="yt-play"></div>
+          </div>
+          <div class="video-info">
+            <div class="video-num">درس ١٠٥</div>
+            <div class="video-title">setInterval و clearInterval</div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ─────────── UPLOAD ─────────── -->
+  <div class="divider"></div>
+  <div class="upload-banner">
+    <h3>📁 رفع الواجب</h3>
+    <p>ارفع مجلدات المشاريع كاملةً (js-practice + rasd-js) على Google Drive</p>
+    <a class="upload-btn" href="https://drive.google.com/drive/folders/1MqnjuumptJzHfxkyL98x_-1ri_2DnKHq?usp=sharing" target="_blank">
+      📤 فتح مجلد الواجبات
+    </a>
+  </div>
+
+</div>
+
+<script>
+  function copyCode(btn) {
+    const pre = btn.closest('.code-wrap').querySelector('pre');
+    const text = pre.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+      btn.textContent = '✓ تم النسخ';
+      setTimeout(() => btn.textContent = 'نسخ', 2000);
+    });
+  }
+</script>
+
+</body>
+</html>

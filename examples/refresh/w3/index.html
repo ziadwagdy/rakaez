@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>رصد — لوحة الغرفة</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>🛡 رصد</h1>
+  <p>لوحة مراقبة الغرفة</p>
+  <div class="cards">
+    <div class="card" id="temp-card">
+      <h2>🌡️ الحرارة</h2>
+      <p class="value" id="temp">-- °C</p>
+    </div>
+    <div class="card" id="humidity-card">
+      <h2>💧 الرطوبة</h2>
+      <p class="value" id="humidity">-- %</p>
+    </div>
+    <div class="card" id="water-card">
+      <h2>🌊 مستوى الماء</h2>
+      <p class="value" id="water">-- %</p>
+    </div>
+    <div class="card" id="distance-card">
+      <h2>📏 المسافة</h2>
+      <p class="value" id="distance">-- cm</p>
+    </div>
+  </div>
+  <p id="status">بانتظار القراءات التجريبية</p>
+  <script src="script.js"></script>
+</body>
+</html>
